@@ -1,0 +1,127 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% if post.banner_video %}
+		<section id="product-hero" class="3xl:-mt-[8rem] lg:-mt-[5rem] -mt-[2.5rem]">
+			<div class="relative w-full h-[80svh] md:h-lvh  md:border-b border-textDark/10">
+				{% if post.product_logo %}
+					<div class="min-[380px]:absolute top-6 left-[100px] lg:left-[125px] z-10 text-white">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
+							<line x1="18" y1="6" x2="6" y2="18"></line>
+							<line x1="6" y1="6" x2="18" y2="18"></line>
+						</svg>
+					</div>
+					{% set logo = get_image(post.product_logo) %}
+					{% if logo and logo.src %}
+						<div class="h-[50px] w-[100px] lg:w-[125px] z-10 min-[380px]:absolute top-5 lg:top-4 left-32 lg:left-40">
+							<img src="{{ logo.src }}" alt="{{ logo.alt|default('Product image') }}" class="w-full h-auto">
+						</div>
+					{% endif %}
+				{% endif %}
+   
+				<video
+					src="{{ post.banner_video.src }}"
+					class="absolute inset-0 w-full h-full object-cover object-bottom"
+					autoplay
+					muted
+					loop
+					playsinline
+				>
+					Your browser does not support the video tag.
+				</video>
+
+				<!-- Overlay for md+ screens -->
+				<div class="hidden md:flex justify-between md:p-8 p-6 md:absolute md:bottom-0 md:left-0 md:w-full md:z-10">
+					<div class="max-w-[400px] text-[#08181E] flex flex-col gap-3">
+						{% if post.hero_heading %}
+							<h1 class="text-lg font-headingCaps tracking-tighter">{{ post.hero_heading }}</h1>
+						{% endif %}
+						{% if post.hero_body %}
+							<div class="text-sm font-headingCaps tracking-tight leading-snug opacity-80">{{ post.hero_body }}</div>
+						{% endif %}
+					</div>
+
+					<div class="max-w-[320px] text-[#08181E] flex flex-col gap-3">
+						{% if post.hero_heading_2 %}
+							<h1 class="text-lg font-headingCaps tracking-tighter text-right">{{ post.hero_heading_2 }}</h1>
+						{% endif %}
+						{% if post.hero_body_2 %}
+							<div class="text-sm font-headingCaps tracking-tight leading-snug opacity-80 text-right">{{ post.hero_body_2 }}</div>
+						{% endif %}
+						{% if post.hero_button_text %}
+							<a href="#product-form" class="hover:gap-2 transition-all text-sm justify-end font-headingCaps tracking-tight leading-snug text-right flex flex-row items-center gap-1">
+								{{ post.hero_button_text }}
+								<div class="size-4">
+									{{ include('icons/arrow-right.twig', ignore_missing = true) }}
+								</div>
+							</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</section>
+	{% endif %}
+
+	<!-- Mobile version beneath the video -->
+	<div class="flex md:hidden justify-between p-6 border-b border-textDark/10 -mt-[6rem] pb-[2rem] flex-col gap-6 relative">
+		<div class="max-w-[400px] text-[#08181E] flex flex-col gap-4">
+			{% if post.hero_heading %}
+				<h1 class="text-lg lg:text-xl font-headingCaps tracking-tighter">{{ post.hero_heading }}</h1>
+			{% endif %}
+			{% if post.hero_body %}
+				<div class="text-sm font-headingCaps tracking-tight leading-snug opacity-80">{{ post.hero_body }}</div>
+			{% endif %}
+			{% if post.hero_button_text %}
+				<a href="#product-form" class="text-sm font-headingCaps tracking-tight leading-snug flex flex-row items-center gap-1">
+					{{ post.hero_button_text }}
+					<div class="size-4">
+						{{ include('icons/arrow-right.twig', ignore_missing = true) }}
+					</div>
+				</a>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="3xl:-mt-[8rem] lg:-mt-[5rem] md:-mt-[2.5rem]">
+		{% for block in post.meta('page_builder') %}
+			<div data-block="{{ block.acf_fc_layout }}">
+				{{ include('blocks/' ~ block.acf_fc_layout ~ '.twig', ignore_missing = true) }}
+			</div>
+		{% endfor %}
+
+		<div class="bg-bgLight" id="product-form">
+			<div class="container">
+				<div class="open-form_wrapper">
+					<div class="heading-blocks bg-bgLight">
+						<div class="border-borderLight border-b flex-col border-x flex  lg:flex-row ">
+							<div class="lg:w-1/2 w-full px-6 py-8 border-borderLight border-b lg:border-b-0  lg:border-r ">
+								<div class="max-w-xl">
+									<div class="heading-container text-textDark max-w-xl relative indent-6 text-[inherit]}">
+										<span class="absolute left-0.5 top-3 xl:top-4 2xl:top-5" aria-hidden="true">
+											{{ include('icons/heading-dot.twig') }}
+										</span>
+										{% if post.form_heading %}
+											<h2>{{ post.form_heading }}</h2>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+
+							<div class="flex px-6 py-8 lg:w-1/2 w-full flex-col gap-10">
+								{% if post.form_body %}
+									<div class="heading-container text-textDark">
+										{{ post.form_body }}
+									</div>
+								{% endif %}
+								<div class="open-form">
+									{{ function('do_shortcode', '[gravityform id="' ~ (post.form_id|default(4)) ~ '" title="false" description="false" ajax="true"]')|raw }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div id="product-bg-fade" class="bg-[#C4C2BF] w-full h-full absolute top-0 left-0 z-[-1000]"></div>
+{% endblock %}

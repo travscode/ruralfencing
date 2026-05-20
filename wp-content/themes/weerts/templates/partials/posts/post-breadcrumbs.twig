@@ -1,0 +1,10 @@
+<section class="!py-0 flex lg:flex-row flex-col gap-4 items-start lg:items-center justify-between border-b border-borderLight">
+	<a href="/pulse" class="is-supertitle scramble-text py-4 px-6 border-r border-borderLight">Back to the pulse</a>
+	<div class="is-supertitle px-6 max-lg:hidden flex flex-row items-center gap-2">
+		<a href="/">Home</a>
+		<span>{% include "icons/chevron-right.twig" with { class: 'size-2.5' } %}</span>
+		<a href="/pulse">Pulse</a>
+		<span>{% include "icons/chevron-right.twig" with { class: 'size-2.5' } %}</span>
+		<span class="">{{ post.title }}</span>
+	</div>
+</section>

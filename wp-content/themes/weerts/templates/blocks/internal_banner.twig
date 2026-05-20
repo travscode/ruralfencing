@@ -1,0 +1,44 @@
+{# js/components/internalBanner.js controls the lines animation #}
+<div class="bg-bgLight pt-headerHeightLessOne border-b border-borderLight"></div>
+<div class="container bg-bgLight">
+	<div class="internal-banner min-h-[350px] flex items-center justify-center bg-bgLight  relative border-b border-b-borderLight border-x">
+
+		<h1 class="internal-banner-heading heading-caps px-8 py-6 relative z-10 text-center flex items-center justify-center text-textDark">
+			<div>
+				{{ block.custom_heading|default(post.title) }}
+			</div>
+
+			{# top left plus #}
+			<span class="internal-heading-plus absolute top-[-4.5px] left-[-4.5px] opacity-0">
+				{{ include('icons/plus.twig', { class: 'w-2.5 h-2.5 text-[#BEBEBE]' }) }}
+			</span>
+
+			{# top right plus #}
+			<span class="internal-heading-plus absolute top-[-4.5px] right-[-5.5px] opacity-0">
+				{{ include('icons/plus.twig', { class: 'w-2.5 h-2.5 text-[#BEBEBE]' }) }}
+			</span>
+
+			{# bottom left plus #}
+			<span class="internal-heading-plus absolute bottom-[-5.5px] left-[-4.5px] opacity-0">
+				{{ include('icons/plus.twig', { class: 'w-2.5 h-2.5 text-[#BEBEBE]' }) }}
+			</span>
+
+			{# bottom right plus #}
+			<span class="internal-heading-plus absolute bottom-[-5.5px] right-[-5.5px] opacity-0">
+				{{ include('icons/plus.twig', { class: 'w-2.5 h-2.5 text-[#BEBEBE]' }) }}
+			</span>
+		</h1>
+
+		<div class="vertical-lines w-full h-full absolute inset-0">
+			<div class="vertical-line border-l border-l-borderLight"></div>
+			<div class="vertical-line border-l border-l-borderLight"></div>
+			<div class="vertical-line border-l border-l-borderLight"></div>
+			<div class="vertical-line border-l border-l-borderLight"></div>
+		</div>
+
+		<div class="horizontal-lines w-full h-full absolute inset-0">
+			<div class="horizontal-line border-t border-t-borderLight"></div>
+			<div class="horizontal-line border-t border-t-borderLight"></div>
+		</div>
+	</div>
+</div>

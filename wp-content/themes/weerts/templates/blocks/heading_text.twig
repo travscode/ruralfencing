@@ -1,0 +1,24 @@
+<div class="heading-blocks container bg-bgLight">
+	<div class="border-borderLight border-b flex-col border-x  flex {% if block.layout == 'horizontal' %} lg:flex-row {% endif %}">
+		<div class="lg:w-1/2 w-full px-6 py-8 border-borderLight border-b lg:border-b-0  {% if block.layout == 'horizontal' %} lg:border-r  {% endif %}">
+			<div class="max-w-xl">
+				<div class="heading-container text-textDark max-w-xl relative {{ block.heading_dot ? 'relative indent-6 text-[inherit]' : '' }} ">
+					{% if block.heading_dot %}
+						<span class="absolute left-0.5 top-3 xl:top-4 2xl:top-5" aria-hidden="true">
+							{{ include('icons/heading-dot.twig') }}
+						</span>
+					{% endif %}
+					<h2>
+						{{ block.heading }}
+					</h2>
+				</div>
+			</div>
+		</div>
+
+		<div class=" flex items-end px-6 py-8 {% if block.layout == 'horizontal' %} lg:w-1/2 w-full {% else %} w-full justify-end {% endif %}">
+			<div class="heading-container text-textDark max-w-xl">
+				{{ block.text }}
+			</div>
+		</div>
+	</div>
+</div>

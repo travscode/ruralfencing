@@ -1,0 +1,43 @@
+<div class="heading-blocks container bg-bgLight">
+	<div class="border-borderLight border-b flex-col border-x  flex {% if block.layout == 'horizontal' %} lg:flex-row {% endif %}">
+		<div class="lg:w-1/2 w-full px-6 py-8 border-borderLight border-b lg:border-b-0  {% if block.layout == 'horizontal' %} lg:border-r  {% endif %}">
+			<div class="max-w-xl">
+				<div class="heading-container text-textDark max-w-xl relative indent-6 text-[inherit]">
+					<span class="absolute left-0.5 top-3 xl:top-4 2xl:top-5" aria-hidden="true">
+						{{ include('icons/heading-dot.twig') }}
+					</span>
+					<h3 class="is-h2">
+						Frequently asked questions
+					</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container bg-bgLight">
+	<div class="border-x border-borderLight border-b">
+		<div class="accordion w-full ">
+			{% for item in block.accordion_items %}
+				<div class="border-b border-borderLight last:border-b-0">
+					<div class="accordion-header flex justify-between md:items-center w-full p-6 cursor-pointer">
+						<div class="flex gap-4">
+							<span class="text-sm text-gray-400 shrink-0 mt-0.5">
+								{% if loop.index < 10 %}0
+								{% endif %}
+								{{ loop.index }}</span>
+							<h4 class="text-xl font-medium text-textDark block-content">{{ item.question }}</h4>
+						</div>
+						<span class="menu-plus transition-all duration-300">
+							{% include 'icons/plus.twig' with { class: 'size-2.5' } %}
+						</span>
+					</div>
+					<div class="accordion-content overflow-hidden">
+						<div class="accordion-inner pb-6 pl-14">
+							<div class="text-textDark leading-relaxed max-w-5xl">{{ item.answer }}</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>

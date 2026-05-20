@@ -1,0 +1,7 @@
+{% set categories = fn('get_post_categories') %}
+<div class="p-6 border-b border-borderLight text-textDark flex flex-row gap-2 justify-end flex-wrap">
+	<button data-category="" class="scramble-text is-supertitle py-2.5 px-4 rounded-full border border-borderLight active [&.active]:bg-black [&.active]:border-black [&.active]:text-white ease-fancy duration-150 hover:bg-black hover:text-white">All</button>
+	{% for category in categories %}
+		<button data-category="{{ category.slug }}" class="scramble-text is-supertitle py-2.5 px-4 rounded-full border border-borderLight [&.active]:bg-black [&.active]:border-black [&.active]:text-white ease-fancy duration-150 hover:bg-black hover:text-white">{{ category.title }}</button>
+	{% endfor %}
+</div>

@@ -1,0 +1,9 @@
+{% extends "base.twig" %}
+{% block content %}
+	{% include "partials/posts/archive-banner.twig" %}
+	<section class="bg-bgLight">
+		<div class="container max-w-[900px] prose *:!text-black">
+			{{ post.content }}
+		</div>
+	</section>
+{% endblock %}

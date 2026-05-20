@@ -1,0 +1,47 @@
+<div class="container bg-bgLight">
+	<div class="border-borderLight border-b border-x grid grid-cols-2 lg:grid-cols-4 w-full">
+		<div class="h-16 sm:h-24"></div>
+	</div>
+
+	<div class="border-b border-x border-borderLight flex flex-col">
+		{% if block.rows %}
+			<div class="w-full flex-row gap-16 flex border-b border-borderLight max-md:hidden">
+				<div class="px-6 py-3 w-full">
+					<span class="label">
+						PROBLEMS
+					</span>
+				</div>
+				<div class="px-6 py-3 w-full">
+					<span class="label">
+						SOLUTIONS
+					</span>
+				</div>
+			</div>
+			{% for row in block.rows %}
+				<div class="w-full flex md:flex-row flex-col md:gap-16 {% if not loop.last %}border-b border-borderLight{% endif %}">
+					<div class="px-6 py-3 w-full md:w-1/2 border-borderLight md:border-b md:hidden">
+						<span class="label">
+							Problem
+						</span>
+					</div>
+					<div class="w-full flex flex-col lg:flex-row p-6 gap-6 lg:gap-12">
+						<h5 class="flex lg:w-3/4">{{ row.problem_heading }}</h5>
+						<p class="flex w-full text-sm md:text-base">{{ row.problem_text }}</p>
+					</div>
+					<div class="px-6 py-3 w-full border-borderLight border-t md:border-y md:hidden">
+						<span class="label">
+							SOLUTION
+						</span>
+					</div>
+					<div class="w-full flex flex-col lg:flex-row p-6 gap-6 lg:gap-12">
+						<h5 class="flex lg:w-3/4">{{ row.solution_heading }}</h5>
+						<p class="flex w-full text-sm md:text-base">{{ row.solution_text }}</p>
+					</div>
+				</div>
+			{% endfor %}
+		{% endif %}
+	</div>
+	<div class="border-borderLight border-x border-b grid grid-cols-2 lg:grid-cols-4 w-full">
+		<div class="h-16 sm:h-24"></div>
+	</div>
+</div>

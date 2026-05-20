@@ -1,0 +1,98 @@
+<footer class="bg-fullBlack text-white relative" data-footer>
+	<div class="container relative z-20">
+		<div class="border-x border-borderDark">
+			<div class="grid grid-cols-2 lg:grid-cols-4 border-b border-borderDark">
+				<div class="col-span-2 border-r border-borderDark py-12 lg:py-20 xl:py-32 px-4 sm:px-6">
+					<a href="/contact" class="is-h1 text-bgLight flex flex-row gap-4 items-center scramble-inner">
+						<span class="self-end mb-2">
+							{% include "icons/heading-dot.twig" %}
+						</span>
+						<span class="scramble-part">
+							Let’s start something
+						</span>
+						{% include "icons/pixelated-arrow.twig" with { class: 'size-6' } %}
+					</a>
+				</div>
+				<div class="border-r border-borderDark col-span-2 py-12 lg:py-20 xl:py-32 px-4 sm:px-6">
+					<div class=" start-contact-form max-w-[375px] flex flex-col gap-4">
+						<div class="flex flex-col gap-2">
+							<span class="is-h5">Sign up for our newsletter</span>
+							<p class="font-mono text-sm uppercase opacity-50">The conversation we can't stop starting</p>
+						</div>
+						{% apply shortcodes %}
+						[gravityform id="2" title="false" ajax="true"]
+						{% endapply %}
+					</div>
+				</div>
+			</div>
+			<div class="grid grid-cols-1 lg:grid-cols-4 border-b border-borderDark">
+				<div class=" lg:border-r border-borderDark p-4 flex flex-col gap-6 max-lg:py-8 pb-12">
+					<h5>Design</h5>
+					<ul class="flex flex-col gap-2 text-textLight relative footer-menu-container">
+						<div class="footer-menu-selector bg-bgLight h-3 w-[2px] absolute top-0 -left-[calc(1rem+1.5px)] opacity-0"></div>
+						{% for item in design_menu.get_items %}
+							<li class="relative">
+								<a href="{{ item.link }}" target="{{ item.target }}" class="scramble-text font-mono text-sm uppercase pointer-events-auto duration-200 ease-fancy hover:text-bgLight">{{ item.title }}</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="max-lg:border-t lg:border-r border-borderDark p-4 flex flex-col gap-6 max-lg:py-8 pb-12">
+					<h5>Technology</h5>
+					<ul class="flex flex-col gap-2 text-textLight footer-menu-container relative">
+						<div class="footer-menu-selector bg-bgLight h-3 w-[2px] absolute top-0 -left-[calc(1rem+1.5px)] opacity-0"></div>
+						{% for item in development_menu.get_items %}
+							<li class="relative">
+								<a href="{{ item.link }}" target="{{ item.target }}" class="scramble-text font-mono text-sm uppercase pointer-events-auto duration-200 ease-fancy hover:text-bgLight">{{ item.title }}</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="max-lg:border-t lg:border-r border-borderDark p-4 flex flex-col gap-6 max-lg:py-8 pb-12">
+					<h5>Marketing</h5>
+					<ul class="flex flex-col gap-2 text-textLight footer-menu-container relative">
+						<div class="footer-menu-selector bg-bgLight h-3 w-[2px] absolute top-0 -left-[calc(1rem+1.5px)] opacity-0"></div>
+						{% for item in marketing_menu.get_items %}
+							<li class="relative">
+								<a href="{{ item.link }}" target="{{ item.target }}" class="scramble-text font-mono text-sm uppercase pointer-events-auto duration-200 ease-fancy hover:text-bgLight">{{ item.title }}</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="max-lg:col-span-full p-4 flex flex-col max-lg:border-borderDark max-lg:border-t gap-6 max-lg:py-8 pb-12 footer-menu-container relative">
+					<div class="footer-menu-selector bg-bgLight h-3 w-[2px] absolute top-0 -left-[1.5px] opacity-0"></div>
+					{% for item in footer_menu.get_items %}
+						<a href="{{ item.link }}" target="{{ item.target }}" class="hover:opacity-70 menu-heading !text-white transition-opacity duration-200 is-h4 pointer-events-auto ">{{ item.title }}</a>
+					{% endfor %}
+				</div>
+				<div class="col-span-full 2xl:col-span-2 flex p-4 border-t 2xl:border-r border-borderDark w-full flex-wrap relative">
+					{% for item in socials_menu.get_items %}
+						<a href="{{ item.link }}" target="_blank" class="scramble-text-parent border border-borderDark rounded-full px-4 py-2 text-sm cursor-pointer text-bgLight pointer-events-auto">
+							<span class="scramble-text font-mono cursor-pointer uppercase">
+								{{ item.title }}
+							</span>
+						</a>
+					{% endfor %}
+				</div>
+				<div class="border-r border-borderDark max-lg:hidden"></div>
+			</div>
+		</div>
+	</div>
+	<div class="text-bgLight py-8 bg-fullBlack">
+		<div class="container text-xs flex sm:flex-row flex-col-reverse gap-4 items-center justify-between">
+			<div class="flex flex-row gap-4 items-center flex-wrap max-sm:justify-center">
+				<span class="text-textLight">
+					&copy;
+					{{ 'now'|date('Y') }}
+					The Start. All Rights Reserved.
+				</span>
+				<a href="/privacy" class="text-textLight duration-300 hover:text-white ">Privacy</a>
+				<a href="/terms-conditions" class="text-textLight duration-300 hover:text-white">Terms &amp; Conditions</a>
+			</div>
+			<div class="flex flex-row gap-2 items-baseline text-bgLight">
+				{% include 'icons/heading-dot.twig' %}
+				<span class="is-h4 font-headingCaps !text-base !lg:text-lg">NEVER STOP STARTING™</span>
+			</div>
+		</div>
+	</div>
+</footer>

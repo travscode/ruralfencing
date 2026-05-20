@@ -1,0 +1,41 @@
+{% set is_product = function('is_page_template', 'template-product.php')|default(false) %}
+
+
+<div id="video-block-{{ block.id|default('default') }}" class="{{ is_product ? 'bg-none' : 'bg-bgLight' }} container z-[52] relative">
+	<div id="video-block-container-{{ block.id|default('default') }}" class="flex {{ is_product ? 'border-textDark/10' : 'border-borderLight' }} justify-center border-x border-b lg:h-lvh overflow-hidden">
+		<div class="video-wrap flex flex-col justify-center gap-4 lg:border-x {{ is_product ? 'bg-none' : 'bg-bgLight' }} {{ is_product ? 'border-textDark/10' : 'border-borderLight' }} lg:w-1/2 w-full will-change-transform overflow-hidden relative transform translate-z-0">
+			<div class="p-6 lg:border-y {{ is_product ? 'border-textDark/10' : 'border-borderLight' }} overflow-hidden">
+				<div class="video-inner h-full w-full flex justify-center items-center relative overflow-hidden">
+					<div class="relative aspect-video w-full overflow-hidden">
+						{% if block.thumbnail %}
+							<img src="{{ block.thumbnail.src }}" alt="{{ block.thumbnail.alt|default(block.thumbnail.post_title) }}" class="thumbnail w-full h-full top-0 left-0 absolute object-cover"/>
+						{% endif %}
+						{% if block.video %}
+							<video 
+								src="{{ block.video.src }}" 
+								class="w-full h-full top-0 left-0 absolute object-cover z-10" 
+								autoplay 
+								muted 
+								loop 
+								playsinline
+							>
+								Your browser does not support the video tag.
+							</video>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include "partials/home/spacer.twig" %}
+</div>
+
+<div class="fixed top-0 left-0 flex justify-center items-center h-full w-full pointer-events-none z-[999999]">
+	<div class="w-[calc(100%-3rem)]  md:w-3/4 fullscreen-window"></div>
+</div>
+<div class="overlay fixed opacity-0 bg-fullBlack/90 backdrop-blur-md top-0 left-0 h-full w-full pointer-events-none z-[99999]">
+	<div class="top-8 right-8 absolute is-supertitle text-bgLight cursor-pointer flex flex-row gap-1 items-center scramble-inner">
+		{% include "icons/cross.twig" with { class: '!size-3' } %}
+		<span class="scramble-part">Close</span>
+	</div>
+</div>

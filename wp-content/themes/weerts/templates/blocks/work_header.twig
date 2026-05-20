@@ -1,0 +1,47 @@
+<div class="bg-bgLight container">
+
+	<div class="w-full bg-bgLight border-b border-borderLight h-headerHeightLessOne"></div>
+
+	<div class="breadcrumbs-bar max-w-full relative w-full flex max-sm:flex-col items-center justify-between border-b border-borderLight border-x">
+		<a href="{{ site.url }}/work" class="p-4 sm:border-r border-borderLight max-sm:w-full max-sm:justify-center flex">
+			<span class="text-textDark font-mono scramble-text uppercase">Back to projects</span>
+		</a>
+		{% if block.site_url %}
+			<a target="_blank" href="{{ block.site_url }}" class="p-4 flex flex-row gap-3 items-center max-sm:w-full max-sm:justify-center border-l bg-textDark  text-bgLight scramble-inner">
+				<span class="size-4">{% include 'icons/arrow-out.twig' %}</span>
+				<span class="font-mono scramble-part uppercase">Go to site</span>
+			</a>
+		{% endif %}
+	</div>
+
+	<div class="w-full bg-bgLight border-b border-borderLight h-[100px] border-x"></div>
+
+	<div class="w-full bg-bgLight border-b border-borderLight flex flex-col lg:flex-row border-x">
+		<div class="w-full xl:1/4 lg:w-1/2 p-6 lg:border-r border-borderLight">
+			<h1 class="text-textDark max-w-3xl">{{ block.title }}</h1>
+		</div>
+		<div class="flex flex-col w-full xl:1/4 lg:w-1/2">
+			<div class="w-full flex flex-col lg:flex-row gap-4 justify-between lg:border-t-0 border-t border-b border-borderLight p-6">
+				<span class="label">CLIENT</span>
+				<span class="text-textDark is-h3">{{ block.client }}</span>
+			</div>
+			<div class="w-full flex flex-col lg:flex-row gap-4 justify-between p-6">
+				<span class="label">SERVICES</span>
+				<div class="w-full flex flex-row flex-wrap lg:justify-end gap-2">
+					{% if post and post.post_type == 'work' %}
+						{% set workServices = post.work_services %}
+						{% for service in workServices %}
+							<a href="/services/{{ service.slug }}" class="text-textDark font-mono uppercase text-sm px-3 py-1 border border-borderLight rounded-full flex flex-row gap-2 items-center">{{ service.name }}
+								{% include 'icons/arrow-top-right.twig' %}</a>
+						{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="work-hero-three" class="h-[50lvh] md:h-lvh w-full bg-bgLight border-borderLight border-x border-b overflow-hidden" data-mouse-content="Drag">
+		{% for image in block.gallery %}
+			<img src="{{ get_image(image).src }}" alt="{{ image.alt }}" class="hidden">
+		{% endfor %}
+	</div>
+</div>

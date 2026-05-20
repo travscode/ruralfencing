@@ -1,0 +1,24 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<article class="bg-bgLight post-type-{{ post.post_type }}" id="post-{{ post.ID }}">
+		<div class="bg-bgLight pt-headerHeightLessOne border-b border-borderLight"></div>
+		<div class="container">
+			<div class="border-x border-borderLight flex flex-col">
+				{% include "partials/posts/post-breadcrumbs.twig" %}
+				<div class="max-lg:hidden">
+					{% include "partials/posts/spacer.twig" %}
+				</div>
+				{% include "partials/posts/post-hero.twig" %}
+				<div class="post-block-builder">
+					{% for block in post.meta('post_builder') %}
+						<div post-data-block="{{ block.acf_fc_layout }}">
+							{{ include('post-blocks/' ~ block.acf_fc_layout ~ '.twig', ignore_missing = true) }}
+						</div>
+					{% endfor %}
+				</div>
+				{% include "partials/posts/post-footer.twig" %}
+			</div>
+		</div>
+	</article>
+{% endblock %}

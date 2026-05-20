@@ -1,0 +1,28 @@
+{% set has_image  = block.image is not empty %}
+{% set is_right   = has_image and block.image_orientation == 'right' %}
+{% set is_product = function('is_page_template', 'template-product.php')|default(false) %}
+
+<div class="container {{ is_product ? 'bg-none' : 'bg-bgLight' }}">
+	<div class="flex flex-col {{ is_right ? 'lg:flex-row-reverse' : 'lg:flex-row' }} border-x border-b {{ is_product ? 'border-textDark/10' : 'border-borderLight' }}  xl:min-h-[700px] lg:min-h-[600px]">
+		{% if has_image %}
+			<div class="w-full lg:w-1/2 p-4 lg:p-6 overflow-hidden border-b lg:border-b-0 {{ is_product ? 'border-textDark/10' : 'border-borderLight' }} {% if not is_right %} lg:border-r {% endif %}">
+				<img src="{{ block.image.src }}" alt="{{ block.image.alt }}" class="w-full h-auto object-cover object-center"/>
+			</div>
+		{% endif %}
+		<div class="w-full lg:w-1/2 p-4 py-6 lg:p-6 flex flex-col gap-5 lg:gap-10 justify-center {{ is_product ? 'border-textDark/10' : 'border-borderLight' }} {% if is_right %} lg:border-r {% endif %}">
+			{% if block.title %}
+				<div class="text-4xl font-bold max-w-xl w-full">{{ block.title }}</div>
+			{% endif %}
+			{% if block.content %}
+				<div class="max-w-xl flex flex-col gap-6 w-full text-base">{{ block.content }}</div>
+			{% endif %}
+			{% if block.link %}
+				{% include "partials/button.twig" with {
+                    link:   block.link.url,
+                    title:  block.link.title,
+                    target: block.link.target
+                } %}
+			{% endif %}
+		</div>
+	</div>
+</div>

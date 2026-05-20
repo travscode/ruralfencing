@@ -1,0 +1,26 @@
+<article class="tease tease-{{ post.post_type }} grid grid-cols-1 md:grid-cols-2 border-b border-borderLight w-full relative" id="tease-{{ post.ID }}" data-mouse-content="{{ post.title }}">
+	<a href="{{ post.link }}" class="flex absolute w-full h-full inset-0 z-10" data-mouse-content="{{ post.title }}"></a>
+	<div class="flex p-4 md:p-6 max-md:border-b md:border-r border-borderLight">
+		<div class="relative w-full aspect-16/9 flex bg-black">
+			{% if post.thumbnail %}
+				<img src="{{ get_image(post.thumbnail).src }}" alt="{{ post.thumbnail.alt }}" class="absolute top-0 left-0 h-full w-full object-cover"/>
+			{% endif %}
+		</div>
+	</div>
+	<div class="relative p-4 md:p-6 max-md:pb-12 md:py-12 flex flex-col gap-6 justify-center">
+		{% if not hide_date %}
+			<span class=" absolute top-0 right-0 py-2.5 px-4 border-l border-b border-borderLight text-textLight text-xs">{{ post.date|date("F Y")|upper }}</span>
+		{% endif %}
+		<div class="flex flex-col gap-6 max-w-[600px]">
+			<div class="flex flex-row gap-2">
+				{% for term in post.terms('category') %}
+					<h3 class="is-supertitle border border-borderLight rounded-full py-2.5 px-4 !leading-none ">{{ term.title }}</h3>
+				{% endfor %}
+			</div>
+			<h3 class="max-md:w-[calc(100%-6rem)]">
+				{{ post.title }}
+			</h3>
+			<p class="text-sm max-w-xl">{{ post.excerpt }}</p>
+		</div>
+	</div>
+</article>

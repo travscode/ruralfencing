@@ -1,0 +1,47 @@
+{# To re-implement this code should we use it later - requires a 'projects' Post Object - work - select multiple true - field on the 'selected_works' ACF field group #}
+
+{# {% set projects = post.selected_works.projects|filter(p => p is not empty) %}
+
+{% if projects %}
+	<section class="bg-bgLight text-textDark !py-0">
+		<div class="container">
+			<div class="border-borderLight border flex flex-col">
+				<div class="border-b border-borderLight py-6 px-4 md:px-6 flex flex-row items-end gap-4">
+					<div class="circle mb-1.5 xl:mb-2"></div>
+					<div class="flex flex-row gap-2">
+						<h3 class="is-h2">Selected Works</h3>
+						<span class="text-sm">{{ projects|length ? : 0 }}</span>
+					</div>
+				</div>
+				<div class="flex flex-col-reverse lg:grid lg:grid-cols-2">
+					<div class="flex flex-col project-selector">
+						{% for work in projects %}
+							{% if work %}
+
+								<a href="{{ work.link }}" class="py-4 px-4 md:px-6 grid grid-cols-2 gap-8 max-sm:text-sm relative z-10 group scramble-inner {{ loop.last ? '' : 'border-b border-borderLight' }}">
+									<span class="scramble-part relative z-10">{{ work.title }}</span>
+									<span class="scramble-part relative z-10">{{ work.terms('work-category')|join(', ') }}</span>
+									<div class="absolute w-full h-0 left-0 bottom-0 bg-black duration-300 ease-fancy group-hover:h-full"></div>
+								</a>
+							{% endif %}
+						{% endfor %}
+					</div>
+					<div class="max-md:h-[350px] max-lg:h-[500px] flex relative bg-black">
+						{% for work in projects %}
+							{% if work %}
+								<div class="overflow-hidden image-container absolute inset-0 bg-black">
+									<img src="{{ get_image(work.thumbnail).src }}" alt="{{ work.thumbnail.alt }}" class="w-full h-full object-cover object-top absolute">
+								</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-borderLight">
+					<div class="md:border-r border-borderLight p-4 flex justify-center">
+						{% include "partials/button.twig" with { link: post.selected_works.link.url, title: post.selected_works.link.title, target: post.selected_works.link.target } %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endif %} #}

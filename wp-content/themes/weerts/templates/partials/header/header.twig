@@ -1,0 +1,32 @@
+<header class="fixed top-0 z-[60] w-full py-4 pointer-events-none duration-300 ease-in-out">
+	<div data-navigation class="container max-w-full relative w-full flex items-center justify-between z-50 chat-hide">
+		<div class="flex-1 items-center flex">
+			<a href="{{ site.url }}" class="logo pointer-events-auto" rel="home">{% include 'icons/logo.twig' with { class: 'h-8' }  %}</a>
+		</div>
+		<div
+			class="flex-1 hidden lg:flex justify-center items-center">{# {% include "partials/header/start-bar-old.twig" %} #}
+		</div>
+		<div class="flex-1 items-center justify-end flex gap-2">
+			<button data-toggle-chat class="menu-toggle h-[34px] pointer-events-auto scramble-text-parent supertitle md:hidden flex flex-row items-center gap-2.5 py-3 px-4 rounded-full border">
+				{% include "icons/mic.twig" with { class: 'size-3' } %}<span>Talk</span>
+			</button>
+
+			<button data-toggle-menu class="menu-toggle h-[34px] pointer-events-auto scramble-text-parent supertitle flex flex-row items-center gap-2.5 py-3 px-4 rounded-full border">
+				{% include "icons/plus.twig" with { class: 'size-2' } %}<span class="scramble-text">Menu</span>
+			</button>
+		</div>
+	</div>
+	{% include "partials/header/start-bar.twig" %}
+</header>
+
+<div class="menu-topbar h-headerHeight -top-headerHeight fixed w-full left-0 z-[59] border-b ease-in-out duration-300"></div>
+
+{% include 'partials/header/desktop-nav.twig' %}
+{% include 'partials/header/mobile-nav.twig' %}
+
+<div class="menu-bg z-[57] fixed top-0 left-0 w-full h-full bg-gradient-to-b from-[#00000000] via-[#00000030] to-[#000000b1] backdrop-blur-sm pointer-events-none opacity-0">
+	<div class="menu-tagline absolute bottom-0 right-0 p-6 flex flex-row gap-2 items-baseline text-bgLight">
+		{% include 'icons/heading-dot.twig' %}
+		<span class="is-h4 font-headingCaps !text-base !lg:text-lg">NEVER STOP STARTING™</span>
+	</div>
+</div>

@@ -1,0 +1,325 @@
+#contact-canvas {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+	#contact-canvas {
+		opacity: 0.85;
+	}
+}
+
+/* Custom slider styles */
+.slider::-webkit-slider-thumb {
+	appearance: none;
+	height: 60px;
+	width: 60px;
+	margin-bottom: 40px;
+	cursor: grab;
+}
+
+.slider::-webkit-slider-thumb:active {
+	cursor: grabbing;
+}
+
+.slider::-moz-range-thumb:active {
+	cursor: grabbing;
+}
+
+.slider::-moz-range-thumb {
+	height: 60px;
+	width: 60px;
+	margin-bottom: 40px;
+	cursor: grab;
+	border: none;
+}
+
+/* Badge styles */
+.option-badge {
+	background-color: #f6f6f6;
+	color: #111114;
+	padding: 0.5rem 1rem;
+	font-size: 16px;
+	border-radius: 9999px;
+	border: 1px solid #f6f6f6;
+	cursor: pointer;
+	transition: all 200ms;
+	font-family: 'VCR OSD Mono', monospace;
+	text-transform: uppercase;
+}
+
+.option-badge:hover {
+	background-color: rgba(255, 255, 255, 0.9);
+}
+
+.option-badge.selected {
+	background: #111114;
+	color: #f6f6f6;
+	border-color: #f6f6f6;
+}
+
+.circles-hidden {
+	transform: scale(3);
+	opacity: 0;
+}
+
+/* Gravity Forms styling */
+#gform-wrapper .gform_wrapper {
+	background: transparent !important;
+}
+
+#gform-wrapper .gform_wrapper .gform_body {
+	background: transparent !important;
+}
+
+#gform-wrapper .gform_wrapper .gfield {
+	margin-bottom: 1rem;
+}
+
+#gform-wrapper .gform_wrapper .gfield input,
+#gform-wrapper .gform_wrapper .gfield textarea,
+#gform-wrapper .gform_wrapper .gfield select {
+	background: #374151 !important;
+	border: 1px solid #6b7280 !important;
+	color: #f6f6f6 !important; /* bgLight */
+	border-radius: 0.5rem !important;
+	padding: 0.75rem !important;
+}
+
+.continue-btn:disabled {
+	background: #111114;
+	color: rgba(255, 255, 255, 0.75);
+	border: solid 1px rgba(255, 255, 255, 0.3);
+}
+
+.continue-btn {
+	background-color: #f6f6f6;
+	color: #111114;
+	border: none;
+	border-radius: 9999px;
+	font-weight: 500;
+	font-size: 18px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	padding: 0.5rem 1.25rem;
+}
+
+.continue-btn:hover {
+	background-color: #f3f4f6;
+}
+
+.continue-btn:disabled:hover {
+	background: #111114;
+	color: rgba(255, 255, 255, 0.75);
+	border: solid 1px rgba(255, 255, 255, 0.3);
+}
+
+#gform-wrapper .gform_wrapper .gfield label {
+	color: #f6f6f6 !important; /* bgLight */
+	font-weight: 500;
+}
+
+#gform-wrapper .gform_wrapper .gform_footer input[type='submit'] {
+	background: #f6f6f6 !important; /* bgLight */
+	color: #1f2937 !important;
+	border: none !important;
+	padding: 0.75rem 1.5rem !important;
+	border-radius: 9999px !important;
+	font-weight: 600 !important;
+	cursor: pointer !important;
+}
+
+#gform-wrapper .gform_wrapper .gform_footer input[type='submit']:hover {
+	background: #f3f4f6 !important;
+}
+
+.back-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.5rem;
+	border-radius: 50%;
+	transition: all 0.3s ease;
+	cursor: pointer;
+	border: none;
+	background: transparent;
+}
+
+.back-btn:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.back-btn:disabled {
+	opacity: 0.3;
+	cursor: not-allowed;
+}
+
+.start-contact-form label {
+	@apply !font-mono !uppercase !text-sm !text-bgLight !ml-4;
+}
+
+.start-contact-form .gfield_description.gform_fileupload_rules {
+	@apply !font-mono !uppercase !text-[rgba(255,255,255,0.5)] !text-sm !ml-4;
+}
+
+.gform_heading {
+	display: none !important;
+}
+
+.start-contact-form .gform_drop_area {
+	border-radius: 999px !important;
+	background: rgba(255, 255, 255, 0.05) !important;
+	border: 1px dashed rgba(255, 255, 255, 0.25) !important;
+	padding: 1.5rem !important;
+	color: #f6f6f6 !important; /* bgLight */
+	@apply !items-center !flex !justify-center;
+}
+
+.start-contact-form .gform_drop_area.gform-theme-field-control {
+	@apply !items-center !flex !justify-center;
+}
+
+.start-contact-form .gform_drop_instructions {
+	margin: 0 !important;
+}
+
+.start-contact-form .gform_drop_area::before {
+	content: none !important;
+}
+
+.start-contact-form .gform_button_select_files {
+	background: transparent !important;
+	text-decoration: underline !important;
+	padding: 0.5rem !important;
+}
+
+.start-contact-form input {
+	@apply !rounded-full !bg-[rgba(255,255,255,0.075)] !border-none !p-6 !text-bgLight;
+}
+
+.start-contact-form textarea {
+	@apply !rounded-[1.5rem] !bg-[rgba(255,255,255,0.075)] !border-none !p-6 !text-bgLight;
+}
+
+.start-contact-form .gfield_required_asterisk {
+	@apply !text-brandColour;
+}
+
+.start-contact-form .gform_button {
+	@apply !rounded-full !bg-bgLight !py-2 !px-4  !transition-all !border !border-textDark !text-textDark !font-mono !uppercase;
+}
+
+.start-contact-form .gform_button:hover {
+	@apply !bg-bgLight/80;
+}
+
+.start-contact-form .validation_message {
+	@apply !text-bgLight/90 !uppercase !font-mono !text-[11px] !ml-4;
+}
+
+.start-contact-form_wrapper .gform_validation_errors {
+	@apply !border-none !bg-none flex justify-center !text-center;
+}
+
+.start-contact-form_wrapper .gform_validation_errors:focus,
+.start-contact-form_wrapper .gform_validation_errors:active,
+.start-contact-form_wrapper .gform_validation_errors:hover {
+	@apply !bg-none !ring-0 !outline-none !bg-transparent !text-center;
+}
+
+.start-contact-form_wrapper .gform_submission_error.hide_summary {
+	@apply !font-mono !text-bgLight/90 !text-[12px] !uppercase !text-center;
+}
+
+.start-contact-form_wrapper .gform_submission_error.hide_summary .gform-icon {
+	@apply !hidden;
+}
+
+#contact-start-btn {
+	cursor: pointer;
+}
+
+.start-contact-form input:focus,
+.start-contact-form textarea:focus {
+	outline: solid 1px #f6f6f65a !important;
+	border: none !important;
+	box-shadow: none !important;
+}
+
+.start-contact-form .gform-valida
+
+/* Ensure form fields are ready for animation */
+.start-contact-form .gfield {
+	transition: all 0.3s ease;
+}
+
+/* Smooth transitions for form elements */
+.start-contact-form .gform_button {
+	transition: all 0.3s ease;
+}
+
+/* Prevent flash of unstyled content */
+#gform-container.hidden .start-contact-form {
+	opacity: 0;
+}
+
+#gform-container:not(.hidden) .start-contact-form {
+	opacity: 1;
+}
+
+.gform-theme--framework
+	.gfield:where(.gfield--type-fileupload, .gfield--input-type-fileupload)
+	.ginput_preview
+	.gfield_fileupload_filename {
+	@apply text-white;
+}
+
+/* Hide the default range input thumb on WebKit browsers (Safari, Chrome) */
+#budget-range::-webkit-slider-thumb {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: transparent;
+	cursor: pointer;
+	border: none;
+	outline: none;
+	box-shadow: none !important;
+}
+
+/* Hide the default range input thumb on Firefox */
+#budget-range::-moz-range-thumb {
+	appearance: none;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: transparent;
+	cursor: pointer;
+	border: none;
+	outline: none;
+}
+
+/* Ensure the track is properly styled */
+#budget-range::-webkit-slider-track {
+	appearance: none;
+	-webkit-appearance: none;
+	background: transparent;
+	border: none;
+	outline: none;
+}
+
+#budget-range::-moz-range-track {
+	appearance: none;
+	background: transparent;
+	border: none;
+	outline: none;
+}
+
+/* Additional mobile-specific fixes */
+#budget-range {
+	-webkit-tap-highlight-color: transparent;
+	outline: none;
+	border: none;
+}

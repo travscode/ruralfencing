@@ -1,0 +1,53 @@
+<section id="home-three-awards-outer" class="!py-0 text-black h-[500lvh] z-50 overflow-hidden relative">
+	<div class="hero-curtains absolute bg-bgLight w-[calc(1rem+1px)] lg:w-[calc(2rem+1px)] h-full top-0 left-0 border-r border-borderLight z-[52] will-change-transform"></div>
+	<div class="flex flex-row items-start absolute left-[calc(1rem+1px)] lg:left-[calc(2rem+1px)] top-0 w-[calc(100%-2rem-2px)] lg:w-[calc(100%-4rem-2px)] h-full z-[52] pointer-events-none">
+		{% for _ in 1..4 %}
+			<div style="--z:{{ loop|length - loop.index0 }};" class="hero-curtains bg-bgLight w-full h-full will-change-transform relative -ml-px z-[--z] {{ loop.last ? '' : 'border-r border-borderLight' }}"></div>
+		{% endfor %}
+	</div>
+	<div class="hero-curtains absolute bg-bgLight w-[calc(1rem+1px)] lg:w-[calc(2rem+1px)] h-full top-0 right-0 border-l border-borderLight z-[52] will-change-transform"></div>
+	<div id="home-three-awards" class="-translate-y-full col-span-2 relative h-lvh text-white z-[51]">
+		<div id="award-text-1" class="block-content text-bgLightDarker w-[calc(100%-2rem)] max-w-[400px] xl:max-w-[510px] 2xl:max-w-[580px] 3xl:max-w-[620px] text-left absolute left-4 md:left-6 xl:left-12 top-20 lg:top-1/4 lg:-translate-y-1/2 !pointer-events-auto">
+			<div class="block-content text-bgLightDarker/70">{{ post.awards.supertitle }}</div>
+			<div class="block-content text-bgLightDarker !gap-0.5">{{ post.awards.heading }}</div>
+			<div class="btn-wrapper opacity-100 !pointer-events-auto">
+				{% if post.awards.read_more %}
+					{% include "partials/button.twig" with {
+                    link:   post.awards.read_more.url,
+                    title:  post.awards.read_more.title,
+                    target: post.awards.read_more.target
+                } %}
+				{% endif %}
+			</div>
+		</div>
+		{% for image in post.awards.gallery %}
+			<img src="{{ get_image(image).src }}" alt="" class="award-images sr-only">
+		{% endfor %}
+		<div class="absolute flex flex-col w-[calc(100%-2rem)] max-w-[400px] max-md:left-4 md:right-6 xl:right-12 bottom-12">
+			<h3 class="text-bgLight pb-4 award-text">Awards</h3>
+			{% for award in post.awards.awards %}
+				<div class="award-text flex flex-row justify-between items-center gap-4 py-2 border-t border-textLight opacity-100">
+					<span>{{ award.award_title }}</span>
+					<span class="is-supertitle">({{ award.amount }})</span>
+				</div>
+			{% endfor %}
+			{% if post.awards.link %}
+				<div class="pt-4 award-text opacity-100">
+					{% include "partials/button.twig" with {
+                    link:   post.awards.link.url,
+                    title:  post.awards.link.title,
+                    target: post.awards.link.target
+                } %}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="end-hero-curtains absolute bg-bgLight w-[calc(1rem+1px)] lg:w-[calc(2rem+1px)] h-0 bottom-0 left-0 border-r border-borderLight z-[52] will-change-transform"></div>
+	<div class="flex flex-row items-end absolute left-[calc(1rem+1px)] lg:left-[calc(2rem+1px)] bottom-0 w-[calc(100%-2rem-2px)] lg:w-[calc(100%-4rem-2px)] h-full z-[52] pointer-events-none">
+		{% for _ in 1..4 %}
+			<div style="--z:{{ loop|length - loop.index0 }};" class="end-hero-curtains bg-bgLight w-full h-0 will-change-transform relative -ml-px z-[--z] {{ loop.last ? '' : 'border-r border-borderLight' }}"></div>
+		{% endfor %}
+	</div>
+	<div class="end-hero-curtains absolute bg-bgLight w-[calc(1rem+1px)] lg:w-[calc(2rem+1px)] h-0 bottom-0 right-0 border-l border-borderLight z-[52] will-change-transform"></div>
+</section>

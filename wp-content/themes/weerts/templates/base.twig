@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!-- [if lt IE 9]><html class="no-js no-svg ie lt-ie9 lt-ie8 lt-ie7" {{ site.language_attributes }}> <![endif] -->
+<!-- [if IE 9]><html class="no-js no-svg ie ie9 lt-ie9 lt-ie8" {{ site.language_attributes }}> <![endif] -->
+<!-- [if gt IE 9]><! -->
+	<html
+	class="no-js no-svg" {{ site.language_attributes }}> <!-- <![endif] -->
+	{% block html_head_container %}
+		{% include 'html-header.twig' %}
+	{% endblock %}
+
+	{% if fn('is_front_page') or fn('is_page', 'contact') or fn('is_page_template', 'template-product.php') %}
+		{% set theme = 'dark' %}
+	{% else %}
+		{% set theme = 'light' %}
+	{% endif %}
+
+	<body
+		class="{{ body_class }} min-h-screen theme-{{ theme }}" data-template="base.twig">
+		<!-- Google Tag Manager (noscript) -->
+		<noscript>
+			<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5Z49HD7V" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+		</noscript>
+		<!-- End Google Tag Manager (noscript) -->
+		{% include "partials/transition-overlay.twig" %}
+		<a class="sr-only skip-link screen-reader-text" href="#page-content">{{ _e('Skip to content') }}</a>
+		<div class="all-content">
+			{% block header %}
+				{% include 'partials/header/header.twig' %}
+			{% endblock %}
+			<div id="swup">
+				<main id="page-content" class="relative z-[1]">
+					{% block content %}
+						<section class="relative">
+							<div class="container">
+								<h2>Content coming soon...</h2>
+							</div>
+						</section>
+					{% endblock %}
+				</main>
+			</div>
+			{% block footer %}
+				{% include 'footer.twig' %}
+				{{ function('wp_footer') }}
+			{% endblock %}
+		</div>
+
+		{# Extend this to add custom scripts to just one page/block #}
+		{% block scripts %}{% endblock %}
+	</body>
+</html>

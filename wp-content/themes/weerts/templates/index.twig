@@ -1,0 +1,24 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="container flex flex-col bg-bgLight">
+		<div class="border-x border-borderLight felx flex-col items-center">
+			{% include "partials/posts/archive-banner.twig" %}
+			{% include "partials/posts/archive-filter.twig" %}
+			<div id="post-grid" class="max-w-5xl mx-auto md:border-x border-borderLight">
+				{% for post in posts %}
+					{% include "partials/posts/tease-post.twig" %}
+				{% endfor %}
+			</div>
+			<div class="py-20 hidden justify-center items-center gap-2 loading-panel">
+				<div class="bg-black size-2 rounded-full"></div>
+				<span class="is-supertitle !leading-none loading">
+					<span class="continuous-scramble">Loading</span>
+					<span class="loading-dot -ml-1">.</span>
+					<span class="loading-dot -ml-2">.</span>
+					<span class="loading-dot -ml-2">.</span>
+				</span>
+			</div>
+		</div>
+	</div>
+{% endblock %}

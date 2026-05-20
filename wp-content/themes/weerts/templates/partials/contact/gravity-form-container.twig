@@ -1,0 +1,16 @@
+{# Gravity Form Container #}
+<div id="gform-container" class="hidden py-28 lg:py-40 gravity-form-last-part">
+	<div class="flex-col justify-center mb-6 flex items-center">
+		<div class="flex items-center justify-center mb-4">
+			<button id="back-btn" class="back-btn text-white/40 hover:text-white transition-colors mr-4" onclick="previousStep()">
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+				</svg>
+			</button>
+			<span class="label text-white/40 back-label">Back
+			</span>
+		</div>
+		<h2 id="gravity-form-title" class="text-3xl text-white mb-6 font-normal text-center">Tell us about your project</h2>
+	</div>
+	{{ function('gravity_form', 1, false, true, '', true, 1) }}
+</div>

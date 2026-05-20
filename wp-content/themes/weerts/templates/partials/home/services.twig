@@ -1,0 +1,41 @@
+<section id="home-services" class="!py-0 bg-bgLight relative z-[51]">
+	<div class="container">
+		<div class="border-x border-b border-borderLight">
+			<div class="flex lg:flex-row flex-col">
+				<div class="lg:w-1/2 w-full px-4 md:px-6 py-8 border-borderLight max-lg:border-b lg:border-r">
+					<div class="max-w-2xl">
+						<div class="header-container text-textDark max-w-2xl relative indent-6">
+							<span class="absolute left-0.5 top-3 xl:top-5 2xl:top-6" aria-hidden="true">
+								{{ include('icons/heading-dot.twig') }}
+							</span>
+							{{ post.services.heading }}
+						</div>
+					</div>
+				</div>
+
+				<div class="lg:w-1/2 w-full flex items-end px-4 md:px-6 py-8">
+					<div class="header-container text-textDark max-w-2xl">
+						{{ post.services.content }}
+					</div>
+				</div>
+			</div>
+			<div id="home-service-grid" class="border-borderLight lg:border-t grid grid-cols-1 lg:grid-cols-3">
+				{% for service in post.services.service %}
+					<div class="service-container flex flex-col gap-12 md:gap-20 xl:gap-28 border-borderLight max-lg:border-t {{ loop.index % 3 == 0 ? '' : ' lg:border-r'}}">
+						<span class="text-textLightSubtle p-6">0{{ loop.index }}</span>
+						<div class="text-item w-fit services-items block-content p-6">{{ service.title }}</div>
+						<div class="services-items flex flex-col border-t border-borderLight">
+							{% for item in service.links %}
+								<a href="{{ item.link.url }}" class="py-4 px-4 md:px-6 grid grid-cols-2 gap-8 max-sm:text-sm relative z-10 group scramble-inner {{ loop.last ? '' : 'border-b border-borderLight' }}">
+									<span class="text-item w-fit scramble-part relative z-10 group-hover:text-bgLight transition-colors duration-300">{{ item.link.title }}</span>
+									<div class="absolute w-full h-0 left-0 bottom-0 bg-black duration-300 ease-fancy group-hover:h-full"></div>
+								</a>
+							{% endfor %}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+		{% include "partials/home/spacer.twig" %}
+	</div>
+</section>

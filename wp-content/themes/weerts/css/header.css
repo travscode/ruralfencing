@@ -1,0 +1,179 @@
+.theme-light,
+.theme-dark.theme-flip {
+	--header-border: #eaecf0;
+	--header-border: #dedede;
+	--header-text: #111114;
+	--startbar-bg: rgba(255, 255, 255, 0.5);
+	--page-bg: #f6f6f6;
+	--menu-item: #565658;
+	--menu-dots: #dedede;
+}
+
+.theme-dark,
+.theme-light.theme-flip {
+	--header-border: #252525;
+	--header-text: #f6f6f6;
+	--startbar-bg: rgba(255, 255, 255, 0.1);
+	--page-bg: #111114;
+	--menu-item: #bdbdbd;
+	--menu-dots: #3b3b42;
+}
+
+.theme-light .menu-topbar,
+.theme-dark.theme-flip .menu-topbar {
+	@apply top-0;
+}
+
+.menu-heading,
+.accordion-header .menu-plus {
+	color: var(--header-text);
+}
+
+.logo {
+	color: var(--header-text);
+	@apply duration-300;
+}
+
+.menu-badge {
+	border-color: var(--header-border);
+	color: var(--header-text);
+}
+
+header li > a {
+	color: var(--header-text);
+	fill: var(--header-text);
+}
+
+header li > a:hover {
+	color: var(--header-text);
+}
+
+.start-bar {
+	background: var(--startbar-bg);
+	color: var(--header-text);
+	@apply duration-300 backdrop-blur-md;
+}
+
+.menu-toggle {
+	color: var(--header-text);
+	border-color: var(--header-border);
+	background: var(--page-bg);
+	@apply duration-300;
+}
+
+.menu-item::before {
+	content: '';
+	background: var(--menu-dots);
+	position: absolute;
+	left: 0;
+	top: 13px;
+	width: 7px;
+	height: 7px;
+	border-radius: 99px;
+	transition: background-color 0.3s ease;
+}
+
+.menu-item:hover::before {
+	background: var(--header-text);
+}
+
+.menu-item {
+	margin-left: 18px;
+	color: var(--menu-item);
+}
+
+.menu-item:hover {
+	color: var(--header-text);
+}
+
+.theme-light,
+.theme-dark.theme-flip {
+	.menu-topbar {
+		@apply top-0;
+	}
+}
+
+.menu-topbar,
+.menu-socialsbar,
+.menu-column,
+.menu-socialsbar a,
+.get-started-btn {
+	background: var(--page-bg);
+	border-color: var(--header-border);
+}
+
+.get-started-btn,
+.menu-toggle {
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menu-toggle:hover {
+	background: var(--startbar-bg);
+}
+
+.menu-open .menu-toggle:not(.chat-toggle),
+.menu-open .chat-toggle,
+.get-started-btn:hover {
+	background: var(--header-text);
+	color: var(--page-bg);
+	border-color: var(--header-text);
+}
+
+.chat-open .chat-hide {
+	display: none;
+}
+
+.menu-toggle svg {
+	transition: transform 0.3s ease;
+}
+
+.menu-open .menu-toggle:not(.chat-toggle) svg {
+	transform: rotate(135deg);
+}
+
+.mouse-follower {
+	position: fixed;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+	border-radius: 99px;
+	height: 18px;
+	width: 18px; /* Default circle size */
+	padding: 0;
+	z-index: 9999;
+	transform: translate(-50%, -50%);
+	background-color: var(--header-text);
+	overflow: hidden; /* Hide content during width animation */
+	@apply max-lg:hidden;
+}
+
+/* Remove fit-content - width will be handled by JS */
+.mouse-follower.has-content {
+	padding: 0 8px 0 18px;
+}
+
+.mouse-content {
+	font-family: 'VCR OSD Mono', monospace;
+	text-transform: uppercase;
+	white-space: nowrap;
+	font-size: 12px;
+	color: var(--page-bg);
+	pointer-events: none;
+	position: absolute;
+	left: 24px;
+	top: 50%;
+	transform: translateY(-50%);
+	opacity: 0; /* Start hidden */
+}
+
+.mouse-content::before {
+	content: '';
+	position: absolute;
+	left: -13px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 5px;
+	height: 5px;
+	background-color: var(--page-bg);
+	border-radius: 99px;
+}
