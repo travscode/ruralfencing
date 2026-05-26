@@ -14,14 +14,6 @@ This repository has been cleaned back to the essentials. It keeps the WordPress 
 - Minimal archive, page, single, search, author, and `404` templates
 - Two menu locations: `primary` and `footer`
 
-## What Has Been Removed
-
-- ACF field groups and page-builder logic
-- Custom post APIs and theme helpers
-- Custom animations and heavy front-end JavaScript
-- Project-specific Twig blocks and partials
-- Extra packages that only supported the previous site
-
 ## Requirements
 
 Before you start, make sure you have:
