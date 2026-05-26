@@ -1,5 +1,0 @@
-{% set is_product = function('is_page_template', 'template-product.php')|default(false) %}
-
-<div class="{{ is_product ? 'bg-none' : 'bg-bgLight' }} container">
-	<div class="w-full  border-b {{ is_product ? 'border-textDark/10' : 'border-borderLight' }} border-x" style="height: {{ block.height ?? '50' }}px">
-</div>

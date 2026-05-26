@@ -1,7 +1,9 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-	<div class="container content-wrapper">
-		{{ content }}
-	</div>
+    <section class="py-16 lg:py-20">
+        <div class="site-width">
+            <div class="rich-text max-w-4xl">{{ content }}</div>
+        </div>
+    </section>
 {% endblock %}

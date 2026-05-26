@@ -1,0 +1,16 @@
+<header class="border-b border-stone-200 bg-stone-50">
+    <div class="site-width flex flex-col gap-6 py-6 lg:flex-row lg:items-center lg:justify-between">
+        <a class="text-lg font-semibold tracking-tight text-stone-900 no-underline" href="{{ site.link }}">{{ site.name }}</a>
+        {% if menu and menu.items %}
+            <nav aria-label="Primary navigation">
+                <ul class="flex flex-wrap gap-4 text-sm text-stone-600">
+                    {% for item in menu.items %}
+                        <li>
+                            <a class="no-underline hover:text-stone-900" href="{{ item.link }}" target="{{ item.target }}">{{ item.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</header>

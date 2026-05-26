@@ -4,150 +4,125 @@ use Timber\Site;
 use Timber\Timber;
 
 /**
- * Timber BlankSlate-theme
- * https://github.com/timber/BlankSlate-theme
- *
- * @package  WordPress
- * @subpackage  Timber
- * @since   Timber 0.1
- */
-
-/**
- * If you are installing Timber as a Composer dependency in your theme, you'll need this block
- * to load your dependencies and initialize Timber. If you are using Timber via the WordPress.org
- * plug-in, you can safely delete this block.
+ * Bootstrap Timber when it is installed through Composer in the theme.
  */
 $composer_autoload = __DIR__ . '/vendor/autoload.php';
 if (file_exists($composer_autoload)) {
-	require_once $composer_autoload;
-	Timber::init();
+    require_once $composer_autoload;
+    Timber::init();
 }
 
-include 'php/tiny-mce-extend.php';
-include 'php/admin-columns.php';
-include 'php/get-posts.php';
-include 'php/post-api.php';
-include 'php/media-library-extend.php';
-include 'php/gravity-forms.php';
-include 'php/contact-form.php';
-include 'php/post-rewrite.php';
+if (!class_exists(Timber::class)) {
+    add_action(
+        'admin_notices',
+        function (): void {
+            printf(
+                '<div class="error"><p>%s</p></div>',
+                wp_kses_post(
+                    __('Timber is not available. Run composer install in the theme or activate the Timber plugin.', 'rural-boilerplate')
+                )
+            );
+        }
+    );
 
+    add_filter(
+        'template_include',
+        function (): string {
+            return get_stylesheet_directory() . '/static/no-timber.html';
+        }
+    );
 
-/**
- * Include helpers
- */
-$helpers = glob(__DIR__ . '/helpers/*/*.php');
-foreach ($helpers as $helper) {
-	if (file_exists($helper)) {
-		include_once $helper;
-	}
+    return;
 }
 
-/**
- * Setup our custom options page
- */
-if (function_exists('acf_add_options_page')) {
-	acf_add_options_page(array(
-		'page_title' 	=> 'Site Settings',
-		'menu_title'	=> 'Site Settings',
-		'menu_slug' 	=> 'site-settings',
-		'capability'	=> 'edit_posts',
-		'redirect'		=> false
-	));
-}
+Timber::$dirname = ['templates'];
 
 /**
- * This ensures that Timber is loaded and available as a PHP class.
- * If not, it gives an error message to help direct developers on where to activate
+ * Sets up the shared Timber site configuration.
  */
-if (!class_exists('Timber')) {
-
-	add_action(
-		'admin_notices',
-		function () {
-			echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url(admin_url('plugins.php#timber')) . '">' . esc_url(admin_url('plugins.php')) . '</a></p></div>';
-		}
-	);
-
-	add_filter(
-		'template_include',
-		function ($template) {
-			return get_stylesheet_directory() . '/static/no-timber.html';
-		}
-	);
-	return;
-}
-
-/**
- * Sets the directories (inside your theme) to find .twig files
- */
-Timber::$dirname = array('templates', 'views');
-
-/**
- * We're going to configure our theme inside of a subclass of Timber\Site
- * You can move this to its own file and include here via php's include("MySite.php")
- */
-class weerts extends Site
+class RuralBoilerplateSite extends Site
 {
-	public function __construct()
-	{
-		add_action('after_setup_theme', array($this, 'theme_supports'));
-		add_filter('timber/context', array($this, 'add_to_context'));
-		add_action('wp_enqueue_scripts', array($this, 'register_assets'));
-		parent::__construct();
-	}
+    /**
+     * Registers theme hooks.
+     */
+    public function __construct()
+    {
+        add_action('after_setup_theme', [$this, 'theme_supports']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_assets']);
+        add_filter('timber/context', [$this, 'add_to_context']);
 
-	public function register_assets()
-	{
-		$style_version = filemtime(get_stylesheet_directory() . '/static/style.css') ?: '';
-		$script_version = filemtime(get_stylesheet_directory() . '/static/site.js') ?: '';
+        parent::__construct();
+    }
 
-		wp_enqueue_style('weerts', get_stylesheet_directory_uri() . '/static/style.css', false, $style_version);
-		wp_enqueue_script('weerts', get_stylesheet_directory_uri() . '/static/site.js', false, $script_version);
-	}
+    /**
+     * Adds shared data to every Twig template.
+     *
+     * @param array<string, mixed> $context Timber context values.
+     * @return array<string, mixed>
+     */
+    public function add_to_context(array $context): array
+    {
+        $context['site'] = $this;
+        $context['menu'] = Timber::get_menu('primary');
+        $context['footer_menu'] = Timber::get_menu('footer');
 
-	/** This is where you add some context
-	 *
-	 * @param string $context context['this'] Being the Twig's {{ this }}.
-	 */
-	public function add_to_context($context)
-	{
-		if (function_exists('get_fields')) {
-			$context['options'] = get_fields('options');
-		}
-		$context['main_menu']  = Timber::get_menu('main');
-		$context['footer_menu']  = Timber::get_menu('footer');
-		$context['socials_menu'] = Timber::get_menu('socials');
-		$context['design_menu'] = Timber::get_menu('design');
-		$context['development_menu'] = Timber::get_menu('development');
-		$context['marketing_menu'] = Timber::get_menu('marketing');
+        return $context;
+    }
 
-		$context['site']  = $this;
+    /**
+     * Enqueues the compiled front-end assets when they exist.
+     */
+    public function enqueue_assets(): void
+    {
+        $theme_path = get_stylesheet_directory();
+        $theme_uri = get_stylesheet_directory_uri();
+        $style_path = $theme_path . '/static/style.css';
+        $script_path = $theme_path . '/static/site.js';
 
-		return $context;
-	}
+        if (file_exists($style_path)) {
+            wp_enqueue_style(
+                'rural-boilerplate-theme',
+                $theme_uri . '/static/style.css',
+                [],
+                (string) filemtime($style_path)
+            );
+        }
 
-	public function theme_supports()
-	{
-		add_theme_support('title-tag');
-		add_theme_support('post-thumbnails');
+        if (file_exists($script_path)) {
+            wp_enqueue_script(
+                'rural-boilerplate-theme',
+                $theme_uri . '/static/site.js',
+                [],
+                (string) filemtime($script_path),
+                true
+            );
+        }
+    }
 
-		add_theme_support('menus');
-		register_nav_menus(
-			array(
-				'main' => __('Main Menu', 'weerts'),
-				'design' => __('Design Menu', 'weerts'),
-				'development' => __('Development Menu', 'weerts'),
-				'marketing' => __('Marketing Menu', 'weerts'),
-				'socials' => __('Socials Menu', 'weerts'),
-			)
-		);
+    /**
+     * Registers theme features and navigation menus.
+     */
+    public function theme_supports(): void
+    {
+        add_theme_support('title-tag');
+        add_theme_support('post-thumbnails');
+        add_theme_support('menus');
+        add_theme_support('align-wide');
+        add_theme_support(
+            'html5',
+            ['comment-list', 'comment-form', 'search-form', 'gallery', 'caption', 'style', 'script']
+        );
 
-		add_theme_support('editor-styles');
-		add_editor_style('static/editor.css');
-	}
+        register_nav_menus(
+            [
+                'primary' => __('Primary Menu', 'rural-boilerplate'),
+                'footer' => __('Footer Menu', 'rural-boilerplate'),
+            ]
+        );
+
+        add_theme_support('editor-styles');
+        add_editor_style('static/editor.css');
+    }
 }
 
-new weerts();
-
-add_filter('timber/meta/transform_value', '__return_true');
+new RuralBoilerplateSite();

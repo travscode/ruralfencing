@@ -1,5 +1,5 @@
 {
-  "name": "weerts/boilerroom",
+  "name": "rural/rural-timber-boilerplate-project",
   "require": {
     "vlucas/phpdotenv": "^5.5",
     "roots/wp-password-bcrypt": "^1.1"

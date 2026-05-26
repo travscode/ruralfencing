@@ -1,30 +1,17 @@
-{% if posts.pagination.pages is not empty %}
-	<nav
-		class="flex items-center justify-center gap-6 lg:gap-12">
-
-		{# Previous #}
-		{% if posts.pagination.prev %}
-			<a class="button" href="{{ posts.pagination.prev.link }}">Prev</a>
-		{% else %}
-			<button class="button" disabled>Prev</button>
-		{% endif %}
-
-		{# Pages #}
-		<div class="max-md:hidden flex items-center gap-2">
-			{% for page in posts.pagination.pages %}
-				{% if page.link %}
-					<a class="flex items-center justify-center size-8 duration-150" href="{{ page.link }}">{{ page.title }}</a>
-				{% else %}
-					<span class="flex items-center justify-center size-8 {{ page.class != 'dots' ? 'font-bold' }}">{{ page.title }}</span>
-				{% endif %}
-			{% endfor %}
-		</div>
-
-		{# Next #}
-		{% if posts.pagination.next %}
-			<a class="button" href="{{ posts.pagination.next.link }}">Next</a>
-		{% else %}
-			<button class="button" disabled>Next</button>
-		{% endif %}
-	</nav>
+{% if pagination and pagination.pages %}
+    <nav class="mt-10 flex flex-wrap items-center gap-3 text-sm text-stone-600" aria-label="Pagination">
+        {% if pagination.prev %}
+            <a class="rounded border border-stone-300 px-3 py-2 no-underline hover:border-stone-900 hover:text-stone-900" href="{{ pagination.prev.link }}">Previous</a>
+        {% endif %}
+        {% for page in pagination.pages %}
+            {% if page.link %}
+                <a class="rounded border border-stone-300 px-3 py-2 no-underline hover:border-stone-900 hover:text-stone-900" href="{{ page.link }}">{{ page.title }}</a>
+            {% else %}
+                <span class="rounded border border-stone-900 bg-stone-900 px-3 py-2 text-stone-50">{{ page.title }}</span>
+            {% endif %}
+        {% endfor %}
+        {% if pagination.next %}
+            <a class="rounded border border-stone-300 px-3 py-2 no-underline hover:border-stone-900 hover:text-stone-900" href="{{ pagination.next.link }}">Next</a>
+        {% endif %}
+    </nav>
 {% endif %}

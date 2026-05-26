@@ -1,10 +1,9 @@
 /*
-Theme Name: weerts
-Author: weerts
-Author URI: https://weerts.com.au
-Description: A starting point for blazing-fast development using Timber, Twig, TailwindCSS and ESBuild.
-Version: 2.0
-Requires at least: 6
+Theme Name: Rural Timber Boilerplate
+Author: Rural
+Description: Minimal WordPress starter theme using Timber, Twig, Tailwind CSS, and ESBuild.
+Version: 1.0.0
+Requires at least: 6.0
 Requires PHP: 8.1
-Text Domain: weerts
+Text Domain: rural-boilerplate
 */

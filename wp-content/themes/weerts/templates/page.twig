@@ -1,10 +1,14 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-
-	{% for block in post.meta('page_builder') %}
-		<div data-block="{{ block.acf_fc_layout }}">
-			{{ include('blocks/' ~ block.acf_fc_layout ~ '.twig', ignore_missing = true) }}
-		</div>
-	{% endfor %}
+    <article class="py-16 lg:py-20">
+        <div class="site-width">
+            <header class="max-w-3xl">
+                <h1 class="text-4xl font-semibold tracking-tight text-stone-900">{{ post.title }}</h1>
+            </header>
+            <div class="rich-text mt-8 max-w-3xl">
+                {{ post.content }}
+            </div>
+        </div>
+    </article>
 {% endblock %}

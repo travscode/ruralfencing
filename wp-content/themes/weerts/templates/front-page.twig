@@ -1,12 +1,19 @@
-{% extends 'page.twig' %}
+{% extends 'base.twig' %}
 
 {% block content %}
-	{% include "partials/home/hero.twig" %}
-	{% include "partials/home/selected-works.twig" %}
-	{% include "partials/home/services.twig" %}
-	{% include "partials/home/awards.twig" %}
-	{% include "partials/home/client_logos.twig" %}
-	{% include "partials/home/video.twig" %}
-	{% include "partials/home/pulse.twig" %}
-	{# {% include "partials/home/feature_panels.twig" %} #}
+    <section class="border-b border-stone-200 py-20 lg:py-28">
+        <div class="site-width">
+            <p class="text-sm uppercase tracking-[0.2em] text-stone-500">WordPress Boilerplate</p>
+            <h1 class="mt-4 text-4xl font-semibold tracking-tight text-stone-900 lg:text-6xl">Build the site you actually want to build.</h1>
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-stone-600">This stripped-back starter keeps Timber, Twig, Tailwind CSS, and a tiny asset pipeline without dragging any of the previous project customisation along with it.</p>
+        </div>
+    </section>
+
+    <section class="py-16 lg:py-20">
+        <div class="site-width">
+            <div class="rich-text max-w-3xl">
+                {{ post.content }}
+            </div>
+        </div>
+    </section>
 {% endblock %}

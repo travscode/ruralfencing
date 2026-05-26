@@ -3,9 +3,7 @@
 use Timber\Timber;
 
 $context = Timber::context();
-$context['post'] = Timber::get_post();
 $context['posts'] = Timber::get_posts();
-$context['categories'] = array_filter(Timber::get_terms('category'), fn($category) => $category->name !== 'Uncategorized');
-$context['title'] = $context['post']->title;
+$context['title'] = get_the_title((int) get_option('page_for_posts')) ?: __('Latest Posts', 'rural-boilerplate');
 
-Timber::render('index.twig', $context);
+Timber::render(['index.twig'], $context);
