@@ -1,0 +1,47 @@
+{% set lead = lead|default('') %}
+{% set paragraphs = paragraphs|default([]) %}
+{% set list_items = list_items|default([]) %}
+{% set image_url = image_url|default('') %}
+{% set caption = caption|default('') %}
+
+<section class="bg-eggshell px-6 pb-[180px] lg:px-[100px]">
+	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-10 py-[90px] lg:flex-row lg:gap-[165px] lg:py-[120px] lg:pb-0">
+		<div class="flex w-full gap-10 lg:w-auto">
+			<div class="w-10 pt-[19px]">
+				{% include 'icons/horiz-line.twig' with { class: 'h-1 w-10 text-deep-green' } %}
+			</div>
+
+			<div class="w-full max-w-[625px]">
+				{% if lead %}
+					<p class="text-t5 leading-9 text-birch">{{ lead }}</p>
+				{% endif %}
+
+				<div class="mt-9 flex flex-col gap-6 text-t1 leading-[26px] text-birch">
+					{% for paragraph in paragraphs %}
+						<p>{{ paragraph }}</p>
+					{% endfor %}
+
+					{% if list_items %}
+						<ul class="list-disc pl-6">
+							{% for item in list_items %}
+								<li>{{ item }}</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		<div class="relative w-full overflow-hidden rounded-xl lg:w-[850px]">
+			{% if image_url %}
+				<img class="h-[420px] w-full object-cover lg:h-[567px]" src="{{ image_url }}" alt="" />
+			{% endif %}
+
+			{% if caption %}
+				<div class="absolute bottom-5 left-5 right-5 rounded-md bg-black/60 p-4 text-t7 leading-[23px] text-white">
+					{{ caption }}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</section>

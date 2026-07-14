@@ -1,0 +1,165 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% set theme_uri = function('get_stylesheet_directory_uri') %}
+
+	{% include 'partials/sections/product-cat-banner.twig' with {
+		breadcrumb_items: breadcrumb_items,
+		banner_icon_url: banner_icon_url,
+		title: title
+	} only %}
+
+	<section class="bg-eggshell px-6 pb-[90px] lg:px-[100px]">
+		<div class="mx-auto w-full max-w-[1720px]">
+			<div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-[60px]">
+				<aside class="w-full pt-[45px] lg:w-[375px]">
+					<div class="rounded-xl border border-birch bg-eggshell px-0 pb-[30px] pt-3">
+						<div class="px-6 py-5">
+							<p class="text-t3 font-bold text-birch">Product Categories</p>
+						</div>
+						{% if product_categories_menu and product_categories_menu.items %}
+							<ul class="flex flex-col">
+								{% for item in product_categories_menu.items %}
+									<li>
+										<a
+											class="flex items-center justify-between px-6 py-[15px] text-b1 text-birch no-underline transition-colors hover:text-deep-green"
+											href="{{ item.link }}"
+											target="{{ item.target|default('_self') }}"
+										>
+											<span class="{% if item.link == term_link %}text-deep-green{% endif %}">{{ item.title }}</span>
+											<svg width="8" height="13" viewBox="0 0 8 13" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+												<path d="M1.41406 1.41406L6.41406 6.41406L1.41406 11.4141" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel"/>
+											</svg>
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+					</div>
+				</aside>
+
+				<div class="flex-1 pt-[45px]">
+					<div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+						<p class="pt-2 text-t7 leading-[23px] text-birch">Showing {{ showing_count }} of {{ total_count }} products</p>
+
+						<form class="flex flex-col gap-3 lg:flex-row lg:items-end lg:gap-10" method="get" action="">
+							<div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-4">
+								<p class="pt-2 text-t7 font-bold leading-[23px] text-birch">Price Range</p>
+
+								<div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-2">
+									<div class="relative">
+										<div class="flex w-[124px] items-center gap-2 rounded-md border border-birch bg-eggshell px-5 py-5">
+											<span class="text-t7 leading-[23px] text-birch">$</span>
+											<input
+												class="w-full bg-transparent text-t7 leading-[23px] text-birch outline-none"
+												type="number"
+												name="min_price"
+												step="0.01"
+												min="0"
+												value="{% if price_min is not null %}{{ price_min|number_format(2, '.', '') }}{% endif %}"
+											/>
+										</div>
+										<div class="absolute left-4 top-0 -translate-y-1/2 bg-eggshell px-[5px] pb-[5px]">
+											<span class="text-t7 leading-[23px] text-birch">Min price</span>
+										</div>
+									</div>
+
+									<div class="relative">
+										<div class="flex w-[124px] items-center gap-2 rounded-md border border-birch bg-eggshell px-5 py-5">
+											<span class="text-t7 leading-[23px] text-birch">$</span>
+											<input
+												class="w-full bg-transparent text-t7 leading-[23px] text-birch outline-none"
+												type="number"
+												name="max_price"
+												step="0.01"
+												min="0"
+												value="{% if price_max is not null %}{{ price_max|number_format(2, '.', '') }}{% endif %}"
+											/>
+										</div>
+										<div class="absolute left-4 top-0 -translate-y-1/2 bg-eggshell px-[5px] pb-[5px]">
+											<span class="text-t7 leading-[23px] text-birch">Max price</span>
+										</div>
+									</div>
+
+									<button class="rounded-md bg-goldenrod px-4 py-[17.5px] font-heading text-b2 uppercase text-birch" type="submit">Go</button>
+								</div>
+							</div>
+
+							<div class="flex items-center gap-4">
+								<p class="pt-2 text-t7 font-bold leading-[23px] text-birch">Sort by:</p>
+
+								<div class="relative">
+									<select
+										class="w-[300px] appearance-none rounded-md border border-birch bg-eggshell px-5 py-5 pr-12 text-t7 leading-[23px] text-birch"
+										name="sort"
+										onchange="this.form.submit()"
+									>
+										<option value="name_asc"{% if sort|default('name_asc') == 'name_asc' %} selected{% endif %}>Product Name (A–Z)</option>
+										<option value="name_desc"{% if sort|default('name_asc') == 'name_desc' %} selected{% endif %}>Product Name (Z–A)</option>
+										<option value="price_asc"{% if sort|default('name_asc') == 'price_asc' %} selected{% endif %}>Price (Low–High)</option>
+										<option value="price_desc"{% if sort|default('name_asc') == 'price_desc' %} selected{% endif %}>Price (High–Low)</option>
+										<option value="newest"{% if sort|default('name_asc') == 'newest' %} selected{% endif %}>Newest</option>
+										<option value="oldest"{% if sort|default('name_asc') == 'oldest' %} selected{% endif %}>Oldest</option>
+									</select>
+
+									<div class="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-birch">
+										{% include 'icons/chevron-down.twig' with { class: 'h-[5px] w-[10px]' } only %}
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					{% if products and products|length %}
+						<div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+							{% for product in products %}
+								<a class="block no-underline" href="{{ product.link }}">
+									<div class="relative overflow-hidden rounded-xl bg-white">
+										{% if product.badge %}
+											<span class="absolute left-4 top-4 z-10 rounded bg-deep-green px-3 py-2 font-heading text-b2 uppercase text-white">{{ product.badge }}</span>
+										{% endif %}
+										{% if product.image_url %}
+											<img class="h-[276px] w-full object-cover" src="{{ product.image_url }}" alt="" />
+										{% endif %}
+									</div>
+									<div class="mt-4">
+										<p class="font-heading text-d4 text-birch">{{ product.title }}</p>
+										<div class="mt-2">{{ product.price_html|raw }}</div>
+									</div>
+								</a>
+							{% endfor %}
+						</div>
+					{% else %}
+						<p class="mt-6 text-t7 leading-[23px] text-birch">No products found.</p>
+					{% endif %}
+
+					{% if pagination %}
+						<div class="mt-10 text-birch">{{ pagination|raw }}</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</section>
+
+	{% include 'partials/sections/product-carousel.twig' with {
+		title: 'New & Featured Products',
+		products_shortcode: '[products limit="12" columns="4" category="' ~ term.slug ~ '" visibility="featured" orderby="date" order="DESC"]'
+	} only %}
+
+	{% include 'partials/sections/image-content.twig' with {
+		title: 'Custom Manufacturing',
+		body: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
+		image_url: theme_uri ~ '/images/txt-img-block-2.png',
+		reverse: true,
+		cta_url: site.url ~ '/contact/',
+		cta_text: 'Get in touch'
+	} only %}
+
+	{% include 'partials/sections/cta-primary.twig' with {
+		title: 'Not sure what you need?',
+		body: 'Tell us what you’re working on – what you’re trying to keep in or out – and we’ll help you figure out what you need. Our team is always happy to point you in the right direction.',
+		button_label: 'Get in touch',
+		button_url: site.url ~ '/contact/',
+		image_url: theme_uri ~ '/images/cta-primary.png'
+	} only %}
+{% endblock %}

@@ -1,0 +1,64 @@
+<nav class="bg-deep-green text-white" aria-label="Primary site navigation">
+	<div class="site-width-fluid mx-auto flex h-20 w-full  items-center justify-between">
+		<div class="flex h-full items-center">
+			<div class="h-full">
+				<button
+					id="products-menu-toggle"
+					type="button"
+					class="flex h-full cursor-pointer items-center gap-5 text-goldenrod"
+					aria-haspopup="true"
+					aria-expanded="false"
+					aria-controls="products-mega-menu"
+				>
+					{% include 'icons/nav.twig' with { class: 'h-[15px] w-[30px]', title: 'Open products menu' } %}
+					<span class="font-heading text-[23px] font-bold uppercase leading-[23px] tracking-button text-white">
+						Products
+					</span>
+				</button>
+			</div>
+
+			<div class="h-10 w-px bg-birch/40 mx-10"></div>
+
+			{% if menu and menu.items %}
+				<ul class="flex h-full items-center gap-[30px] text-t7 font-medium">
+					{% for item in menu.items %}
+						<li>
+							<a class="no-underline hover:text-goldenrod" href="{{ item.link }}" target="{{ item.target|default('_self') }}">
+								{{ item.title }}
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		</div>
+
+		<div class="flex items-center gap-[31px]">
+			<form class="relative" method="get" action="{{ function('home_url', '/') }}">
+				<span class="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-birch">
+					{% include 'icons/search.twig' with { class: 'h-[14px] w-[14px]', title: 'Search' } %}
+				</span>
+				<input
+					class="h-10 w-[min(520px,40vw)] rounded-md bg-white pl-[55px] pr-6 text-[15px] leading-[22px] text-birch placeholder:text-birch/60 focus:outline-none"
+					name="s"
+					placeholder="What can we help you find today?"
+					type="search"
+				/>
+			</form>
+
+			<div class="flex h-full items-center">
+				<a class="inline-flex h-20 items-center px-[15px] text-white hover:text-goldenrod" href="{{ account_url }}" aria-label="Account">
+					{% include 'icons/person.twig' with { class: 'h-[25px] w-auto', title: 'Account' } %}
+				</a>
+
+				<a class="relative inline-flex h-20 items-center px-[15px] text-white hover:text-goldenrod" href="{{ cart_url }}" aria-label="Cart">
+					{% include 'icons/cart.twig' with { class: 'h-6 w-6', title: 'Cart' } %}
+					<span
+						class="absolute right-[10px] top-[18px] inline-flex h-[21px] min-w-[21px] items-center justify-center rounded-full bg-goldenrod px-[6.5px] text-[12px] font-medium leading-6 text-birch"
+					>
+						{{ cart_count|default(0) }}
+					</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</nav>

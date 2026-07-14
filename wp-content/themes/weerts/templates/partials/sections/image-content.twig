@@ -1,0 +1,87 @@
+{% set eyebrow = eyebrow|default('') %}
+{% set section_title = title|default('') %}
+{% set body = body|default('') %}
+{% set body_html = body_html|default('') %}
+{% set paragraphs = paragraphs|default([]) %}
+{% set list_items = list_items|default([]) %}
+{% set image_url = image_url|default('') %}
+{% set reverse = reverse|default(false) %}
+{% set cta_url = cta_url|default('') %}
+{% set cta_text = cta_text|default('') %}
+{% set cta2_url = cta2_url|default('') %}
+{% set cta2_text = cta2_text|default('') %}
+{% set cta2_icon = cta2_icon|default('arrow-right') %}
+{% set layout_class = reverse ? 'lg:flex-row-reverse' : 'lg:flex-row' %}
+
+<section class="bg-eggshell px-6 pb-[180px] lg:px-[100px]">
+	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-10 py-[90px] lg:gap-[165px] lg:py-[120px] {{ layout_class }}">
+		<div class="flex w-full gap-10 lg:w-auto">
+			<div class="w-10 pt-[19px]">
+				{% include 'icons/horiz-line.twig' with { class: 'h-1 w-10 text-deep-green' } %}
+			</div>
+
+			<div class="w-full max-w-[625px]">
+				{% if eyebrow %}
+					<p class="text-t7 uppercase tracking-button text-deep-green">{{ eyebrow }}</p>
+				{% endif %}
+
+				{% if section_title %}
+					<h2 class="mt-2 font-heading text-d2 uppercase leading-[58px] text-birch">{{ section_title }}</h2>
+				{% endif %}
+
+				{% if body_html %}
+					<div class="mt-6 text-t1 leading-[26px] text-birch">{{ body_html|raw }}</div>
+				{% elseif body %}
+					<p class="mt-6 text-t1 leading-[26px] text-birch">{{ body }}</p>
+				{% endif %}
+
+				{% if paragraphs or list_items %}
+					<div class="mt-6 flex flex-col gap-6 text-t1 leading-[26px] text-birch">
+						{% for paragraph in paragraphs %}
+							<p>{{ paragraph }}</p>
+						{% endfor %}
+
+						{% if list_items %}
+							<ul class="list-disc pl-6">
+								{% for item in list_items %}
+									<li>{{ item }}</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+					</div>
+				{% endif %}
+
+				{% if (cta_url and cta_text) or (cta2_url and cta2_text) %}
+					<div class="mt-10 flex flex-col gap-4 sm:flex-row">
+						{% if cta_url and cta_text %}
+							<a class="inline-flex overflow-hidden rounded-md no-underline" href="{{ cta_url }}">
+								<span class="flex items-center bg-goldenrod p-[19px] text-birch" aria-hidden="true">
+									{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } %}
+								</span>
+								<span class="flex items-center bg-white py-[17.5px] pl-5 pr-[30px] font-heading text-b2 uppercase text-birch">{{ cta_text }}</span>
+							</a>
+						{% endif %}
+
+						{% if cta2_url and cta2_text %}
+							<a class="inline-flex overflow-hidden rounded-md no-underline" href="{{ cta2_url }}">
+								{% set cta2_icon_path = 'icons/' ~ cta2_icon ~ '.twig' %}
+								{% set cta2_icon_wrap_class = cta2_icon == 'pdf' ? 'bg-deep-green px-[18px] py-[15px] text-white' : 'bg-goldenrod p-[19px] text-birch' %}
+								{% set cta2_icon_class = cta2_icon == 'pdf' ? 'h-5 w-auto' : 'h-3 w-3' %}
+								<span class="flex items-center {{ cta2_icon_wrap_class }}" aria-hidden="true">
+									{% include cta2_icon_path with { class: cta2_icon_class } only %}
+								</span>
+								<span class="flex items-center bg-white py-[17.5px] pl-5 pr-[30px] font-heading text-b2 uppercase text-birch">{{ cta2_text }}</span>
+							</a>
+						{% endif %}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="relative w-full overflow-hidden rounded-xl lg:w-[850px]">
+			{% if image_url %}
+				<img class="h-[420px] w-full object-cover lg:h-[567px]" src="{{ image_url }}" alt="" />
+			{% endif %}
+		</div>
+	</div>
+</section>

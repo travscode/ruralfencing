@@ -1,0 +1,42 @@
+{% set background_url = background_url|default('') %}
+{% set section_title = title|default('') %}
+{% set body = body|default('') %}
+{% set buttons = buttons|default([]) %}
+
+<section class="relative overflow-hidden px-6 pb-[60px] pt-0 lg:px-[100px]">
+	{% if background_url %}
+		<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ background_url }}');"></div>
+	{% endif %}
+	<div class="absolute inset-0 bg-birch/50"></div>
+
+	<div class="relative z-10 mx-auto flex w-full max-w-[1720px] flex-col gap-[80px]">
+		<div class="flex w-full max-w-[1285px] flex-col gap-[80px] pt-[220px] lg:pt-[287px]">
+			<div class="flex flex-col gap-[60px]">
+				<h1 class="font-heading text-d1 uppercase leading-[6.625rem] text-white max-md:text-d1-md max-md:leading-[5rem]">
+					{{ section_title }}
+				</h1>
+
+				{% if body %}
+					<p class="max-w-[995px] text-t5 leading-9 text-white">{{ body }}</p>
+				{% endif %}
+			</div>
+
+			{% if buttons %}
+				<div class="flex flex-wrap gap-5">
+					{% for button in buttons %}
+						<div class="wp-block-button {{ button.style|default('') }}">
+							<a class="wp-block-button__link" href="{{ button.url|default('#') }}">{{ button.label|default('Learn more') }}</a>
+						</div>
+					{% endfor %}
+				</div>
+			{% endif %}
+		</div>
+
+		<div class="mx-auto w-6 opacity-60" aria-hidden="true">
+			<svg width="24" height="38" viewBox="0 0 24 38" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+				<rect x="1" y="1" width="22" height="36" rx="11" stroke="#FFFFFF" stroke-width="2"></rect>
+				<rect x="9" y="9" width="6" height="6" fill="#FFFFFF"></rect>
+			</svg>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,84 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% set theme_uri = function('get_stylesheet_directory_uri') %}
+
+	{% set info_paragraphs = [
+		'An electric fence is a circuit which is powered by an energizer which is also grounded. The pulsed electric current is sent along the fence wire at about one pulse per second. When the horse touches the fence, it completes the circuit between the fence and the ground, causing it to receive a short, sharp but safe shock. The horse remembers this experience so that an electric horse fence acts as a psychological barrier and is therefore safer for the horse and better for the upkeep of the fence.',
+		'An active, alert animal is often injured accidentally because of its inherent reaction to run from danger, whether real or imagined. A highly visible, well respected horse fence is designed to minimize these possibilities.',
+		'When planning the fence the following should be considered.'
+	] %}
+
+	{% set info_list_items = [
+		'Power supply—mains, battery or solar',
+		'Distance of the wire',
+		'Style of fence',
+		'The animal to be kept in or out',
+		'If possible, a map of the area to be fenced'
+	] %}
+
+	{% set gallery_items = [
+		{
+			image_url: theme_uri ~ '/images/helpful-electric-horse-gallery-1.png',
+			caption: 'Various systems on display.'
+		},
+		{
+			image_url: theme_uri ~ '/images/helpful-electric-horse-gallery-2.png',
+			caption: 'The electric fencing wire above the rail prevents the horses from sucking and chewing the treated timber.'
+		},
+		{
+			image_url: theme_uri ~ '/images/helpful-electric-horse-gallery-3.png',
+			caption: 'Electric Fencing Equipment.'
+		}
+	] %}
+
+	{% set quicklink_cards = [
+		{
+			title: 'Horse Gates',
+			text: 'Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet.',
+			image_url: theme_uri ~ '/images/helpful-electric-horse-quicklink-1.png',
+			href: site.url ~ '/product-category/gates/'
+		},
+		{
+			title: 'Farm Gate Accessories',
+			text: 'Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet.',
+			image_url: theme_uri ~ '/images/helpful-electric-horse-quicklink-2.png',
+			href: site.url ~ '/product-category/gates/'
+		},
+		{
+			title: 'Electric Fence Supplies',
+			text: 'Link to Turbo Equi Braid category … Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet.',
+			image_url: theme_uri ~ '/images/helpful-electric-horse-quicklink-3.png',
+			href: site.url ~ '/product-category/fencing/'
+		}
+	] %}
+
+	{% include 'partials/sections/internal-banner.twig' with {
+		title: 'Electric & Horse Fencing',
+		background_url: theme_uri ~ '/images/helpful-electric-horse-banner-bg-aced98.png'
+	} only %}
+
+	{% include 'partials/sections/text-image.twig' with {
+		lead: 'We offer a wide range of high quality electric fencing products and accessories specifically designed with the safety of your livestock in mind. Particularly in the case of your valuable horses, a safe, reliable and highly visible fence is an important consideration for their welfare.',
+		paragraphs: info_paragraphs,
+		list_items: info_list_items,
+		image_url: theme_uri ~ '/images/helpful-electric-horse-story-image.png'
+	} only %}
+
+	{% include 'partials/sections/image-gallery.twig' with {
+		items: gallery_items
+	} only %}
+
+	{% include 'partials/sections/quicklinks.twig' with {
+		title: 'Explore our Electric & Horse Fencing Products',
+		cards: quicklink_cards
+	} only %}
+
+	{% include 'partials/sections/cta-primary.twig' with {
+		title: 'Not sure what you need?',
+		body: 'Tell us what you’re working on – what you’re trying to keep in or out – and we’ll help you figure out what you need. Our team is always happy to point you in the right direction.',
+		button_label: 'Get in touch',
+		button_url: site.url ~ '/contact/',
+		image_url: theme_uri ~ '/images/cta-primary.png'
+	} only %}
+{% endblock %}

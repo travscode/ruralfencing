@@ -1,0 +1,41 @@
+{% set section_title = title|default('') %}
+{% set body = body|default('') %}
+{% set image_url = image_url|default('') %}
+{% set button_label = button_label|default('Get in touch') %}
+{% set button_url = button_url|default('#') %}
+
+<section class="px-6 bg-eggshell pt-[100px]">
+	<div class="mx-auto w-full max-w-[1720px]">
+		<div class="relative overflow-visible rounded-t-xl bg-deep-green">
+			<div class="flex flex-col lg:min-h-[690px] lg:flex-row lg:items-center">
+				{% if image_url %}
+					<div class="w-full px-6 pt-6 lg:w-[660px] lg:flex-none lg:px-0 lg:pl-[85px] absolute bottom-0">
+						<img
+							class="!h-[420px] w-full rounded-t-xl object-cover lg:!h-[736px] lg:!w-[575px]"
+							src="{{ image_url }}"
+							alt=""
+						/>
+					</div>
+				{% endif %}
+
+				<div class="flex w-full flex-col gap-12 px-6 py-16 text-white lg:max-w-[700px] lg:flex-1 lg:px-[88px] lg:py-[120px] md:ml-[660px]">
+					<div class="flex items-center gap-2" aria-hidden="true">
+						<span class="h-[42px] w-1 bg-goldenrod"></span>
+						<span class="h-[42px] w-1 bg-goldenrod"></span>
+						<span class="h-[42px] w-1 bg-goldenrod"></span>
+					</div>
+
+					<h2 class="font-heading text-d2 uppercase leading-[58px] text-white">{{ section_title }}</h2>
+					<p class="max-w-[475px] text-t4 leading-[30px] text-white">{{ body }}</p>
+
+					<a class="inline-flex overflow-hidden rounded-md no-underline" href="{{ button_url }}">
+						<span class="flex items-center bg-goldenrod p-[19px] text-birch" aria-hidden="true">
+							{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } %}
+						</span>
+						<span class="flex items-center bg-white py-[17.5px] pl-5 pr-[30px] font-heading text-b2 uppercase text-birch">{{ button_label }}</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

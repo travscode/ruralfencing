@@ -1,0 +1,7 @@
+<div class="rural-category-spotlight__buttons" aria-label="Product categories">
+	<div class="rural-category-spotlight__buttons-inner">
+		{% for term in terms %}
+			<a class="rural-category-spotlight__pill" href="{{ term.link }}">{{ term.name }}</a>
+		{% endfor %}
+	</div>
+</div>

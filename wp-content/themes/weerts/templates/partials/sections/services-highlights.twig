@@ -1,0 +1,56 @@
+{% set icon_items = icon_items|default([]) %}
+{% set testimonials = testimonials|default([]) %}
+{% set quote_icon_template = quote_icon_template|default(null) %}
+
+<section class="px-6 lg:px-[100px]">
+	<div class="mx-auto w-full max-w-[1720px]">
+
+
+		{% if testimonials %}
+			<div class="my-10 rounded-xl bg-deep-green px-6 py-14 lg:my-[90px] lg:px-[80px] lg:py-[110px]">
+				<div class="rural-testimonials-fade" data-testimonials-fade-carousel data-interval="5000">
+					<div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-[110px]">
+						<div class="flex items-start gap-[52px]">
+							<div class="flex items-center gap-2" aria-hidden="true">
+								<span class="h-[42px] w-1 bg-goldenrod"></span>
+								<span class="h-[42px] w-1 bg-goldenrod"></span>
+								<span class="h-[42px] w-1 bg-goldenrod"></span>
+							</div>
+
+							<h2 class="font-heading text-d2 uppercase leading-[58px] text-white">What our customers say</h2>
+						</div>
+
+						<div class="w-full max-w-[850px]">
+							<div class="relative" data-fade-stage>
+								{% for t in testimonials %}
+									<div
+										class="w-full transition-opacity duration-700 ease-in-out{% if loop.first %} relative opacity-100{% else %} absolute inset-0 opacity-0 pointer-events-none{% endif %}"
+										data-fade-slide
+										{% if loop.first %}
+											aria-hidden="false"
+										{% else %}
+											aria-hidden="true"
+										{% endif %}
+									>
+										{% if quote_icon_template %}
+											<div aria-hidden="true">
+												{% include quote_icon_template with { class: 'h-6 w-8 text-goldenrod' } only %}
+											</div>
+										{% endif %}
+
+										<p class="mt-[34px] text-t5 leading-9 text-white">{{ t.quote }}</p>
+										<p class="mt-[34px] text-t1 leading-[26px] text-white">
+											<strong>{{ t.name }}</strong><br>{{ t.suburb }}
+										</p>
+									</div>
+								{% endfor %}
+							</div>
+
+							<div class="rural-testimonials-carousel__pagination" data-carousel-pagination aria-label="Testimonials pagination"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+</section>

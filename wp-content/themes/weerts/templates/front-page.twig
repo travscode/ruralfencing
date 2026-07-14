@@ -1,19 +1,157 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-    <section class="border-b border-stone-200 py-20 lg:py-28">
-        <div class="site-width">
-            <p class="text-sm uppercase tracking-[0.2em] text-stone-500">WordPress Boilerplate</p>
-            <h1 class="mt-4 text-4xl font-semibold tracking-tight text-stone-900 lg:text-6xl">Build the site you actually want to build.</h1>
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-stone-600">This stripped-back starter keeps Timber, Twig, Tailwind CSS, and a tiny asset pipeline without dragging any of the previous project customisation along with it.</p>
-        </div>
-    </section>
+	{% set theme_uri = function('get_stylesheet_directory_uri') %}
 
-    <section class="py-16 lg:py-20">
-        <div class="site-width">
-            <div class="rich-text max-w-3xl">
-                {{ post.content }}
-            </div>
-        </div>
-    </section>
+	{% set hero_buttons = [
+		{
+			label: 'Fencing',
+			url: site.url ~ '/product-category/fencing/',
+			style: 'is-style-rural-hero-fencing'
+		},
+		{
+			label: 'Gates',
+			url: site.url ~ '/product-category/gates/',
+			style: 'is-style-rural-hero-gates'
+		},
+		{
+			label: 'Irrigation',
+			url: site.url ~ '/product-category/irrigation/',
+			style: 'is-style-rural-hero-irrigation'
+		}
+	] %}
+
+	{% set product_faqs = [
+		{
+			question: 'Need help choosing the right products for your job?',
+			answer: 'Yes. If you are not sure what suits your site, project, or stock requirements, our team can help you work through the options and point you toward the right products.'
+		},
+		{
+			question: 'Do you sell to both rural and domestic customers?',
+			answer: 'Absolutely. We supply products for farms, acreages, commercial jobs, and residential projects across Perth and Western Australia.'
+		},
+		{
+			question: 'Can you help with gates and custom fabrication?',
+			answer: 'Yes. We stock a wide range of gate products, and custom or decorative gate work can be manufactured through our workshop.'
+		},
+		{
+			question: 'Do you stock irrigation, pumps, and water tank products too?',
+			answer: 'We do. Alongside fencing and gates, we supply irrigation, pumps, and water tank products to help cover the full job.'
+		},
+		{
+			question: 'Can you arrange pickup or delivery?',
+			answer: 'Our warehouse team can help with packing and loading, and delivery arrangements can be discussed depending on your order and location.'
+		}
+	] %}
+
+	{% set testimonial_slides = [
+		{
+			quote: 'Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna.',
+			name: 'Steve',
+			location: 'Suburb'
+		},
+		{
+			quote: 'The team were great to deal with and helped us work through the right products for our job. Everything was ready when promised and the advice was spot on.',
+			name: 'Janine',
+			location: 'Maddington'
+		},
+		{
+			quote: 'From the first call through to pickup, the service was friendly, practical and fast. It made the whole project much easier to get moving.',
+			name: 'Mark',
+			location: 'Perth Hills'
+		}
+	] %}
+
+	{% include 'partials/sections/home-hero.twig' with {
+		background_url: theme_uri ~ '/images/home_bg.jpg',
+		title: 'Your one-stop shop for all things fencing, gates & irrigation',
+		body: 'Supplying Perth and Western Australia with a complete range of products, backed by practical advice to help you get the job done right.',
+		buttons: hero_buttons
+	} only %}
+
+	{% include 'partials/sections/location-block.twig' with {
+		title: 'Visit Us in Store',
+		location: {
+			address: '2 Davison Street, Maddington WA 6109',
+			directions_url: 'https://maps.google.com/?q=2+Davison+Street,+Maddington+WA+6109'
+		},
+		hours: [
+			'Monday to Friday: 7:30am - 4:30pm',
+			'Saturday: 8am - 1pm'
+		],
+		contact: {
+			email: 'sales@ruralfencingsupplies.com.au',
+			phone: '(08) 9492 0500',
+			phone_link: '0894920500'
+		}
+	} only %}
+
+	{% include 'partials/sections/home-intro.twig' with {
+		lead: 'We market fencing and irrigation products that are strong, durable and versatile for rural, domestic, and commercial projects across Western Australia.',
+		body: 'Our range covers fencing, trellising, safety barriers, pet enclosures, vermin exclusion, gates, irrigation, pumps, and more. We constantly source new and innovative products, and if you are unsure what will suit your project, our customer service team is always happy to help.'
+	} only %}
+
+	{% include 'partials/sections/product-carousel.twig' with {
+		title: 'New & Featured Products',
+		products_shortcode: '[weerts_products limit="12" columns="4" featured="true" on_sale="false" show_badges="true" orderby="date" order="DESC"]'
+	} only %}
+
+	
+
+	{% include 'partials/sections/category-spotlight.twig' with {
+		title: 'Fencing Supplies & Enclosures',
+		paragraphs: [
+			'We stock practical fencing solutions for rural properties, acreage, and domestic projects, including meshes, wires, posts, strainers, fittings, and enclosure products.',
+			'Whether you are managing livestock, securing boundaries, protecting gardens, or setting up pet and vermin exclusion, we can help you choose products that are strong, durable, and fit for purpose.'
+		],
+		helper_html: 'Browse our fencing categories to find what you need, or <a class="underline underline-offset-4" href="' ~ site.url ~ '/contact/">talk to one of our team</a> for guidance based on your project.',
+		category_shortcode: '[weerts_product_category_pills parent_slug="fencing" limit="12"]',
+		icon_url: theme_uri ~ '/images/icon-fencing.svg',
+		image_hero_url: theme_uri ~ '/images/category-fencing-1.png',
+		image_small_url: theme_uri ~ '/images/category-fencing-2-62a8e6.png',
+		image_medium_url: theme_uri ~ '/images/category-fencing-3.png'
+	} only %}
+
+	{% include 'partials/sections/category-spotlight.twig' with {
+		title: 'Irrigation, Pumps & Water Tanks',
+		paragraphs: [
+			'Alongside fencing and gates, we also supply irrigation, pumps, and water tank products to help keep your property running efficiently.',
+			'From straightforward replacement parts through to new setups, our team can help you narrow down the right products for your land, stock, or domestic water needs.'
+		],
+		helper_html: 'Browse our irrigation range, or <a class="underline underline-offset-4" href="' ~ site.url ~ '/contact/">get in touch</a> if you would like help working out what you need.',
+		category_shortcode: '[weerts_product_category_pills parent_slug="irrigation" limit="12"]',
+		icon_url: theme_uri ~ '/images/icon-fencing.svg',
+		image_hero_url: theme_uri ~ '/images/about-quicklink-3.png',
+		image_small_url: theme_uri ~ '/images/about-gallery-1.png',
+		image_medium_url: theme_uri ~ '/images/about-gallery-2.png',
+		reverse: true
+	} only %}
+
+	{% include 'partials/sections/search-strip.twig' with {
+		title: 'Search our extensive product range',
+		body_html: 'Not sure what you need? <a class="underline underline-offset-4" href="' ~ site.url ~ '/contact/">Get in touch</a>',
+		action_url: function('home_url', '/'),
+		icon_url: theme_uri ~ '/images/icon-search-30.svg'
+	} only %}
+
+
+	{% include 'partials/sections/product-carousel.twig' with {
+		title: 'Specials &amp; Clearance Items',
+		products_shortcode: '[weerts_products limit="12" columns="4" featured="true" on_sale="true" show_sale_flash="false" show_badges="true" orderby="date" order="DESC"]'
+	} only %}
+
+	{% include 'partials/sections/faq.twig' with {
+		title: 'Frequently Asked Questions',
+		items: product_faqs
+	} only %}
+
+
+
+	{% include 'partials/sections/cta-primary.twig' with {
+		title: 'Not sure what you need?',
+		body: 'Tell us what you are working on, what you are trying to keep in or out, and we will help you figure out what you need. Our team is always happy to point you in the right direction.',
+		button_label: 'Get in touch',
+		button_url: site.url ~ '/contact/',
+		image_url: theme_uri ~ '/images/cta-primary.png'
+	} only %}
 {% endblock %}

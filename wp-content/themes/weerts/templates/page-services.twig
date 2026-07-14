@@ -1,0 +1,121 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% set theme_uri = function('get_stylesheet_directory_uri') %}
+
+	{% set service_sections = [
+		{
+			title: 'Fencing, Gates & Irrigation Product supplies in western Australia',
+			body: 'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.',
+			image_url: theme_uri ~ '/images/txt-img-block-1.png',
+			reverse: false
+		},
+		{
+			title: 'Custom Manufacturing',
+			body: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
+			image_url: theme_uri ~ '/images/txt-img-block-2.png',
+			reverse: true,
+			cta_url: site.url ~ '/contact/',
+			cta_text: 'Get in touch'
+		},
+		{
+			title: 'Advice & DIY',
+			body: 'Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.',
+			image_url: theme_uri ~ '/images/txt-img-block-3.png',
+			reverse: false,
+			cta_url: site.url ~ '/contact/',
+			cta_text: 'Contact us',
+			cta2_url: '#',
+			cta2_text: 'Fence installation guide',
+			cta2_icon: 'pdf'
+		}
+	] %}
+
+	{% set faq_items = [
+		{
+			question: 'Can you help me choose the right fencing product?',
+			answer: 'Yes. Tell us what you’re trying to keep in or out, the distances involved, and what you already have on site, and we’ll recommend options.'
+		},
+		{
+			question: 'Do you offer custom gates or fabrication?',
+			answer: 'We can assist with workshop jobs and custom orders depending on what you need. Get in touch with details (sizes, quantities, photos) and we’ll advise next steps.'
+		},
+		{
+			question: 'Can I pick up in store?',
+			answer: 'Yes. You can pick up from our Maddington location. If you call ahead, we can help have things ready for you.'
+		},
+		{
+			question: 'Do you deliver?',
+			answer: 'Deliveries can be negotiated depending on your location and the size of the order. Contact us and we’ll help organise it.'
+		}
+	] %}
+
+	{% include 'partials/sections/internal-banner.twig' with {
+		title: 'What We Do & How we help',
+		background_url: theme_uri ~ '/images/internal-banner-bg-1c16be.png'
+	} only %}
+
+	{% for section in service_sections %}
+		{% include 'partials/sections/image-content.twig' with section only %}
+	{% endfor %}
+
+	
+
+	{% set testimonial_slides = [
+		{
+			quote: 'Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero.',
+			name: 'Steve',
+			suburb: 'Suburb'
+		}
+	] %}
+
+	{% include 'partials/sections/services-highlights.twig' with {
+		testimonials: testimonial_slides,
+		quote_icon_template: 'icons/quote-marks.twig'
+	} only %}
+
+	{% set additional_service_sections = [
+		{
+			title: 'Delivery Solutions',
+			paragraphs: [
+				'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.',
+				'Nullam accumsan lorem in dui. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante.'
+			],
+			list_items: [
+				'Phasellus leo dolor, tempus non, auctor et, hendrerit quis, nisi.',
+				'Maecenas malesuada. Praesent congue erat at massa.',
+				'Sed cursus turpis vitae tortor.',
+				'Donec posuere vulputate arcu.'
+			],
+			image_url: theme_uri ~ '/images/txt-img-block-4.png',
+			reverse: false,
+			cta_url: site.url ~ '/contact/',
+			cta_text: 'Contact us'
+		},
+		{
+			title: 'Professional Installation',
+			body_html: 'We don’t provide a fence installation service however, we do have a list of trusted contractors that we can recommend. Let us know if you need assistance and we can put you in touch with the right people.<br><br>For the purchase and installation of automatic gates, head over to our <a class="underline" href="https://gatemaster.com.au/" target="_blank" rel="noopener noreferrer">Gatemaster Australia website</a>.',
+			image_url: theme_uri ~ '/images/txt-img-block-5-2c1215.png',
+			reverse: true,
+			cta_url: site.url ~ '/contact/',
+			cta_text: 'Get in touch'
+		}
+	] %}
+
+	{% for section in additional_service_sections %}
+		{% include 'partials/sections/image-content.twig' with section only %}
+	{% endfor %}
+
+	{% include 'partials/sections/faq.twig' with {
+		title: 'Frequently asked questions',
+		items: faq_items
+	} only %}
+
+	{% include 'partials/sections/cta-primary.twig' with {
+		title: 'Not sure what you need?',
+		body: 'Tell us what you’re working on – what you’re trying to keep in or out – and we’ll help you figure out what you need. Our team is always happy to point you in the right direction.',
+		button_label: 'Get in touch',
+		button_url: site.url ~ '/contact/',
+		image_url: theme_uri ~ '/images/cta-primary.png'
+	} only %}
+{% endblock %}

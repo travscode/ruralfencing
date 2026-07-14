@@ -8,8 +8,8 @@
 		"build:js": "esbuild js/index.js --bundle --minify --outfile=static/site.js",
 		"build:css-app": "postcss css/main.css -o static/style.css",
 		"build:css-editor": "postcss css/editor.css -o static/editor.css",
-		"watch:css-app": "postcss css/main.css -o static/style.css --watch",
-		"watch:css-editor": "postcss css/editor.css -o static/editor.css --watch"
+		"watch:css-app": "tailwindcss -i css/main.css -o static/style.css --watch --postcss",
+		"watch:css-editor": "tailwindcss -i css/editor.css -o static/editor.css --watch --postcss"
 	},
 	"dependencies": {
 		"autoprefixer": "^10.4.21",

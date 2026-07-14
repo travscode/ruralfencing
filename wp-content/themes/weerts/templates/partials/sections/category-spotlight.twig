@@ -1,0 +1,61 @@
+{% set section_title = title|default('') %}
+{% set paragraphs = paragraphs|default([]) %}
+{% set helper_html = helper_html|default('') %}
+{% set category_shortcode = category_shortcode|default('') %}
+{% set icon_url = icon_url|default('') %}
+{% set image_hero_url = image_hero_url|default('') %}
+{% set image_small_url = image_small_url|default('') %}
+{% set image_medium_url = image_medium_url|default('') %}
+{% set reverse = reverse|default(false) %}
+
+<section class="rural-category-spotlight px-6 pb-[180px] lg:px-[100px]">
+	<div class="mx-auto flex w-full max-w-[1720px] flex-col items-center gap-12 {% if reverse %}lg:flex-row-reverse{% else %}lg:flex-row{% endif %} lg:gap-[165px]">
+		<div class="flex items-start w-full gap-[43px] lg:w-auto">
+			{% if icon_url %}
+				<img src="{{ icon_url }}" width="37" height="42" alt="" aria-hidden="true" />
+			{% endif %}
+
+			<div class="flex w-full max-w-[625px] flex-col gap-[60px]">
+				<div class="flex flex-col gap-12">
+					<h2 class="font-heading text-d2 uppercase leading-[58px] text-birch">{{ section_title }}</h2>
+
+					<div class="flex flex-col gap-6 text-t1 leading-[26px] text-birch">
+						{% for paragraph in paragraphs %}
+							<p>{{ paragraph }}</p>
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="flex flex-col gap-12 border-t-2 border-deep-green pt-[30px]">
+					{% if helper_html %}
+						<div class="text-t3 leading-[26px] text-birch">{{ helper_html|raw }}</div>
+					{% endif %}
+
+					{% if category_shortcode %}
+						{{ function('do_shortcode', category_shortcode)|raw }}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		<div class="rural-category-spotlight__images grid w-full gap-5 lg:w-[850px] lg:grid-cols-2">
+			{% if image_hero_url %}
+				<div class="rural-category-spotlight__img rural-category-spotlight__img--hero">
+					<img src="{{ image_hero_url }}" alt="" />
+				</div>
+			{% endif %}
+
+			{% if image_small_url %}
+				<div class="rural-category-spotlight__img rural-category-spotlight__img--small">
+					<img src="{{ image_small_url }}" alt="" />
+				</div>
+			{% endif %}
+
+			{% if image_medium_url %}
+				<div class="rural-category-spotlight__img rural-category-spotlight__img--medium">
+					<img src="{{ image_medium_url }}" alt="" />
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</section>

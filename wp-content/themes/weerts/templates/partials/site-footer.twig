@@ -1,16 +1,161 @@
-<footer class="border-t border-stone-200 bg-white">
-    <div class="site-width flex flex-col gap-6 py-8 text-sm text-stone-500 lg:flex-row lg:items-center lg:justify-between">
-        <p>&copy; {{ 'now'|date('Y') }} {{ site.name }}</p>
-        {% if footer_menu and footer_menu.items %}
-            <nav aria-label="Footer navigation">
-                <ul class="flex flex-wrap gap-4">
-                    {% for item in footer_menu.items %}
-                        <li>
-                            <a class="no-underline hover:text-stone-900" href="{{ item.link }}" target="{{ item.target }}">{{ item.title }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </nav>
-        {% endif %}
-    </div>
+<footer class="bg-birch text-eggshell">
+	<div class="site-width py-12 sm:py-14 lg:py-20">
+		<div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between lg:gap-10">
+			<a class="inline-flex items-center no-underline" href="{{ site.link }}">
+				{% include 'images/logo_footer.twig' %}
+			</a>
+
+			<div class="flex items-center gap-4">
+				<a
+					class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-goldenrod text-birch transition-colors hover:bg-goldenrod/90"
+					href="https://www.facebook.com/"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Facebook"
+				>
+					{% include 'icons/facebook.twig' with { class: 'h-6 w-6', title: 'Facebook' } %}
+				</a>
+				<a
+					class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-goldenrod text-birch transition-colors hover:bg-goldenrod/90"
+					href="https://www.instagram.com/"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Instagram"
+				>
+					{% include 'icons/instagram.twig' with { class: 'h-6 w-6', title: 'Instagram' } %}
+				</a>
+			</div>
+		</div>
+
+		<div class="mt-12 border-t border-eggshell/20 pt-12">
+			<div class="grid gap-12 md:grid-cols-12 md:gap-x-12 md:gap-y-0 lg:gap-x-16">
+				<div class="md:col-span-5">
+					<dl class="mt-1 grid gap-y-4 text-t7 leading-relaxed text-eggshell/80">
+						<div class="grid gap-y-1 sm:grid-cols-[96px_1fr] sm:items-start sm:gap-x-6 sm:gap-y-0">
+							<dt class="pt-[2px] text-t8 font-bold uppercase tracking-button text-goldenrod sm:whitespace-nowrap">
+								Location
+							</dt>
+							<dd class="break-words">
+								2 Davison Street, Maddington WA 6109
+							</dd>
+						</div>
+						<div class="grid gap-y-1 sm:grid-cols-[96px_1fr] sm:items-start sm:gap-x-6 sm:gap-y-0">
+							<dt class="pt-[2px] text-t8 font-bold uppercase tracking-button text-goldenrod sm:whitespace-nowrap">Phone</dt>
+							<dd>
+								<a class="no-underline transition-colors hover:text-eggshell" href="tel:0894920500">(08) 9492 0500</a>
+							</dd>
+						</div>
+						<div class="grid gap-y-1 sm:grid-cols-[96px_1fr] sm:items-start sm:gap-x-6 sm:gap-y-0">
+							<dt class="pt-[2px] text-t8 font-bold uppercase tracking-button text-goldenrod sm:whitespace-nowrap">Email</dt>
+							<dd class="break-words">
+								<a class="no-underline transition-colors hover:text-eggshell" href="mailto:sales@ruralfencingsupplies.com.au">
+									sales@ruralfencingsupplies.com.au
+								</a>
+							</dd>
+						</div>
+						<div class="grid gap-y-1 sm:grid-cols-[96px_1fr] sm:items-start sm:gap-x-6 sm:gap-y-0">
+							<dt class="pt-[2px] text-t8 font-bold uppercase tracking-button text-goldenrod sm:whitespace-nowrap">Hours</dt>
+							<dd class="flex flex-col gap-1">
+								<span>Monday to Friday: 7:30am - 4:30pm</span>
+								<span>Saturday: 8am - 1pm</span>
+							</dd>
+						</div>
+					</dl>
+				</div>
+
+				<div class="grid gap-12 sm:grid-cols-2 md:col-span-7 md:grid-cols-2">
+					<div>
+						<p class="text-t8 font-bold uppercase tracking-button text-goldenrod">Product Categories</p>
+						{% if product_categories_menu and product_categories_menu.items %}
+							<ul class="mt-4 flex flex-col gap-3 text-t7 leading-relaxed text-eggshell/80">
+								{% for item in product_categories_menu.items %}
+									<li>
+										<a
+											class="no-underline transition-colors hover:text-eggshell"
+											href="{{ item.link }}"
+											target="{{ item.target|default('_self') }}"
+										>
+											{{ item.title }}
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+					</div>
+
+					<div>
+						<p class="text-t8 font-bold uppercase tracking-button text-goldenrod">Quicklinks</p>
+						{% if footer_menu and footer_menu.items %}
+							<ul class="mt-4 flex flex-col gap-3 text-t7 leading-relaxed text-eggshell/80">
+								{% for item in footer_menu.items %}
+									<li>
+										<a
+											class="no-underline transition-colors hover:text-eggshell"
+											href="{{ item.link }}"
+											target="{{ item.target|default('_self') }}"
+										>
+											{{ item.title }}
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mt-12 flex flex-col items-center gap-8 border-t border-eggshell/20 pt-8 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
+			<ul
+				class="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 text-eggshell/90 [&_svg]:h-4 [&_svg]:w-auto lg:justify-start"
+				aria-label="Payment methods"
+			>
+				<li>
+					<span class="sr-only">Visa</span>
+					{% include 'icons/payment/visa.twig' %}
+				</li>
+				<li>
+					<span class="sr-only">Mastercard</span>
+					{% include 'icons/payment/mastercard.twig' %}
+				</li>
+				<li>
+					<span class="sr-only">American Express</span>
+					{% include 'icons/payment/amex.twig' %}
+				</li>
+				<li>
+					<span class="sr-only">PayPal</span>
+					{% include 'icons/payment/paypal.twig' %}
+				</li>
+				<li>
+					<span class="sr-only">Apple Pay</span>
+					{% include 'icons/payment/apple.twig' %}
+				</li>
+				<li>
+					<span class="sr-only">Google Pay</span>
+					{% include 'icons/payment/google.twig' %}
+				</li>
+				<li>
+					<span class="sr-only">Afterpay</span>
+					{% include 'icons/payment/afterpay.twig' %}
+				</li>
+				<li>
+					<span class="sr-only">Zip</span>
+					{% include 'icons/payment/zip.twig' %}
+				</li>
+			</ul>
+
+			<div class="flex flex-col gap-3 text-sm text-eggshell lg:flex-row lg:items-center lg:gap-6">
+				<p>Copyright &copy; {{ 'now'|date('Y') }}. Rural Fencing and Irrigation Supplies</p>
+				<a class="underline underline-offset-4 hover:text-eggshell hover:underline" href="/privacy">Privacy Policy</a>
+				<a
+					class="underline underline-offset-4 hover:text-eggshell hover:underline"
+					href="https://visible.com.au"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					Website by Visible
+				</a>
+			</div>
+		</div>
+	</div>
 </footer>

@@ -1,0 +1,32 @@
+{% set svg_title = title|default(null) %}
+
+<svg
+	class="{{ class|default('') }}"
+	viewBox="0 0 24 24"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+	{% if svg_title %}
+		role="img"
+		aria-label="{{ svg_title|e }}"
+	{% else %}
+		aria-hidden="true"
+	{% endif %}
+>
+	{% if svg_title %}
+		<title>{{ svg_title }}</title>
+	{% endif %}
+	<path
+		d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0Z"
+		stroke="currentColor"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+	/>
+	<path
+		d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+		stroke="currentColor"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+	/>
+</svg>

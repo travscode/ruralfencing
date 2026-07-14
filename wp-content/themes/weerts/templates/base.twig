@@ -4,7 +4,36 @@
     <body class="{{ body_class }}">
         <a class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-stone-900 focus:px-4 focus:py-2 focus:text-stone-50" href="#content">{{ function('__', 'Skip to content', 'rural-boilerplate') }}</a>
         {% include 'partials/site-header.twig' %}
-        <main id="content">
+        {% if product_cat_tree %}
+            <div
+                id="products-mega-menu"
+                class="products-mega-menu fixed inset-x-0 bottom-0 top-[var(--site-header-height,0px)] z-40 hidden"
+                data-open="false"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Product categories"
+            >
+                <div class="products-mega-menu__overlay absolute inset-0 bg-birch/70" data-products-menu="overlay"></div>
+                <div class="relative z-10 h-full overflow-y-auto">
+                    <div class="relative flex h-full flex-row items-stretch">
+                        <div class="products-mega-menu__panel products-mega-menu__panel--level1 relative z-30 h-full w-[444px] bg-white text-birch">
+                            <div class="px-[100px] py-[15px]">
+                                <span class="sr-only">Product categories</span>
+                            </div>
+                            <div data-products-menu="level1"></div>
+                        </div>
+                        <div class="products-mega-menu__panel products-mega-menu__panel--level2 relative z-20 h-full w-[344px] bg-eggshell text-birch">
+                            <div class="pt-[41px]" data-products-menu="level2"></div>
+                        </div>
+                        <div class="products-mega-menu__panel products-mega-menu__panel--level3 relative z-10 h-full w-[344px] bg-eggshell text-birch">
+                            <div class="pt-[41px]" data-products-menu="level3"></div>
+                        </div>
+                    </div>
+                </div>
+                <script id="product-cat-tree" type="application/json">{{ product_cat_tree|json_encode|raw }}</script>
+            </div>
+        {% endif %}
+        <main id="content" class="bg-eggshell">
             {% block content %}{% endblock %}
         </main>
         {% include 'partials/site-footer.twig' %}

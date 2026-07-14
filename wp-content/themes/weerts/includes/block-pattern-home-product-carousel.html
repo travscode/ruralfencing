@@ -1,0 +1,48 @@
+<!-- wp:group {"tagName":"section","className":"rural-product-carousel px-6 lg:px-[100px] pb-[180px]"} -->
+<section class="wp-block-group rural-product-carousel px-6 lg:px-[100px] pb-[180px]"><!-- wp:group {"className":"flex w-full flex-col items-center gap-[60px]"} -->
+<div class="wp-block-group flex w-full flex-col items-center gap-[60px]"><!-- wp:group {"className":"flex w-full items-center justify-between gap-8"} -->
+<div class="wp-block-group flex w-full items-center justify-between gap-8"><!-- wp:group {"className":"flex items-center gap-[52px]"} -->
+<div class="wp-block-group flex items-center gap-[52px]"><!-- wp:html -->
+<div class="flex items-center gap-2" aria-hidden="true">
+  <span class="h-[42px] w-1 bg-goldenrod"></span>
+  <span class="h-[42px] w-1 bg-goldenrod"></span>
+  <span class="h-[42px] w-1 bg-goldenrod"></span>
+</div>
+<!-- /wp:html -->
+
+<!-- wp:heading {"level":2,"className":"font-heading text-d2 uppercase leading-[58px] text-birch"} -->
+<h2 class="wp-block-heading font-heading text-d2 uppercase leading-[58px] text-birch">New &amp; Featured Products</h2>
+<!-- /wp:heading --></div>
+<!-- /wp:group -->
+
+<!-- wp:html -->
+<div class="flex items-center justify-end gap-3">
+  <button class="rural-product-carousel__nav" type="button" data-carousel-prev aria-label="Previous products" disabled>
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M12.5 5L7.5 10L12.5 15" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel"/>
+    </svg>
+  </button>
+  <button class="rural-product-carousel__nav" type="button" data-carousel-next aria-label="Next products">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel"/>
+    </svg>
+  </button>
+</div>
+<!-- /wp:html --></div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"rural-product-carousel__viewport w-full","layout":{"type":"constrained"}} -->
+<div class="wp-block-group rural-product-carousel__viewport w-full"><!-- wp:shortcode -->
+[products limit="12" columns="4" visibility="featured" orderby="date" order="DESC"]
+<!-- /wp:shortcode --></div>
+<!-- /wp:group -->
+
+<!-- wp:html -->
+<div class="rural-product-carousel__progress" aria-hidden="true">
+  <div class="rural-product-carousel__progress-track">
+    <div class="rural-product-carousel__progress-bar" data-carousel-progress></div>
+  </div>
+</div>
+<!-- /wp:html --></div>
+<!-- /wp:group --></section>
+<!-- /wp:group -->

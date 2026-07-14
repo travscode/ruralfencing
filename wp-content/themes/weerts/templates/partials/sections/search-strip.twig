@@ -1,0 +1,30 @@
+{% set section_title = title|default('') %}
+{% set body_html = body_html|default('') %}
+{% set action_url = action_url|default(function('home_url', '/')) %}
+{% set icon_url = icon_url|default('') %}
+
+<section class="rural-search-strip px-6 pb-[180px]">
+	<div class="mx-auto w-full max-w-[1720px] rounded-xl bg-goldenrod px-6 py-10 lg:px-20 lg:py-20">
+		<div class="flex flex-col items-stretch justify-between gap-10 lg:flex-row lg:items-center lg:gap-[112px]">
+			<div class="flex w-full flex-col gap-[30px] lg:w-[678px]">
+				<h2 class="font-heading text-d2 uppercase leading-[58px] text-birch">{{ section_title }}</h2>
+
+				{% if body_html %}
+					<div class="text-t1 leading-[26px] text-birch">{{ body_html|raw }}</div>
+				{% endif %}
+			</div>
+
+			<form class="rural-search-strip__form w-full md:max-w-1/2 role="search" method="get" action="{{ action_url }}" aria-label="Search products">
+				<div class="rural-search-strip__bar">
+					<label class="sr-only" for="rural-search-strip-field">Search</label>
+					<input id="rural-search-strip-field" class="rural-search-strip__field" type="search" name="s" placeholder="What can we help you find today?" />
+					<button class="rural-search-strip__submit" type="submit" aria-label="Search">
+						{% if icon_url %}
+							<img src="{{ icon_url }}" width="30" height="30" alt="" aria-hidden="true" />
+						{% endif %}
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>

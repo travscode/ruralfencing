@@ -1,0 +1,84 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% set theme_uri = function('get_stylesheet_directory_uri') %}
+
+	{% include 'partials/sections/product-cat-banner.twig' with {
+		breadcrumb_items: breadcrumb_items,
+		banner_icon_url: banner_icon_url,
+		title: title
+	} only %}
+
+	<section class="bg-eggshell px-6 pb-[90px] lg:px-[100px]">
+		<div class="mx-auto w-full max-w-[1720px]">
+			<div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-[60px]">
+				<aside class="w-full pt-[45px] lg:w-[375px]">
+					<div class="rounded-xl border border-birch bg-eggshell px-0 pb-[30px] pt-3">
+						<div class="px-6 py-5">
+							<p class="text-t3 font-bold text-birch">Product Categories</p>
+						</div>
+						{% if product_categories_menu and product_categories_menu.items %}
+							<ul class="flex flex-col">
+								{% for item in product_categories_menu.items %}
+									<li>
+										<a
+											class="flex items-center justify-between px-6 py-[15px] text-b1 text-birch no-underline transition-colors hover:text-deep-green"
+											href="{{ item.link }}"
+											target="{{ item.target|default('_self') }}"
+										>
+											<span class="{% if item.link == term_link %}text-deep-green{% endif %}">{{ item.title }}</span>
+											<svg width="8" height="13" viewBox="0 0 8 13" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+												<path d="M1.41406 1.41406L6.41406 6.41406L1.41406 11.4141" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel"/>
+											</svg>
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+					</div>
+				</aside>
+
+				<div class="flex-1 pt-[45px]">
+					{% if category_cards and category_cards|length %}
+						<p class="text-t7 leading-[23px] text-birch">Showing {{ category_cards|length }} of {{ category_cards|length }} categories</p>
+						<div class="mt-5 flex flex-wrap gap-5">
+							{% for card in category_cards %}
+								<a
+									class="group relative block h-[276px] w-full overflow-hidden rounded-xl bg-birch/10 lg:w-[415px]"
+									href="{{ card.link }}"
+									style="{% if card.image_url %}background-image:url('{{ card.image_url }}');background-size:cover;background-position:center;{% endif %}"
+								>
+									<span class="absolute inset-0 bg-birch opacity-0 transition-opacity duration-200 group-hover:opacity-20"></span>
+									<span class="absolute bottom-5 left-5 right-5 flex justify-center">
+										<span class="rounded-md border border-white/50 bg-goldenrod px-5 py-3 font-heading text-d4 text-birch">
+											{{ card.name }}
+										</span>
+									</span>
+								</a>
+							{% endfor %}
+						</div>
+					{% else %}
+						<p class="text-t7 leading-[23px] text-birch">No categories found.</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</section>
+
+	{% include 'partials/sections/product-carousel.twig' with {
+		title: 'New & Featured Products',
+		products_shortcode: '[products limit="12" columns="4" category="' ~ term.slug ~ '" visibility="featured" orderby="date" order="DESC"]'
+	} only %}
+
+	{% if optional_seo_content %}
+		{% include 'partials/sections/image-content.twig' with optional_seo_content only %}
+	{% endif %}
+
+	{% include 'partials/sections/cta-primary.twig' with {
+		title: 'Not sure what you need?',
+		body: 'Tell us what you’re working on – what you’re trying to keep in or out – and we’ll help you figure out what you need. Our team is always happy to point you in the right direction.',
+		button_label: 'Get in touch',
+		button_url: site.url ~ '/contact/',
+		image_url: theme_uri ~ '/images/cta-primary.png'
+	} only %}
+{% endblock %}

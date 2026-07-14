@@ -1,0 +1,27 @@
+{% set breadcrumb_items = breadcrumb_items|default([]) %}
+{% set banner_icon_url = banner_icon_url|default('') %}
+{% set title = title|default('') %}
+
+<section class="bg-goldenrod px-6 pb-[90px] pt-5 lg:px-[100px]">
+	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-[70px]">
+		<nav class="text-t7 leading-[23px] text-birch">
+			{% for item in breadcrumb_items %}
+				{% if loop.first %}
+					<a class="underline" href="{{ item.url }}">{{ item.title }}</a>
+				{% elseif item.url %}
+					<span> &gt; </span><a href="{{ item.url }}">{{ item.title }}</a>
+				{% else %}
+					<span> &gt; </span><span>{{ item.title }}</span>
+				{% endif %}
+			{% endfor %}
+		</nav>
+
+		<div class="flex items-center gap-10">
+			{% if banner_icon_url %}
+				<img src="{{ banner_icon_url }}" width="40" height="44" alt="" aria-hidden="true" />
+			{% endif %}
+			<h1 class="font-heading text-d1-md uppercase leading-[80px] text-birch">{{ title }}</h1>
+		</div>
+	</div>
+</section>
+

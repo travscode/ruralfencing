@@ -1,0 +1,38 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% set theme_uri = function('get_stylesheet_directory_uri') %}
+
+	<section class="bg-eggshell px-6 pb-10 pt-5 lg:px-[100px]">
+		<nav class="mx-auto w-full max-w-[1720px] text-t7 leading-[23px] text-birch">
+			{% for item in breadcrumb_items %}
+				{% if loop.first %}
+					<a class="underline" href="{{ item.url }}">{{ item.title }}</a>
+				{% elseif item.url %}
+					<span> &gt; </span><a class="underline" href="{{ item.url }}">{{ item.title }}</a>
+				{% else %}
+					<span> &gt; </span><span>{{ item.title }}</span>
+				{% endif %}
+			{% endfor %}
+		</nav>
+	</section>
+
+	{% include 'partials/sections/single-product-details.twig' %}
+
+	{% if related_products_shortcode %}
+		{% include 'partials/sections/product-carousel.twig' with {
+			title: 'Frequently Bought Together',
+			products_shortcode: related_products_shortcode
+		} only %}
+	{% endif %}
+
+	{% include 'partials/sections/cta-primary.twig' with {
+		title: 'Not sure what you need?',
+		body: 'Tell us what you’re working on – what you’re trying to keep in or out – and we’ll help you figure out what you need. Our team is always happy to point you in the right direction.',
+		button_label: 'Get in touch',
+		button_url: site.url ~ '/contact/',
+		image_url: theme_uri ~ '/images/cta-primary.png'
+	} only %}
+
+	{% include 'partials/product-enquiry-modal.twig' %}
+{% endblock %}

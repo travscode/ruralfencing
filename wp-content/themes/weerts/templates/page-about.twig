@@ -1,0 +1,118 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% set theme_uri = function('get_stylesheet_directory_uri') %}
+
+	{% set about_paragraphs = [
+		'We market fencing and irrigation products that are strong, durable and versatile. Our products are popular for use in both the rural and domestic sectors for tasks such as fencing, trellising, safety barriers, pet enclosures, vermin or pest exclusion and irrigation. All meshes and woven fencing are sold in both single rolls and pallet quantities.',
+		'We constantly source new and innovative products to improve fencing practices. We stock automatic gates for both rural and domestic purposes. Special designs or decorative gates can be manufactured in our workshop.',
+		'If you are unsure of the choice of products to suit your needs, feel free to call the Customer Service staff at Rural Fencing & Irrigation Supplies. They will be more than happy to assist you in your choice.'
+	] %}
+
+	{% set gallery_items = [
+		{
+			image_url: theme_uri ~ '/images/about-gallery-1.png',
+			caption: 'Paul and the rest of our warehouse staff are always available to help with packing and loading of goods. Deliveries can be negotiated.'
+		},
+		{
+			image_url: theme_uri ~ '/images/about-gallery-2.png',
+			caption: 'Our fully-stocked warehouse has everything you need.'
+		},
+		{
+			image_url: theme_uri ~ '/images/about-gallery-3.png',
+			caption: 'The welding shop caters to your custom gates and fencing needs.'
+		}
+	] %}
+
+	{% set testimonial_slides = [
+		{
+			quote: 'Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero.',
+			name: 'Steve',
+			location: 'Suburb'
+		},
+		{
+			quote: 'The team were great to deal with and helped us work through the right products for our job. Everything was ready when promised and the advice was spot on.',
+			name: 'Janine',
+			location: 'Maddington'
+		},
+		{
+			quote: 'From the first call through to pickup, the service was friendly, practical and fast. It made the whole project much easier to get moving.',
+			name: 'Mark',
+			location: 'Perth Hills'
+		}
+	] %}
+
+	{% set quicklink_cards = [
+		{
+			title: 'Fencing Supplies & Enclosures',
+			text: 'Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.',
+			image_url: theme_uri ~ '/images/about-quicklink-1.png',
+			href: site.url ~ '/product-category/fencing/'
+		},
+		{
+			title: 'Gates & Accessories',
+			text: 'Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.',
+			image_url: theme_uri ~ '/images/about-quicklink-2.png',
+			href: site.url ~ '/product-category/gates/'
+		},
+		{
+			title: 'Irrigation, Pumps & Water Tanks',
+			text: 'Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.',
+			image_url: theme_uri ~ '/images/about-quicklink-3.png',
+			href: site.url ~ '/product-category/irrigation/'
+		}
+	] %}
+
+	{% include 'partials/sections/internal-banner.twig' with {
+		title: post.title,
+		background_url: theme_uri ~ '/images/about-banner-bg.png'
+	} only %}
+
+	{% include 'partials/sections/location-block.twig' with {
+		title: 'Visit Us in Store',
+		location: {
+			address: '2 Davison Street, Maddington WA 6109',
+			directions_url: 'https://maps.google.com/?q=2+Davison+Street,+Maddington+WA+6109'
+		},
+		hours: [
+			'Monday to Friday: 7:30am - 4:30pm',
+			'Saturday: 8am - 1pm'
+		],
+		contact: {
+			email: 'sales@ruralfencingsupplies.com.au',
+			phone: '(08) 9492 0500',
+			phone_link: '0894920500'
+		}
+	} only %}
+
+	{% include 'partials/sections/text-image.twig' with {
+		lead: 'Rural Fencing & Irrigation Supplies is a family company that provides excellent customer service and has the provision of up to date and technically advanced products as its main aim.',
+		paragraphs: about_paragraphs,
+		image_url: theme_uri ~ '/images/about-story-image.jpg',
+		caption: 'Danny and Julie Woodhams are actively involved in the running of their company. With good humour and attention to detail, they serve this community well.'
+	} only %}
+
+	{% include 'partials/sections/image-gallery.twig' with {
+		items: gallery_items
+	} only %}
+
+	{% include 'partials/sections/testimonials.twig' with {
+		title: 'What our customers say',
+		slides: testimonial_slides,
+		quote_icon_url: theme_uri ~ '/images/icon-quote-marks.svg'
+	} only %}
+
+	{% include 'partials/sections/quicklinks.twig' with {
+		eyebrow: 'Where to next?',
+		title: 'Explore our product range',
+		cards: quicklink_cards
+	} only %}
+
+	{% include 'partials/sections/cta-primary.twig' with {
+		title: 'Not sure what you need?',
+		body: 'Tell us what you’re working on - what you’re trying to keep in or out - and we’ll help you figure out what you need. Our team is always happy to point you in the right direction.',
+		button_label: 'Get in touch',
+		button_url: site.url ~ '/contact/',
+		image_url: theme_uri ~ '/images/cta-primary.png'
+	} only %}
+{% endblock %}

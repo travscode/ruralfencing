@@ -1,16 +1,84 @@
-<header class="border-b border-stone-200 bg-stone-50">
-    <div class="site-width flex flex-col gap-6 py-6 lg:flex-row lg:items-center lg:justify-between">
-        <a class="text-lg font-semibold tracking-tight text-stone-900 no-underline" href="{{ site.link }}">{{ site.name }}</a>
-        {% if menu and menu.items %}
-            <nav aria-label="Primary navigation">
-                <ul class="flex flex-wrap gap-4 text-sm text-stone-600">
-                    {% for item in menu.items %}
-                        <li>
-                            <a class="no-underline hover:text-stone-900" href="{{ item.link }}" target="{{ item.target }}">{{ item.title }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </nav>
-        {% endif %}
-    </div>
+<header class="relative z-50 border-b border-birch/10 bg-eggshell">
+	<div class="site-width-fluid py-6">
+		<div class="flex items-center justify-between gap-6">
+			<a class="inline-flex items-center no-underline" href="{{ site.link }}">
+				{% include 'images/logo.twig' with { class: 'h-10 w-auto', title: site.name } %}
+			</a>
+			<div class="flex items-center gap-6">
+				{% if top_menu and top_menu.items %}
+					<div class="hidden items-center gap-8 lg:flex">
+						<nav aria-label="Primary navigation">
+							<ul class="flex items-center gap-8 text-t7 text-birch">
+								{% for item in top_menu.items %}
+									<li>
+										<a
+											class="no-underline hover:text-deep-green"
+											href="{{ item.link }}"
+											target="{{ item.target|default('_self') }}"
+										>
+											{{ item.title }}
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+						</nav>
+
+						<a class="inline-flex overflow-hidden rounded-md no-underline" href="tel:1800010319" aria-label="Call 1800 010 319">
+							<span class="flex items-center bg-goldenrod p-[17px] text-birch">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+									<path
+										d="M22 16.92V20a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2 4.18 2 2 0 0 1 4 2h3.09a2 2 0 0 1 2 1.72c.12.86.3 1.7.57 2.5a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.58-1.12a2 2 0 0 1 2.11-.45c.8.27 1.64.45 2.5.57A2 2 0 0 1 22 16.92Z"
+										fill="currentColor"
+									/>
+								</svg>
+							</span>
+							<span class="flex items-center bg-white py-[17.5px] pl-5 pr-[30px] font-heading text-b2 uppercase text-birch">
+								1800 010 319
+							</span>
+						</a>
+					</div>
+
+					<details class="relative lg:hidden">
+						<summary
+							class="inline-flex list-none items-center justify-center rounded-lg border border-birch/20 bg-white p-3 text-birch hover:bg-birch hover:text-eggshell [&::-webkit-details-marker]:hidden"
+						>
+							<span class="sr-only">Open menu</span>
+							{% include 'icons/menu.twig' with { class: 'h-6 w-6', title: 'Menu' } %}
+						</summary>
+						<nav class="absolute right-0 mt-3 w-64 rounded-xl border border-birch/10 bg-white p-4 shadow-lg" aria-label="Mobile primary navigation">
+						<a class="mb-4 inline-flex overflow-hidden rounded-md no-underline" href="tel:1800010319" aria-label="Call 1800 010 319">
+							<span class="flex items-center bg-goldenrod p-[17px] text-birch">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+									<path
+										d="M22 16.92V20a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2 4.18 2 2 0 0 1 4 2h3.09a2 2 0 0 1 2 1.72c.12.86.3 1.7.57 2.5a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.58-1.12a2 2 0 0 1 2.11-.45c.8.27 1.64.45 2.5.57A2 2 0 0 1 22 16.92Z"
+										fill="currentColor"
+									/>
+								</svg>
+							</span>
+							<span class="flex items-center bg-white py-[17.5px] pl-5 pr-[30px] font-heading text-b2 uppercase text-birch">
+								1800 010 319
+							</span>
+						</a>
+							<ul class="flex flex-col gap-3 text-t7 text-birch">
+								{% for item in top_menu.items %}
+									<li>
+										<a
+											class="block rounded-lg px-3 py-2 no-underline hover:bg-eggshell hover:text-deep-green"
+											href="{{ item.link }}"
+											target="{{ item.target|default('_self') }}"
+										>
+											{{ item.title }}
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+						</nav>
+					</details>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+	{% include 'partials/site-nav.twig' %}
+	
 </header>

@@ -1,0 +1,20 @@
+{% set svg_title = title|default(null) %}
+<svg
+	class="{{ class|default('') }}"
+	width="33"
+	height="24"
+	viewBox="0 0 33 24"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+	{% if svg_title %}
+		role="img"
+		aria-label="{{ svg_title|e }}"
+	{% else %}
+		aria-hidden="true"
+	{% endif %}
+>
+	{% if svg_title %}
+		<title>{{ svg_title }}</title>
+	{% endif %}
+	<path d="M7.65039 9.59961H14.4004V24H0V9.59961L4.125 0H9L7.65039 9.59961ZM25.6504 9.59961H32.4004V24H18V9.59961L22.125 0H27L25.6504 9.59961Z" fill="currentColor" />
+</svg>

@@ -1,0 +1,18 @@
+{% set lead = lead|default('') %}
+{% set body = body|default('') %}
+
+<section class="px-6 py-[120px] lg:px-6 lg:pb-[180px] lg:pl-[245px] lg:pr-[390px] lg:pt-[160px]">
+	<div class="flex flex-col gap-[72px]">
+		{% if lead %}
+			<p class="text-t6 font-medium leading-[42px] text-birch">{{ lead }}</p>
+		{% endif %}
+
+		<div class="flex flex-col gap-8 lg:flex-row lg:gap-[104px]">
+			<div class="mt-[11px] h-1 w-10 flex-none bg-deep-green" aria-hidden="true"></div>
+
+			{% if body %}
+				<p class="max-w-[850px] text-t1 leading-[26px] text-birch">{{ body }}</p>
+			{% endif %}
+		</div>
+	</div>
+</section>

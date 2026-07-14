@@ -1,0 +1,47 @@
+{% set section_title = title|default('') %}
+{% set products_shortcode = products_shortcode|default('') %}
+
+<section class="rural-product-carousel px-6 pb-[180px] lg:px-[100px]">
+	<div class="mx-auto flex w-full max-w-[1720px] flex-col items-center gap-[60px]">
+		<div class="flex w-full items-center justify-between gap-8">
+			<div class="flex items-center gap-[52px]">
+				<div class="flex items-center gap-2" aria-hidden="true">
+					<span class="h-[42px] w-1 bg-goldenrod"></span>
+					<span class="h-[42px] w-1 bg-goldenrod"></span>
+					<span class="h-[42px] w-1 bg-goldenrod"></span>
+				</div>
+
+				<h2 class="font-heading text-d2 uppercase leading-[58px] text-birch">{{ section_title }}</h2>
+			</div>
+
+			<div class="flex items-center justify-end gap-3">
+				<button class="rural-product-carousel__nav" type="button" data-carousel-prev aria-label="Previous products" disabled>
+					<svg width="22" height="23" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20.7072 11.4142H2.37382" stroke="#006600" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel"/>
+<path d="M10.7072 21.4142L0.707153 11.4142L10.7072 1.41418" stroke="#006600" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel"/>
+</svg>
+
+				</button>
+				<button class="rural-product-carousel__nav" type="button" data-carousel-next aria-label="Next products">
+					<svg width="22" height="23" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1 11.4142H19.3333" stroke="#006600" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel"/>
+<path d="M11 1.41418L21 11.4142L11 21.4142" stroke="#006600" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel"/>
+</svg>
+
+				</button>
+			</div>
+		</div>
+
+		<div class="rural-product-carousel__viewport w-full">
+			{% if products_shortcode %}
+				{{ function('do_shortcode', products_shortcode)|raw }}
+			{% endif %}
+		</div>
+
+		<div class="rural-product-carousel__progress" aria-hidden="true">
+			<div class="rural-product-carousel__progress-track">
+				<div class="rural-product-carousel__progress-bar" data-carousel-progress></div>
+			</div>
+		</div>
+	</div>
+</section>

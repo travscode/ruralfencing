@@ -1,0 +1,95 @@
+{% if enquire_only %}
+	<div
+		class="fixed inset-0 z-50 hidden items-center justify-center p-6"
+		data-enquiry-modal
+		data-enquiry-modal-open="{{ enquiry_status in ['sent', 'invalid', 'error'] ? 'true' : 'false' }}"
+	>
+		<div class="absolute inset-0 bg-birch/70" data-enquiry-overlay></div>
+		<div class="relative z-10 w-full max-w-[760px] rounded-xl bg-white p-8 lg:p-10">
+			<button
+				class="absolute right-5 top-5 flex h-10 w-10 items-center justify-center text-terracotta-clay"
+				type="button"
+				aria-label="Close enquiry form"
+				data-enquiry-close
+			>
+				<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+					<path d="M2 2L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+					<path d="M18 2L2 18" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+				</svg>
+			</button>
+
+			<p class="max-w-[560px] text-t4 leading-[30px] text-birch">{{ enquiry_intro }}</p>
+
+			{% if enquiry_status == 'sent' %}
+				<div class="mt-6 rounded-md border border-deep-green bg-deep-green/5 px-4 py-3 text-b1 text-deep-green">
+					Thanks, your enquiry has been sent.
+				</div>
+			{% elseif enquiry_status == 'invalid' %}
+				<div class="mt-6 rounded-md border border-terracotta-clay bg-terracotta-clay/5 px-4 py-3 text-b1 text-terracotta-clay">
+					Please complete the required fields and enter a valid email address.
+				</div>
+			{% elseif enquiry_status == 'error' %}
+				<div class="mt-6 rounded-md border border-terracotta-clay bg-terracotta-clay/5 px-4 py-3 text-b1 text-terracotta-clay">
+					There was a problem sending your enquiry. Please try again.
+				</div>
+			{% endif %}
+
+			<form class="mt-8 flex flex-col gap-5" method="post" action="{{ enquiry_form_action }}" data-enquiry-form>
+				<input type="hidden" name="action" value="weerts_product_enquiry" />
+				<input type="hidden" name="product_id" value="{{ product.id }}" />
+				<input type="hidden" name="redirect_to" value="{{ post.link }}" />
+				<input type="hidden" name="weerts_product_enquiry_nonce" value="{{ function('wp_create_nonce', 'weerts_product_enquiry') }}" />
+
+				<label class="relative flex flex-col">
+					<span class="absolute left-4 top-[-8px] bg-white px-1 text-t7 text-deep-green">Product of interest</span>
+					<input
+						class="h-[62px] rounded-md border border-birch px-4 text-t1 text-birch"
+						type="text"
+						name="product_interest"
+						value="{{ title }}"
+						readonly
+						data-enquiry-product-interest
+					/>
+				</label>
+
+				<div class="grid gap-5 md:grid-cols-2">
+					<label class="relative flex flex-col">
+						<span class="absolute left-4 top-[-8px] bg-white px-1 text-t7 text-deep-green">First name</span>
+						<input class="h-[62px] rounded-md border border-birch px-4 text-t1 text-birch" type="text" name="first_name" required />
+					</label>
+					<label class="relative flex flex-col">
+						<span class="absolute left-4 top-[-8px] bg-white px-1 text-t7 text-deep-green">Last name</span>
+						<input class="h-[62px] rounded-md border border-birch px-4 text-t1 text-birch" type="text" name="last_name" required />
+					</label>
+				</div>
+
+				<div class="grid gap-5 md:grid-cols-2">
+					<label class="relative flex flex-col">
+						<span class="absolute left-4 top-[-8px] bg-white px-1 text-t7 text-deep-green">Email</span>
+						<input class="h-[62px] rounded-md border border-birch px-4 text-t1 text-birch" type="email" name="email" required />
+					</label>
+					<label class="relative flex flex-col">
+						<span class="absolute left-4 top-[-8px] bg-white px-1 text-t7 text-deep-green">Phone</span>
+						<input class="h-[62px] rounded-md border border-birch px-4 text-t1 text-birch" type="text" name="phone" />
+					</label>
+				</div>
+
+				<label class="relative flex flex-col">
+					<span class="absolute left-4 top-[-8px] bg-white px-1 text-t7 text-deep-green">Your location</span>
+					<input class="h-[62px] rounded-md border border-birch px-4 text-t1 text-birch" type="text" name="location" />
+				</label>
+
+				<label class="relative flex flex-col">
+					<span class="absolute left-4 top-[-8px] bg-white px-1 text-t7 text-deep-green">What would you like to know?</span>
+					<textarea class="min-h-[160px] rounded-md border border-birch px-4 py-5 text-t1 text-birch" name="message" required></textarea>
+				</label>
+
+				<div>
+					<button class="w-full rounded-md border border-goldenrod bg-goldenrod px-5 py-3 text-b1 text-birch" type="submit">
+						Send Enquiry
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endif %}

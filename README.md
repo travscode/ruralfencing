@@ -107,7 +107,21 @@ This creates:
 
 ### 8. Open the site locally
 
-Load the site in your browser.
+Start the local WordPress server from the project root:
+
+```bash
+./serve-local.sh
+```
+
+This uses the tracked high-limit PHP overrides in `.php/conf.d/99-local-dev.ini`, which helps avoid local plugin install and upload timeouts in `wp-admin`.
+
+To use a different host or port:
+
+```bash
+./serve-local.sh 127.0.0.1 9090
+```
+
+Then load the site in your browser.
 
 If WordPress has not been installed yet, complete the normal WordPress installation flow.
 
@@ -143,6 +157,12 @@ This watches and rebuilds:
 ## Daily Workflow
 
 ### Start development
+
+From the project root, start WordPress:
+
+```bash
+./serve-local.sh
+```
 
 From `wp-content/themes/weerts`:
 
@@ -274,4 +294,10 @@ composer install
 pnpm install
 pnpm run dev
 pnpm run build
+```
+
+From the project root:
+
+```bash
+./serve-local.sh
 ```

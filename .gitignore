@@ -8,6 +8,7 @@
 !composer.json
 !composer.lock
 !setup.sh
+!serve-local.sh
 !wp-config.php
 
 # Directories and files required for WordPress
@@ -29,3 +30,8 @@ wp-content/plugins/plugins.zip
 
 # ENV
 !.env.sample
+
+# Local PHP runtime overrides tracked for this boilerplate
+!.php/
+!.php/conf.d/
+!.php/conf.d/99-local-dev.ini

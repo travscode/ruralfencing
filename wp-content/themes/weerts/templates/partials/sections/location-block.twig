@@ -1,0 +1,65 @@
+{% set section_title = title|default('') %}
+{% set location = location|default({}) %}
+{% set hours = hours|default([]) %}
+{% set contact = contact|default({}) %}
+{% set facebook_url = facebook_url|default('https://www.facebook.com/') %}
+{% set instagram_url = instagram_url|default('https://www.instagram.com/') %}
+
+<section class="bg-eggshell px-6 lg:px-[100px]">
+	<div class="bg-white mx-auto w-full max-w-[1720px] rounded-b-xl px-6 py-[60px] lg:px-[80px]">
+		<div class="grid gap-10 lg:grid-cols-[260px_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.1fr)_auto] lg:gap-5">
+			<div class="flex flex-col gap-[30px]">
+				<h2 class="font-heading text-d3 uppercase leading-[38px] text-birch">{{ section_title }}</h2>
+				{% include 'icons/horiz-line.twig' with { class: 'h-1 w-10 text-terracotta-clay' } %}
+			</div>
+
+			<div class="flex flex-col text-t1 leading-[26px] text-birch">
+				<p><strong>Location</strong></p>
+				<p class="mt-1">{{ location.address|default('') }}</p>
+				{% if location.directions_url %}
+					<p class="mt-1">
+						<a class="text-deep-green underline underline-offset-4" href="{{ location.directions_url }}">Get directions</a>
+					</p>
+				{% endif %}
+			</div>
+
+			<div class="flex flex-col text-t1 leading-[26px] text-birch">
+				<p><strong>Opening Hours</strong></p>
+				{% for line in hours %}
+					<p class="mt-1">{{ line }}</p>
+				{% endfor %}
+			</div>
+
+			<div class="flex flex-col text-t1 leading-[26px] text-birch">
+				<p><strong>Contact Us</strong></p>
+				{% if contact.email %}
+					<p class="mt-1"><span class="font-bold text-deep-green">E</span> <a class="underline underline-offset-4" href="mailto:{{ contact.email }}">{{ contact.email }}</a></p>
+				{% endif %}
+				{% if contact.phone %}
+					<p class="mt-1"><span class="font-bold text-deep-green">P</span> <a class="underline underline-offset-4" href="tel:{{ contact.phone_link|default(contact.phone|replace({' ': '', '(': '', ')': ''})) }}">{{ contact.phone }}</a></p>
+				{% endif %}
+			</div>
+
+			<div class="flex items-start gap-3">
+				<a
+					class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-goldenrod text-birch transition-colors hover:bg-goldenrod/90"
+					href="{{ facebook_url }}"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Facebook"
+				>
+					{% include 'icons/facebook.twig' with { class: 'h-6 w-6', title: 'Facebook' } %}
+				</a>
+				<a
+					class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-goldenrod text-birch transition-colors hover:bg-goldenrod/90"
+					href="{{ instagram_url }}"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Instagram"
+				>
+					{% include 'icons/instagram.twig' with { class: 'h-6 w-6', title: 'Instagram' } %}
+				</a>
+			</div>
+		</div>
+	</div>
+</section>

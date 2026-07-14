@@ -1,13 +1,300 @@
+@import './fonts.css';
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
 @layer base {
-    body {
-        @apply mx-auto max-w-3xl px-6 py-8 text-base leading-7 text-stone-900;
-    }
+	body {
+		@apply mx-auto max-w-3xl bg-eggshell px-6 py-8 font-body text-t1 text-birch;
+	}
 
-    a {
-        @apply underline;
-    }
+	a {
+		@apply underline;
+	}
+}
+
+@layer components {
+	.wp-block-button.is-style-rural-hero-fencing .wp-block-button__link,
+	.wp-block-button.is-style-rural-hero-gates .wp-block-button__link,
+	.wp-block-button.is-style-rural-hero-irrigation .wp-block-button__link {
+		@apply relative inline-flex items-center overflow-hidden rounded-md bg-white py-5 pl-[76px] pr-[30px] font-heading text-b2 uppercase text-birch no-underline transition-colors duration-200 hover:bg-eggshell;
+	}
+
+	.wp-block-button.is-style-rural-hero-fencing .wp-block-button__link::before,
+	.wp-block-button.is-style-rural-hero-gates .wp-block-button__link::before,
+	.wp-block-button.is-style-rural-hero-irrigation
+		.wp-block-button__link::before {
+		content: '';
+		@apply absolute inset-y-0 left-0 w-[56px] bg-goldenrod;
+	}
+
+	.wp-block-button.is-style-rural-hero-fencing .wp-block-button__link::after,
+	.wp-block-button.is-style-rural-hero-gates .wp-block-button__link::after,
+	.wp-block-button.is-style-rural-hero-irrigation
+		.wp-block-button__link::after {
+		content: '';
+		@apply absolute left-[24px] top-1/2 h-[13px] w-[8px] -translate-y-1/2;
+		background-repeat: no-repeat;
+		background-size: 8px 13px;
+		background-image: url('data:image/svg+xml,%3Csvg%20width%3D%228%22%20height%3D%2213%22%20viewBox%3D%220%200%208%2013%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M1.41406%201.41406L6.41406%206.41406L1.41406%2011.4141%22%20stroke%3D%22%232A231A%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22square%22%20stroke-linejoin%3D%22bevel%22/%3E%3C/svg%3E');
+	}
+
+	.rural-location-strip
+		.wp-block-group.grid
+		> .wp-block-group__inner-container {
+		display: contents;
+	}
+
+	.rural-location-strip__social.wp-block-social-links {
+		@apply flex items-start justify-start gap-3;
+	}
+
+	.rural-location-strip__social .wp-social-link {
+		@apply m-0 bg-goldenrod text-birch transition-colors duration-200 hover:bg-goldenrod/90;
+		width: 48px;
+		height: 48px;
+		border-radius: 9999px;
+	}
+
+	.rural-location-strip__social .wp-social-link a {
+		@apply flex h-full w-full items-center justify-center p-0;
+	}
+
+	.rural-location-strip__social .wp-social-link svg {
+		@apply h-6 w-6;
+	}
+
+	.rural-product-carousel__nav {
+		@apply inline-flex h-5 w-5 items-center justify-center text-birch disabled:opacity-30;
+	}
+
+	.rural-product-carousel__viewport {
+		@apply w-full overflow-x-auto;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		scroll-snap-type: x mandatory;
+	}
+
+	.rural-product-carousel__viewport::-webkit-scrollbar {
+		display: none;
+	}
+
+	.rural-product-carousel__viewport .woocommerce ul.products {
+		@apply m-0 flex list-none gap-5 p-0;
+	}
+
+	.rural-product-carousel__viewport .woocommerce ul.products::before,
+	.rural-product-carousel__viewport .woocommerce ul.products::after {
+		content: none;
+	}
+
+	.rural-product-carousel__viewport .woocommerce ul.products li.product {
+		@apply relative m-0 flex-none;
+		width: 415px;
+		scroll-snap-align: start;
+	}
+
+	.rural-product-carousel__viewport .weerts-product-badges {
+		@apply absolute left-5 top-5 z-10 flex flex-wrap gap-2;
+		pointer-events: none;
+	}
+
+	.rural-product-carousel__viewport .weerts-product-badge {
+		@apply rounded-md px-4 py-2 text-[18px] font-medium leading-5;
+	}
+
+	.rural-product-carousel__viewport .weerts-product-badge--featured {
+		@apply bg-goldenrod text-birch;
+	}
+
+	.rural-product-carousel__viewport .weerts-product-badge--specials {
+		@apply bg-goldenrod text-birch;
+	}
+
+	.rural-product-carousel__viewport .weerts-product-badge--clearance {
+		@apply bg-terracotta-clay text-eggshell;
+	}
+
+	.rural-product-carousel__viewport .weerts-product-badge--new {
+		@apply bg-deep-green text-eggshell;
+	}
+
+	.rural-product-carousel__viewport .woocommerce ul.products li.product a {
+		@apply no-underline;
+	}
+
+	.rural-product-carousel__viewport .woocommerce ul.products li.product img {
+		@apply m-0 h-[276px] w-full rounded-xl object-cover;
+	}
+
+	.rural-product-carousel__viewport .woocommerce ul.products li.product h2,
+	.rural-product-carousel__viewport
+		.woocommerce
+		ul.products
+		li.product
+		.woocommerce-loop-product__title {
+		@apply mt-5 text-[22px] font-medium leading-[26px] text-birch;
+	}
+
+	.rural-product-carousel__viewport .woocommerce ul.products li.product .price {
+		@apply mt-3 block text-[19px] leading-[26px] text-terracotta-clay;
+	}
+
+	.rural-product-carousel__viewport
+		.woocommerce
+		ul.products
+		li.product
+		.price
+		ins {
+		@apply text-terracotta-clay;
+	}
+
+	.rural-product-carousel__viewport
+		.woocommerce
+		ul.products
+		li.product
+		.button {
+		display: none;
+	}
+
+	.rural-product-carousel__progress {
+		@apply w-full px-0;
+	}
+
+	.rural-product-carousel__progress-track {
+		@apply relative h-[2px] w-full overflow-hidden bg-white;
+	}
+
+	.rural-product-carousel__progress-bar {
+		@apply absolute left-0 top-0 h-[2px] bg-birch transition-[left,width] duration-200;
+		width: 0%;
+	}
+
+	.rural-category-spotlight__buttons-inner {
+		@apply flex flex-wrap gap-3;
+	}
+
+	.rural-category-spotlight__pill {
+		@apply inline-flex items-center justify-center rounded-md border border-birch px-3 py-3 text-[17px] font-medium leading-6 text-birch no-underline transition-colors duration-200 hover:bg-eggshell;
+		border-width: 1.2px;
+	}
+
+	.rural-category-spotlight__img img {
+		@apply w-full rounded-xl object-cover;
+	}
+
+	.rural-category-spotlight__images {
+		@apply grid grid-cols-1 gap-5 lg:grid-cols-2;
+	}
+
+	.rural-category-spotlight__img--hero {
+		@apply w-full lg:col-span-2;
+	}
+
+	.rural-category-spotlight__img--hero img {
+		height: 463px;
+	}
+
+	.rural-category-spotlight__img--small {
+		@apply w-full;
+	}
+
+	.rural-category-spotlight__img--small img {
+		height: 330px;
+	}
+
+	.rural-category-spotlight__img--medium {
+		@apply w-full;
+	}
+
+	.rural-category-spotlight__img--medium img {
+		height: 330px;
+	}
+
+	.rural-search-strip__bar {
+		@apply flex w-full overflow-hidden rounded-xl;
+	}
+
+	.rural-search-strip__field {
+		@apply h-[102px] w-full rounded-l-xl bg-white px-[30px] text-[19px] leading-[26px] text-birch placeholder:text-birch/60 focus:outline-none;
+	}
+
+	.rural-search-strip__submit {
+		@apply inline-flex h-[102px] w-[88px] items-center justify-center bg-deep-green text-white;
+	}
+
+	.rural-search-strip__submit img {
+		@apply h-[30px] w-[30px];
+	}
+
+	.rural-faq .wp-block-details {
+		@apply border-t border-birch py-9;
+	}
+
+	.rural-faq .wp-block-details:last-of-type {
+		border-bottom: 1px solid rgba(42, 35, 26, 1);
+	}
+
+	.rural-faq .wp-block-details summary {
+		@apply relative cursor-pointer list-none pr-10 text-[22px] font-medium leading-[26px] text-birch;
+	}
+
+	.rural-faq .wp-block-details summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.rural-faq .wp-block-details summary::after {
+		content: '';
+		position: absolute;
+		right: 0;
+		top: 50%;
+		width: 20px;
+		height: 20px;
+		transform: translateY(-50%);
+		background: linear-gradient(#db9d16, #db9d16) center / 2px 20px no-repeat,
+			linear-gradient(#db9d16, #db9d16) center / 20px 2px no-repeat;
+	}
+
+	.rural-faq .wp-block-details[open] summary::after {
+		background: linear-gradient(#db9d16, #db9d16) center / 20px 2px no-repeat;
+	}
+
+	.rural-faq .wp-block-details > :not(summary) {
+		@apply mt-6;
+	}
+
+	.rural-testimonials-carousel__viewport {
+		@apply w-full overflow-x-auto;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		scroll-snap-type: x mandatory;
+	}
+
+	.rural-testimonials-carousel__viewport::-webkit-scrollbar {
+		display: none;
+	}
+
+	.rural-testimonials-carousel__track {
+		@apply flex gap-0;
+	}
+
+	.rural-testimonials-carousel__slide {
+		@apply flex-none;
+		width: min(850px, 100%);
+		scroll-snap-align: start;
+	}
+
+	.rural-testimonials-carousel__pagination {
+		@apply flex items-center gap-4 pt-5;
+	}
+
+	.rural-testimonials-carousel__dot {
+		@apply h-[14px] w-[14px] rounded-full;
+		background: transparent;
+		border: 1px solid rgba(255, 255, 255, 1);
+	}
+
+	.rural-testimonials-carousel__dot.is-active {
+		background: rgba(255, 255, 255, 1);
+	}
 }

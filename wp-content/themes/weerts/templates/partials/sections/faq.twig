@@ -1,0 +1,28 @@
+{% set section_title = title|default('') %}
+{% set items = items|default([]) %}
+{% set items_per_column = ((items|length) / 2)|round(0, 'ceil') %}
+{% set columns = items|batch(items_per_column, null) %}
+
+<section class="rural-faq px-6 pb-[180px] lg:px-[100px]">
+	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-[60px]">
+		<div class="flex items-center gap-10">
+			<div class="h-1 w-10 bg-deep-green" aria-hidden="true"></div>
+			<h2 class="font-heading text-d2 uppercase leading-[58px] text-birch">{{ section_title }}</h2>
+		</div>
+
+		<div class="grid gap-x-5 lg:grid-cols-2">
+			{% for column in columns %}
+				<div>
+					{% for item in column %}
+						{% if item %}
+							<details class="wp-block-details">
+								<summary>{{ item.question }}</summary>
+								<div class="text-t1 leading-[26px] text-birch">{{ item.answer|raw }}</div>
+							</details>
+						{% endif %}
+					{% endfor %}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</section>
