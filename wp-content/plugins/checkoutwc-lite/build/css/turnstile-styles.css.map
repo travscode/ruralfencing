@@ -1,0 +1,1 @@
+{"version":3,"file":"css/turnstile-styles.css","mappings":";;;AACA;EACI;AAAJ,C","sources":["webpack://checkout-for-woocommerce/./sources/scss/frontend/turnstile.scss"],"sourcesContent":["// Integration with CheckoutWC module styling\n.cfw-module.cfw-turnstile-container {\n    margin-bottom: 1rem;\n}\n"],"names":[],"sourceRoot":""}

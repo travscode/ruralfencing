@@ -1,0 +1,113 @@
+{
+    "name": "objectivco/checkout-for-woocommerce",
+    "description": "Beautiful, responsive, and conversion optimized checkout templates for WooCommerce.",
+    "type": "wordpress-plugin",
+    "config": {
+        "optimize-autoloader": true,
+        "classmap-authoritative": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "platform": {
+            "php": "7.4"
+        }
+    },
+    "authors": [
+        {
+            "name": "Clifton Griffin",
+            "email": "clif@checkoutwc.com"
+        }
+    ],
+    "scripts": {
+        "prefix-namespaces": [
+            "@php bin/strauss.phar",
+            "@composer dump-autoload"
+        ],
+        "post-install-cmd": [
+            "@prefix-namespaces"
+        ],
+        "post-update-cmd": [
+            "@prefix-namespaces"
+        ],
+        "post-autoload-dump": [
+            "@php bin/strauss.phar include-autoloader"
+        ]
+    },
+    "extra": {
+        "strauss": {
+            "target_directory": "vendor-prefixed",
+            "namespace_prefix": "CheckoutWC\\",
+            "classmap_prefix": "CheckoutWC_",
+            "constant_prefix": "CFWV_",
+            "packages": [
+                "symfony/css-selector",
+                "pelago/emogrifier",
+                "pressmodo/wp-admin-notices",
+                "stellarwp/installer",
+                "symfony/rate-limiter"
+            ],
+            "update_call_sites": true,
+            "override_autoload": {
+            },
+            "exclude_from_copy": {
+                "packages": [
+                ],
+                "namespaces": [
+                ],
+                "file_patterns": [
+                ]
+            },
+            "exclude_from_prefix": {
+                "packages": [
+                ],
+                "namespaces": [
+                ],
+                "file_patterns": [
+                ]
+            },
+            "namespace_replacement_patterns" : {
+            },
+            "delete_vendor_packages": true,
+            "delete_vendor_files": false
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Objectiv\\Plugins\\Checkout\\": "includes/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Objectivco/wp-admin-notices.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Objectivco/installer.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Objectivco/wp-documentor.git"
+        }
+    ],
+    "require-dev": {
+        "kint-php/kint": "*",
+        "phpcompatibility/php-compatibility": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "*",
+        "phpunit/phpunit": "^9.3",
+        "wp-coding-standards/wpcs": "^3.0",
+        "squizlabs/php_codesniffer": "*",
+        "woocommerce/woocommerce-sniffs": "*",
+        "pronamic/wp-documentor": "*"
+    },
+    "require": {
+        "php": ">=7.3.0",
+        "ext-json": "*",
+        "symfony/css-selector": "^4.4.44",
+        "pelago/emogrifier": "^7.3.0",
+        "pressmodo/wp-admin-notices": "^1.0.5",
+        "stellarwp/installer": "^1.1.2",
+        "symfony/rate-limiter": "^5.4"
+    },
+    "prefer-stable": true
+}
