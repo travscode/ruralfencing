@@ -2,8 +2,7 @@
 *
 
 # Don't ignore the .gitignore file itself
-!.gitignore
-!.github/workflows/deploy.yaml
+
 !README.md
 !composer.json
 !composer.lock
@@ -39,3 +38,11 @@ wp-content/plugins/plugins.zip
 !.php/
 !.php/conf.d/
 !.php/conf.d/99-local-dev.ini
+
+
+!.gitignore
+!.github
+!.github/
+!.github/workflows/
+!.github/workflows/deploy.yml
+!.github/workflows/deploy.yaml
