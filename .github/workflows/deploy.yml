@@ -52,9 +52,14 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -p "${{ secrets.SSH_PORT }}" -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
 
+          THEME_PATH="${{ secrets.SSH_PATH }}"
+          THEMES_DIR="$(dirname "${THEME_PATH%/}")"
+          WP_CONTENT_DIR="$(dirname "$THEMES_DIR")"
+          PLUGINS_PATH="$WP_CONTENT_DIR/plugins"
+
           ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_ed25519 \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
-            "mkdir -p '${{ secrets.SSH_PATH }}'"
+            "mkdir -p '${{ secrets.SSH_PATH }}' '$PLUGINS_PATH'"
 
           rsync -az --delete \
             -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
@@ -63,3 +68,11 @@ jobs:
             --exclude .github \
             wp-content/themes/weerts/ \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}"
+
+          rsync -az --delete \
+            -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
+            --exclude node_modules \
+            --exclude .git \
+            --exclude .github \
+            wp-content/plugins/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$PLUGINS_PATH/"
