@@ -11,6 +11,10 @@
 !serve-local.sh
 !wp-config.php
 
+weerts_github_actions
+weerts_github_actions.pub
+
+
 # Directories and files required for WordPress
 !wp-content/
 
