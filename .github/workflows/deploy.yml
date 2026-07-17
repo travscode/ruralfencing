@@ -26,9 +26,19 @@ jobs:
           cache: pnpm
           cache-dependency-path: wp-content/themes/weerts/pnpm-lock.yaml
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          tools: composer:v2
+
       - name: Install dependencies
         working-directory: wp-content/themes/weerts
         run: pnpm install --frozen-lockfile
+
+      - name: Install PHP dependencies
+        working-directory: wp-content/themes/weerts
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Build theme assets
         working-directory: wp-content/themes/weerts
