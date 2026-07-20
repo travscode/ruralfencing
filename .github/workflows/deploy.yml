@@ -56,10 +56,11 @@ jobs:
           THEMES_DIR="$(dirname "${THEME_PATH%/}")"
           WP_CONTENT_DIR="$(dirname "$THEMES_DIR")"
           PLUGINS_PATH="$WP_CONTENT_DIR/plugins"
+          UPLOADS_PATH="$WP_CONTENT_DIR/uploads"
 
           ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_ed25519 \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
-            "mkdir -p '${{ secrets.SSH_PATH }}' '$PLUGINS_PATH'"
+            "mkdir -p '${{ secrets.SSH_PATH }}' '$PLUGINS_PATH' '$UPLOADS_PATH'"
 
           rsync -az --delete \
             -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
@@ -76,3 +77,10 @@ jobs:
             --exclude .github \
             wp-content/plugins/ \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$PLUGINS_PATH/"
+
+          rsync -az \
+            -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
+            --exclude .git \
+            --exclude .github \
+            wp-content/uploads/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$UPLOADS_PATH/"
