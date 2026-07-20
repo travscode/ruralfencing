@@ -70,7 +70,7 @@ jobs:
             wp-content/themes/weerts/ \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}"
 
-          rsync -az --delete \
+          rsync -az \
             -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
             --exclude node_modules \
             --exclude .git \
