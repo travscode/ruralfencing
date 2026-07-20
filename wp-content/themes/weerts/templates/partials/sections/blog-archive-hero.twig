@@ -1,0 +1,61 @@
+{% set section_title = title|default('') %}
+{% set section_body = body|default('') %}
+{% set categories = category_options|default([]) %}
+{% set active_category_slug = selected_category_slug|default('') %}
+{% set active_category_label = selected_category_label|default('Show all') %}
+
+<section class="bg-birch px-6 py-[80px] lg:px-[100px] lg:py-[100px]">
+	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-[80px]">
+		<div class="max-w-[995px]">
+			<div class="flex items-center gap-2 text-goldenrod">
+				<span class="block h-[60px] w-1 bg-goldenrod"></span>
+				<span class="block h-[60px] w-1 bg-goldenrod"></span>
+				<span class="block h-[60px] w-1 bg-goldenrod"></span>
+			</div>
+			<h1 class="mt-[52px] font-heading text-d1 uppercase leading-[80px] text-white max-md:text-d1-md max-md:leading-[5rem]">
+				{{ section_title }}
+			</h1>
+			{% if section_body %}
+				<p class="mt-[50px] max-w-[900px] text-[30px] leading-[36px] text-white">
+					{{ section_body }}
+				</p>
+			{% endif %}
+		</div>
+
+		<div class="w-full max-w-[415px]">
+			<p class="text-[22px] font-medium leading-[26px] text-goldenrod">
+				Filter posts by category:
+			</p>
+			<div class="relative mt-[30px] pt-[10px]">
+				<label class="absolute left-[15px] top-0 z-[1] bg-birch px-[5px] text-t7 leading-[23px] text-white" for="blog-category-filter">
+					Categories
+				</label>
+				<div class="relative">
+					<select
+						id="blog-category-filter"
+						class="w-full appearance-none rounded-md border border-white bg-transparent px-5 py-6 pr-16 text-t1 leading-[26px] text-white focus:outline-none"
+						aria-label="Filter posts by category"
+						onchange="if (this.value) { window.location.href = this.value; }"
+					>
+						{% for category in categories %}
+							<option
+								value="{{ category.url }}"
+								{% if category.slug == active_category_slug %}
+									selected
+								{% endif %}
+							>
+								{{ category.label }}
+							</option>
+						{% endfor %}
+					</select>
+					<span class="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-white">
+						{% include 'icons/chevron-down.twig' with { class: 'h-[5px] w-[10px]' } only %}
+					</span>
+				</div>
+			</div>
+			<p class="mt-4 text-t7 leading-[23px] text-white/80">
+				Currently showing: {{ active_category_label }}
+			</p>
+		</div>
+	</div>
+</section>

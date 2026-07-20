@@ -1,0 +1,32 @@
+<section class="bg-eggshell px-6 pb-[100px] lg:px-[100px] lg:pb-[140px]">
+	<div class="mx-auto w-full max-w-[1140px] border-t border-deep-green pt-5">
+		<div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+			<p class="text-t3 font-bold text-birch">
+				Share this post:
+			</p>
+
+			<div class="flex flex-wrap items-center gap-3">
+				<button
+					class="inline-flex h-[50px] w-[50px] items-center justify-center rounded-full border border-birch text-birch transition-colors duration-200 hover:bg-white"
+					type="button"
+					aria-label="Copy article link"
+					onclick="if (navigator.clipboard) { navigator.clipboard.writeText('{{ share_url|e('js') }}'); }"
+				>
+					{% include 'icons/link.twig' with { class: 'h-5 w-5' } only %}
+				</button>
+
+				{% for item in share_links %}
+					<a
+						class="inline-flex h-[50px] w-[50px] items-center justify-center rounded-full border border-birch text-birch no-underline transition-colors duration-200 hover:bg-white"
+						href="{{ item.url }}"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="Share on {{ item.label }}"
+					>
+						{% include 'icons/' ~ item.icon ~ '.twig' with { class: 'h-5 w-5' } only %}
+					</a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</section>

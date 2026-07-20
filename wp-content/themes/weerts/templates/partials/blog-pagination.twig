@@ -1,0 +1,48 @@
+{% if pagination and pagination.pages %}
+	<nav class="mt-[80px] flex justify-center" aria-label="Pagination">
+		<div class="inline-flex items-stretch">
+			{% if pagination.prev %}
+				<a
+					class="flex h-[46px] w-[36px] items-center justify-center rounded-l-md border border-birch text-birch no-underline transition-colors duration-200 hover:bg-eggshell"
+					href="{{ pagination.prev.link }}"
+					aria-label="Previous page"
+				>
+					{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3 rotate-180' } only %}
+				</a>
+			{% else %}
+				<span class="flex h-[46px] w-[36px] items-center justify-center rounded-l-md border border-birch text-birch/40">
+					{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3 rotate-180' } only %}
+				</span>
+			{% endif %}
+
+			{% for page in pagination.pages %}
+				{% if page.link %}
+					<a
+						class="-ml-px flex h-[46px] min-w-[36px] items-center justify-center border border-birch px-3 text-birch no-underline transition-colors duration-200 hover:bg-eggshell"
+						href="{{ page.link }}"
+					>
+						{{ page.title }}
+					</a>
+				{% else %}
+					<span class="-ml-px flex h-[46px] min-w-[36px] items-center justify-center border border-deep-green bg-deep-green px-3 text-white">
+						{{ page.title }}
+					</span>
+				{% endif %}
+			{% endfor %}
+
+			{% if pagination.next %}
+				<a
+					class="-ml-px flex h-[46px] w-[36px] items-center justify-center rounded-r-md border border-birch text-birch no-underline transition-colors duration-200 hover:bg-eggshell"
+					href="{{ pagination.next.link }}"
+					aria-label="Next page"
+				>
+					{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } only %}
+				</a>
+			{% else %}
+				<span class="-ml-px flex h-[46px] w-[36px] items-center justify-center rounded-r-md border border-birch text-birch/40">
+					{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } only %}
+				</span>
+			{% endif %}
+		</div>
+	</nav>
+{% endif %}

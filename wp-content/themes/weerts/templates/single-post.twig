@@ -1,0 +1,23 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% include 'partials/sections/blog-article-hero.twig' with {
+		post: post,
+		image_url: hero_image_url,
+		post_date_display: post_date_display,
+		post_category_links: post_category_links
+	} only %}
+
+	{% include 'partials/sections/blog-article-content.twig' with {
+		post: post
+	} only %}
+
+	{% include 'partials/sections/blog-share.twig' with {
+		share_url: share_url,
+		share_links: share_links
+	} only %}
+
+	{% include 'partials/sections/blog-related-posts.twig' with {
+		posts: related_posts
+	} only %}
+{% endblock %}

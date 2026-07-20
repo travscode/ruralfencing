@@ -6,12 +6,64 @@ function initSite() {
 	document.documentElement.classList.add('js')
 
 	initHeaderHeightVar()
+	initGoogleMapsSections()
 	initProductsMegaMenu()
 	initProductCarousels()
 	initTestimonialsCarousels()
 	initFadeTestimonialsCarousels()
 	initProductVariationButtons()
 	initProductEnquiryModal()
+}
+
+let googleMapsApiPromise = null
+
+/**
+ * Loads the Google Maps JavaScript API once and reuses it across map sections.
+ */
+function loadGoogleMapsApi(apiKey) {
+	if (window.google?.maps) {
+		return Promise.resolve(window.google.maps)
+	}
+
+	if (googleMapsApiPromise) {
+		return googleMapsApiPromise
+	}
+
+	googleMapsApiPromise = new Promise((resolve, reject) => {
+		const callbackName = '__weertsGoogleMapsReady'
+		const existingScript = document.querySelector(
+			'script[data-google-maps-loader="true"]'
+		)
+
+		window[callbackName] = () => {
+			delete window[callbackName]
+			resolve(window.google.maps)
+		}
+
+		if (existingScript) {
+			existingScript.addEventListener('error', () => {
+				googleMapsApiPromise = null
+				delete window[callbackName]
+				reject(new Error('Google Maps failed to load'))
+			})
+			return
+		}
+
+		const script = document.createElement('script')
+		script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&callback=${callbackName}`
+		script.async = true
+		script.defer = true
+		script.dataset.googleMapsLoader = 'true'
+		script.addEventListener('error', () => {
+			googleMapsApiPromise = null
+			delete window[callbackName]
+			reject(new Error('Google Maps failed to load'))
+		})
+
+		document.head.appendChild(script)
+	})
+
+	return googleMapsApiPromise
 }
 
 function initHeaderHeightVar() {
@@ -27,6 +79,69 @@ function initHeaderHeightVar() {
 
 	set()
 	window.addEventListener('resize', set)
+}
+
+/**
+ * Upgrades fallback map embeds to Google Maps widgets when an API key is available.
+ */
+function initGoogleMapsSections() {
+	const sections = Array.from(document.querySelectorAll('[data-google-map]'))
+	if (!sections.length) return
+
+	const sectionsWithKeys = sections.filter(
+		(section) => section.getAttribute('data-api-key')?.trim()
+	)
+	if (!sectionsWithKeys.length) return
+
+	const apiKey = sectionsWithKeys[0].getAttribute('data-api-key')?.trim() || ''
+	if (!apiKey) return
+
+	loadGoogleMapsApi(apiKey)
+		.then(() => {
+			for (const section of sectionsWithKeys) {
+				initGoogleMapSection(section)
+			}
+		})
+		.catch(() => {
+			// Leave the iframe fallback in place if the API is unavailable.
+		})
+}
+
+/**
+ * Renders a single Google Map instance for the supplied section element.
+ */
+function initGoogleMapSection(section) {
+	const canvas = section.querySelector('[data-google-map-canvas]')
+	const fallback = section.querySelector('[data-google-map-fallback]')
+	if (!(canvas instanceof HTMLElement)) return
+
+	const latitude = Number.parseFloat(
+		section.getAttribute('data-latitude') || 'NaN'
+	)
+	const longitude = Number.parseFloat(
+		section.getAttribute('data-longitude') || 'NaN'
+	)
+	if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return
+
+	const center = { lat: latitude, lng: longitude }
+	const title = section.getAttribute('data-title') || ''
+
+	const map = new window.google.maps.Map(canvas, {
+		center,
+		zoom: 15,
+		mapTypeControl: false,
+		streetViewControl: false,
+		fullscreenControl: true,
+	})
+
+	new window.google.maps.Marker({
+		map,
+		position: center,
+		title,
+	})
+
+	canvas.classList.remove('hidden')
+	fallback?.classList.add('hidden')
 }
 
 function initProductsMegaMenu() {

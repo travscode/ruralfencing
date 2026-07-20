@@ -1,0 +1,75 @@
+{% set form_action = form_action|default(function('admin_url', 'admin-post.php')) %}
+{% set redirect_to = redirect_to|default('') %}
+{% set status = status|default('') %}
+{% set reasons = reasons|default([]) %}
+{% set submit_label = submit_label|default('Send Enquiry') %}
+
+<div class="contact-enquiry-form">
+	{% if status == 'sent' %}
+		<div class="mb-6 rounded-md border border-deep-green bg-deep-green/5 px-5 py-4 text-b1 text-deep-green">
+			Thanks, your enquiry has been sent.
+		</div>
+	{% elseif status == 'invalid' %}
+		<div class="mb-6 rounded-md border border-terracotta-clay bg-terracotta-clay/5 px-5 py-4 text-b1 text-terracotta-clay">
+			Please complete the required fields and enter a valid email address.
+		</div>
+	{% elseif status == 'error' %}
+		<div class="mb-6 rounded-md border border-terracotta-clay bg-terracotta-clay/5 px-5 py-4 text-b1 text-terracotta-clay">
+			There was a problem sending your enquiry. Please try again.
+		</div>
+	{% endif %}
+
+	<form class="grid gap-5 md:grid-cols-2" method="post" action="{{ form_action }}">
+		<input type="hidden" name="action" value="weerts_contact_enquiry" />
+		<input type="hidden" name="redirect_to" value="{{ redirect_to }}" />
+		<input type="hidden" name="weerts_contact_enquiry_nonce" value="{{ function('wp_create_nonce', 'weerts_contact_enquiry') }}" />
+
+		<label class="contact-enquiry-form__field">
+			<span class="contact-enquiry-form__label">First name</span>
+			<input class="contact-enquiry-form__input" type="text" name="first_name" placeholder="John" required />
+		</label>
+
+		<label class="contact-enquiry-form__field">
+			<span class="contact-enquiry-form__label">Last name</span>
+			<input class="contact-enquiry-form__input" type="text" name="last_name" placeholder="Smith" required />
+		</label>
+
+		<label class="contact-enquiry-form__field">
+			<span class="contact-enquiry-form__label">Email</span>
+			<input class="contact-enquiry-form__input" type="email" name="email" placeholder="smithy.j@gmail.com" required />
+		</label>
+
+		<label class="contact-enquiry-form__field">
+			<span class="contact-enquiry-form__label">Phone</span>
+			<input class="contact-enquiry-form__input" type="text" name="phone" placeholder="0987 654 321" />
+		</label>
+
+		<label class="contact-enquiry-form__field md:col-span-2">
+			<span class="contact-enquiry-form__label">Your location</span>
+			<input class="contact-enquiry-form__input" type="text" name="location" placeholder="Karratha, WA" />
+		</label>
+
+		<label class="contact-enquiry-form__field contact-enquiry-form__field--select md:col-span-2">
+			<span class="contact-enquiry-form__label">Reason for enquiry</span>
+			<span class="contact-enquiry-form__select-wrap">
+				<select class="contact-enquiry-form__input contact-enquiry-form__select" name="reason">
+					{% for reason in reasons %}
+						<option value="{{ reason }}">{{ reason }}</option>
+					{% endfor %}
+				</select>
+			</span>
+		</label>
+
+		<label class="contact-enquiry-form__field md:col-span-2">
+			<span class="contact-enquiry-form__label">What would you like to know?</span>
+			<textarea class="contact-enquiry-form__input contact-enquiry-form__textarea" name="message" placeholder="Tell us a bit about your project or what you need help with." required></textarea>
+		</label>
+
+		<div class="md:col-span-2">
+			<button class="contact-enquiry-form__submit" type="submit">
+				<span>{{ submit_label }}</span>
+				{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } %}
+			</button>
+		</div>
+	</form>
+</div>

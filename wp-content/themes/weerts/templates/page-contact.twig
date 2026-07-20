@@ -1,0 +1,62 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% set theme_uri = function('get_stylesheet_directory_uri') %}
+	{% set enquiry_reasons = [
+		'Product Advice',
+		'Custom Manufacturing',
+		'Fencing Supplies',
+		'Gates & Accessories',
+		'Irrigation, Pumps & Water Tanks',
+		'Delivery & Pickup',
+		'Other'
+	] %}
+
+	{% include 'partials/sections/internal-banner.twig' with {
+		title: post.title,
+		background_url: theme_uri ~ '/images/contact-banner-bg-7b13df.png'
+	} only %}
+
+	{% include 'partials/sections/location-block.twig' with {
+		title: 'Visit Us in Store',
+		location: {
+			address: '2 Davison Street, Maddington WA 6109',
+			directions_url: 'https://maps.google.com/?q=2+Davison+Street,+Maddington+WA+6109'
+		},
+		hours: [
+			'Monday to Friday: 7:30am - 4:30pm',
+			'Saturday: 8am - 1pm'
+		],
+		contact: {
+			email: 'sales@ruralfencingsupplies.com.au',
+			phone: '(08) 9492 0500',
+			phone_link: '0894920500'
+		}
+	} only %}
+
+	{% include 'partials/sections/contact-form-layout.twig' with {
+		title: 'Not sure what you need?',
+		body_html: 'Tell us what you’re working on - what you’re trying to keep in or out - and we’ll help you figure out what you need.<br><br>Our team is always happy to point you in the right direction - just send us an email via this form or call us on <a class="underline underline-offset-4" href="tel:0894920500">9492 0500</a>.',
+		form_action: function('admin_url', 'admin-post.php'),
+		form_redirect: post.link,
+		form_status: contact_enquiry_status,
+		reasons: enquiry_reasons,
+		submit_label: 'Send Enquiry'
+	} only %}
+
+	{% include 'partials/sections/search-strip.twig' with {
+		title: 'Search our extensive product range',
+		body_html: 'Not sure what you need? <a class="underline underline-offset-4" href="' ~ site.url ~ '/contact/">Get in touch</a>',
+		action_url: function('home_url', '/'),
+		icon_url: theme_uri ~ '/images/icon-search-30.svg'
+	} only %}
+
+	{% include 'partials/sections/google-map.twig' with {
+		title: 'Rural Fencing & Irrigation Supplies',
+		address: '2 Davison Street, Maddington WA 6109',
+		directions_url: 'https://maps.google.com/?q=2+Davison+Street,+Maddington+WA+6109',
+		latitude: -32.0446099,
+		longitude: 115.9895214,
+		api_key: google_maps_api_key
+	} only %}
+{% endblock %}

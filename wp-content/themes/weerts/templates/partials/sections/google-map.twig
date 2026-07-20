@@ -1,0 +1,45 @@
+{% set map_title = title|default('') %}
+{% set address = address|default('') %}
+{% set directions_url = directions_url|default('') %}
+{% set latitude = latitude|default(0) %}
+{% set longitude = longitude|default(0) %}
+{% set api_key = api_key|default('') %}
+{% set iframe_src = 'https://maps.google.com/maps?q=' ~ address|url_encode ~ '&z=15&output=embed' %}
+
+<section class="w-full">
+	<div
+		class="contact-google-map relative h-[397px] w-full overflow-hidden bg-eggshell"
+		data-google-map
+		data-api-key="{{ api_key }}"
+		data-latitude="{{ latitude }}"
+		data-longitude="{{ longitude }}"
+		data-title="{{ map_title }}"
+		data-address="{{ address }}"
+	>
+		<div class="hidden h-full w-full" data-google-map-canvas aria-label="{{ map_title }}"></div>
+
+		<div class="h-full w-full" data-google-map-fallback>
+			<iframe
+				class="h-full w-full border-0"
+				src="{{ iframe_src }}"
+				loading="lazy"
+				referrerpolicy="no-referrer-when-downgrade"
+				title="{{ map_title }}"
+			></iframe>
+		</div>
+
+		{% if directions_url %}
+			<div class="pointer-events-none absolute inset-x-6 bottom-6 flex justify-end lg:inset-x-[100px]">
+				<a
+					class="pointer-events-auto inline-flex items-center gap-3 rounded-md bg-white px-5 py-4 text-b1 text-birch no-underline shadow-md transition-colors hover:bg-eggshell"
+					href="{{ directions_url }}"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<span>Get directions</span>
+					{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } %}
+				</a>
+			</div>
+		{% endif %}
+	</div>
+</section>

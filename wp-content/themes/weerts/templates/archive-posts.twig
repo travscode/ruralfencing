@@ -1,0 +1,16 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% include 'partials/sections/blog-archive-hero.twig' with {
+		title: hero_title,
+		body: hero_body,
+		category_options: category_options,
+		selected_category_slug: selected_category_slug,
+		selected_category_label: selected_category_label
+	} only %}
+
+	{% include 'partials/sections/blog-post-grid.twig' with {
+		posts: posts,
+		pagination: pagination
+	} only %}
+{% endblock %}

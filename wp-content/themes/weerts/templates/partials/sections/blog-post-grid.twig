@@ -1,0 +1,15 @@
+<section class="bg-eggshell px-6 py-[80px] lg:px-[100px] lg:pb-[140px]">
+	<div class="mx-auto w-full max-w-[1720px]">
+		{% if posts %}
+			<div class="grid gap-y-[80px] gap-x-5 md:grid-cols-2 3xl:grid-cols-3">
+				{% for post in posts %}
+					{% include 'partials/blog-post-card.twig' with { post: post } only %}
+				{% endfor %}
+			</div>
+
+			{% include 'partials/blog-pagination.twig' with { pagination: pagination } only %}
+		{% else %}
+			{% include 'partials/content-none.twig' %}
+		{% endif %}
+	</div>
+</section>

@@ -54,8 +54,12 @@ class RuralBoilerplateSite extends Site
         add_action('wp_enqueue_scripts', [$this, 'enqueue_assets']);
         add_action('init', [$this, 'register_block_editor_assets']);
         add_action('init', [$this, 'register_shortcodes']);
+        add_action('init', [$this, 'register_blog_rewrites'], 90);
         add_action('init', [$this, 'register_root_product_cat_rewrites'], 100);
+        add_action('init', [$this, 'maybe_flush_blog_rewrites'], 105);
         add_action('init', [$this, 'maybe_flush_root_product_cat_rewrites'], 110);
+        add_action('pre_get_posts', [$this, 'configure_blog_queries']);
+        add_action('after_switch_theme', [$this, 'flush_blog_rewrites'], 10, 0);
         add_action('after_switch_theme', [$this, 'flush_root_product_cat_rewrites'], 10, 0);
         add_action('created_product_cat', [$this, 'flush_root_product_cat_rewrites'], 10, 0);
         add_action('edited_product_cat', [$this, 'flush_root_product_cat_rewrites'], 10, 0);
@@ -69,8 +73,12 @@ class RuralBoilerplateSite extends Site
         add_action('woocommerce_admin_process_product_object', [$this, 'save_product_enquiry_field']);
         add_action('admin_post_weerts_product_enquiry', [$this, 'handle_product_enquiry']);
         add_action('admin_post_nopriv_weerts_product_enquiry', [$this, 'handle_product_enquiry']);
+        add_action('admin_post_weerts_contact_enquiry', [$this, 'handle_contact_enquiry']);
+        add_action('admin_post_nopriv_weerts_contact_enquiry', [$this, 'handle_contact_enquiry']);
         add_filter('timber/context', [$this, 'add_to_context']);
+        add_filter('post_link', [$this, 'filter_blog_post_link'], 10, 2);
         add_filter('term_link', [$this, 'filter_product_cat_term_link'], 10, 3);
+        add_filter('template_include', [$this, 'force_blog_template'], 15, 1);
         add_filter('template_include', [$this, 'force_root_product_cat_template'], 20, 1);
         add_filter('woocommerce_is_purchasable', [$this, 'filter_enquire_only_purchasable'], 10, 2);
 
@@ -102,8 +110,45 @@ class RuralBoilerplateSite extends Site
             $cart_count = (int) WC()->cart->get_cart_contents_count();
         }
         $context['cart_count'] = $cart_count;
+        $context['contact_enquiry_status'] = $this->get_request_status('contact', ['sent', 'invalid', 'error']);
+        $context['google_maps_api_key'] = $this->get_google_maps_api_key();
 
         return $context;
+    }
+
+    /**
+     * Returns a sanitized request status when it matches an allowed value.
+     *
+     * @param string $key
+     * @param array<int, string> $allowed
+     * @return string
+     */
+    private function get_request_status(string $key, array $allowed): string
+    {
+        if (!isset($_GET[$key])) {
+            return '';
+        }
+
+        $value = sanitize_key((string) wp_unslash($_GET[$key]));
+
+        return in_array($value, $allowed, true) ? $value : '';
+    }
+
+    /**
+     * Retrieves the Google Maps JavaScript API key used by frontend map widgets.
+     */
+    private function get_google_maps_api_key(): string
+    {
+        if (defined('WEERTS_GOOGLE_MAPS_API_KEY')) {
+            $constant_value = constant('WEERTS_GOOGLE_MAPS_API_KEY');
+            if (is_string($constant_value)) {
+                return trim($constant_value);
+            }
+        }
+
+        $option_value = get_option('weerts_google_maps_api_key', '');
+
+        return is_string($option_value) ? trim($option_value) : '';
     }
 
     /**
@@ -226,6 +271,42 @@ class RuralBoilerplateSite extends Site
     }
 
     /**
+     * Adds custom blog archive and single-post URLs for the Tips and Article sections.
+     */
+    public function register_blog_rewrites(): void
+    {
+        add_rewrite_rule(
+            '^tips/page/([0-9]{1,})/?$',
+            'index.php?post_type=post&paged=$matches[1]',
+            'top'
+        );
+
+        add_rewrite_rule(
+            '^tips/([^/]+)/page/([0-9]{1,})/?$',
+            'index.php?post_type=post&category_name=$matches[1]&paged=$matches[2]',
+            'top'
+        );
+
+        add_rewrite_rule(
+            '^tips/([^/]+)/?$',
+            'index.php?post_type=post&category_name=$matches[1]',
+            'top'
+        );
+
+        add_rewrite_rule(
+            '^tips/?$',
+            'index.php?post_type=post',
+            'top'
+        );
+
+        add_rewrite_rule(
+            '^article/([^/]+)/?$',
+            'index.php?post_type=post&name=$matches[1]',
+            'top'
+        );
+    }
+
+    /**
      * Makes product category term links resolve to root-level URLs (e.g. /fencing/).
      *
      * @param string $termlink
@@ -253,6 +334,18 @@ class RuralBoilerplateSite extends Site
         }
 
         return trailingslashit(home_url('/' . $slug));
+    }
+
+    /**
+     * Rewrites blog post permalinks to the /article/{slug}/ format used by the Twig templates.
+     */
+    public function filter_blog_post_link(string $permalink, WP_Post $post): string
+    {
+        if ($post->post_type !== 'post' || $post->post_name === '') {
+            return $permalink;
+        }
+
+        return trailingslashit(home_url('/article/' . $post->post_name));
     }
 
     /**
@@ -288,6 +381,31 @@ class RuralBoilerplateSite extends Site
         }
 
         return $candidate;
+    }
+
+    /**
+     * Forces the custom blog archive and post routes to use the standard archive and single controllers.
+     *
+     * @param string $template The template path WordPress selected.
+     * @return string
+     */
+    public function force_blog_template(string $template): string
+    {
+        if ($this->is_blog_archive_request()) {
+            $candidate = get_stylesheet_directory() . '/archive.php';
+            if (file_exists($candidate)) {
+                return $candidate;
+            }
+        }
+
+        if ($this->is_blog_article_request()) {
+            $candidate = get_stylesheet_directory() . '/single.php';
+            if (file_exists($candidate)) {
+                return $candidate;
+            }
+        }
+
+        return $template;
     }
 
     /**
@@ -341,6 +459,118 @@ class RuralBoilerplateSite extends Site
         }
 
         return '';
+    }
+
+    /**
+     * Returns the current request path split into URL path segments.
+     *
+     * @return array<int, string>
+     */
+    private function get_request_path_parts(): array
+    {
+        $uri = isset($_SERVER['REQUEST_URI']) && is_string($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+        if ($uri === '') {
+            return [];
+        }
+
+        $path = parse_url($uri, PHP_URL_PATH);
+        $path = is_string($path) ? trim($path, '/') : '';
+        if ($path === '') {
+            return [];
+        }
+
+        $parts = array_values(array_filter(array_map('trim', explode('/', $path)), static function ($part): bool {
+            return is_string($part) && $part !== '';
+        }));
+
+        return array_map('strval', $parts);
+    }
+
+    /**
+     * Determines whether the current request matches the custom /tips archive route pattern.
+     */
+    private function is_blog_archive_request(): bool
+    {
+        $parts = $this->get_request_path_parts();
+        if (($parts[0] ?? '') !== 'tips') {
+            return false;
+        }
+
+        if (count($parts) === 1) {
+            return true;
+        }
+
+        if (count($parts) === 2 && $parts[1] !== 'page') {
+            return true;
+        }
+
+        if (count($parts) === 3 && $parts[1] === 'page' && preg_match('/^[0-9]+$/', $parts[2])) {
+            return true;
+        }
+
+        return count($parts) === 4
+            && $parts[2] === 'page'
+            && preg_match('/^[0-9]+$/', $parts[3]) === 1;
+    }
+
+    /**
+     * Determines whether the current request matches the custom /article/{slug} route pattern.
+     */
+    private function is_blog_article_request(): bool
+    {
+        $parts = $this->get_request_path_parts();
+
+        return ($parts[0] ?? '') === 'article' && count($parts) === 2;
+    }
+
+    /**
+     * Applies the custom blog archive pagination and ordering to the main query.
+     */
+    public function configure_blog_queries(WP_Query $query): void
+    {
+        if (is_admin() || !$query->is_main_query() || !$this->is_blog_archive_request()) {
+            return;
+        }
+
+        $query->set('post_type', 'post');
+        $query->set('posts_per_page', 9);
+        $query->set('ignore_sticky_posts', true);
+        $query->set('orderby', 'date');
+        $query->set('order', 'DESC');
+    }
+
+    /**
+     * Flushes rewrite rules once in wp-admin after the custom blog routes are deployed.
+     */
+    public function maybe_flush_blog_rewrites(): void
+    {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        $version = '1';
+        $option_key = 'weerts_blog_rewrites_version';
+        $saved_version = get_option($option_key);
+        if (is_string($saved_version) && $saved_version === $version) {
+            return;
+        }
+
+        $permalink_structure = (string) get_option('permalink_structure');
+        if ($permalink_structure === '') {
+            update_option('permalink_structure', '/%postname%/');
+        }
+
+        $this->register_blog_rewrites();
+        flush_rewrite_rules(false);
+        update_option($option_key, $version, false);
+    }
+
+    /**
+     * Flushes rewrite rules when the theme is switched so the custom blog routes are registered.
+     */
+    public function flush_blog_rewrites(): void
+    {
+        flush_rewrite_rules(false);
     }
 
     /**
@@ -929,6 +1159,58 @@ class RuralBoilerplateSite extends Site
         $sent = wp_mail(get_option('admin_email'), $subject, implode("\n", $body_lines), $headers);
 
         wp_safe_redirect(add_query_arg('enquiry', $sent ? 'sent' : 'error', $redirect_url));
+        exit;
+    }
+
+    /**
+     * Sends contact page enquiry submissions to the site admin email.
+     */
+    public function handle_contact_enquiry(): void
+    {
+        $redirect_url = isset($_POST['redirect_to'])
+            ? esc_url_raw((string) wp_unslash($_POST['redirect_to']))
+            : home_url('/contact/');
+
+        if (
+            !isset($_POST['weerts_contact_enquiry_nonce'])
+            || !wp_verify_nonce(
+                sanitize_text_field((string) wp_unslash($_POST['weerts_contact_enquiry_nonce'])),
+                'weerts_contact_enquiry'
+            )
+        ) {
+            wp_safe_redirect(add_query_arg('contact', 'error', $redirect_url));
+            exit;
+        }
+
+        $first_name = isset($_POST['first_name']) ? sanitize_text_field((string) wp_unslash($_POST['first_name'])) : '';
+        $last_name = isset($_POST['last_name']) ? sanitize_text_field((string) wp_unslash($_POST['last_name'])) : '';
+        $email = isset($_POST['email']) ? sanitize_email((string) wp_unslash($_POST['email'])) : '';
+        $phone = isset($_POST['phone']) ? sanitize_text_field((string) wp_unslash($_POST['phone'])) : '';
+        $location = isset($_POST['location']) ? sanitize_text_field((string) wp_unslash($_POST['location'])) : '';
+        $reason = isset($_POST['reason']) ? sanitize_text_field((string) wp_unslash($_POST['reason'])) : '';
+        $message = isset($_POST['message']) ? sanitize_textarea_field((string) wp_unslash($_POST['message'])) : '';
+
+        if ($first_name === '' || $last_name === '' || $email === '' || !is_email($email) || $message === '') {
+            wp_safe_redirect(add_query_arg('contact', 'invalid', $redirect_url));
+            exit;
+        }
+
+        $subject = sprintf(__('Contact enquiry from %s', 'rural-boilerplate'), trim($first_name . ' ' . $last_name));
+        $body_lines = [
+            'Name: ' . trim($first_name . ' ' . $last_name),
+            'Email: ' . $email,
+            'Phone: ' . $phone,
+            'Location: ' . $location,
+            'Reason for enquiry: ' . $reason,
+            '',
+            'Enquiry:',
+            $message,
+        ];
+
+        $headers = ['Content-Type: text/plain; charset=UTF-8', 'Reply-To: ' . $email];
+        $sent = wp_mail(get_option('admin_email'), $subject, implode("\n", $body_lines), $headers);
+
+        wp_safe_redirect(add_query_arg('contact', $sent ? 'sent' : 'error', $redirect_url));
         exit;
     }
 

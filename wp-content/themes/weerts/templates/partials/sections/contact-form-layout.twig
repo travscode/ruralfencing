@@ -1,0 +1,33 @@
+{% set section_title = title|default('') %}
+{% set body_html = body_html|default('') %}
+{% set form_action = form_action|default(function('admin_url', 'admin-post.php')) %}
+{% set form_redirect = form_redirect|default('') %}
+{% set form_status = form_status|default('') %}
+{% set reasons = reasons|default([]) %}
+{% set submit_label = submit_label|default('Send Enquiry') %}
+
+<section class="px-6 py-[120px] lg:px-[100px] lg:py-[120px]">
+	<div class="mx-auto grid w-full max-w-[1720px] gap-[60px] lg:grid-cols-[minmax(0,596px)_minmax(0,850px)] lg:justify-between lg:gap-5">
+		<div class="flex flex-col gap-12 pt-[19px]">
+			<div class="flex gap-10">
+				<div class="w-10 pt-[19px]">
+					{% include 'icons/horiz-line.twig' with { class: 'h-1 w-10 text-goldenrod' } %}
+				</div>
+				<div class="flex-1">
+					<h2 class="font-heading text-d2 uppercase leading-[58px] text-birch">{{ section_title }}</h2>
+					{% if body_html %}
+						<div class="mt-12 max-w-[516px] text-t4 leading-[30px] text-birch">{{ body_html|raw }}</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		{% include 'partials/sections/contact-enquiry-form.twig' with {
+			form_action: form_action,
+			redirect_to: form_redirect,
+			status: form_status,
+			reasons: reasons,
+			submit_label: submit_label
+		} only %}
+	</div>
+</section>
