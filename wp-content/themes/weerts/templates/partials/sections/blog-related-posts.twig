@@ -1,19 +1,18 @@
 {% if posts %}
-	<section class="bg-white px-6 py-[100px] lg:px-[100px] lg:py-[140px]">
-		<div class="mx-auto w-full max-w-[1720px]">
-			<div class="flex items-center justify-center gap-5 text-birch">
-				{% include 'icons/horiz-line.twig' with { class: 'text-goldenrod' } only %}
+	<section class="bg-white px-6 lg:px-[90px]">
+		<div class="mx-auto flex w-full max-w-[1140px] flex-col items-start gap-[60px] py-[100px] lg:py-[140px] lg:pb-[180px]">
+			<div class="flex items-center gap-5 text-birch">
+				{% include 'icons/horiz-line.twig' with { class: 'h-1 w-10 text-deep-green' } only %}
 				<h2 class="font-heading text-d2 uppercase leading-[58px] text-birch">
 					Related Posts
 				</h2>
-				{% include 'icons/horiz-line.twig' with { class: 'text-goldenrod' } only %}
 			</div>
 
-			<div class="mt-[60px] grid gap-y-[80px] gap-x-5 md:grid-cols-2 3xl:grid-cols-3">
+			<div class="grid w-full gap-5 md:grid-cols-2">
 				{% for post in posts %}
 					{% include 'partials/blog-post-card.twig' with {
 						post: post,
-						surface_class: 'bg-eggshell'
+						variant: 'related'
 					} only %}
 				{% endfor %}
 			</div>

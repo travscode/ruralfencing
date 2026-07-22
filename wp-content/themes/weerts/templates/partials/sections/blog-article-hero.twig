@@ -2,42 +2,42 @@
 {% set categories = post_category_links|default([]) %}
 
 <section
-	class="px-6 pb-[80px] pt-[80px] lg:px-[100px] lg:pb-[120px] lg:pt-[100px]"
-	style="background: linear-gradient(to bottom, #2A231A 0%, #2A231A 58%, #F1EDE2 58%, #F1EDE2 100%);"
+	class="px-6 pb-[80px] pt-[80px] lg:px-[100px] lg:pb-[120px] lg:pt-[80px]"
+	style="background: linear-gradient(to bottom, #2A231A 0%, #2A231A 64%, #F1EDE2 64%, #F1EDE2 100%);"
 >
-	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(420px,50%)] lg:items-end lg:gap-20">
-		<div class="max-w-[760px]">
-			<div class="flex flex-wrap items-center gap-3">
-				<span class="rounded-md bg-goldenrod px-3 py-2 text-t7 leading-[23px] text-birch">
-					{{ post_date_display }}
-				</span>
+	<div class="mx-auto flex w-full max-w-[1140px] flex-col gap-[52px]">
+		<div class="flex flex-wrap items-center gap-3 md:pl-20">
+			<span class="rounded-md bg-goldenrod px-3 py-2 text-t7 leading-[23px] text-birch">
+				{{ post_date_display }}
+			</span>
 
-				{% for category in categories %}
-					<a
-						class="rounded-md bg-eggshell px-3 py-2 text-t7 leading-[23px] text-birch no-underline transition-colors duration-200 hover:bg-white"
-						href="{{ category.url }}"
-					>
-						{{ category.name }}
-					</a>
-				{% endfor %}
-			</div>
+			{% for category in categories %}
+				<a
+					class="rounded-md bg-eggshell px-3 py-2 text-t7 leading-[23px] text-birch no-underline transition-colors duration-200 hover:bg-white"
+					href="{{ category.url }}"
+				>
+					{{ category.name }}
+				</a>
+			{% endfor %}
+		</div>
 
-			<div class="mt-10 flex items-center gap-2 text-goldenrod">
+		<div class="flex flex-col gap-8 md:flex-row md:items-start md:gap-[52px]">
+			<div class="flex items-center gap-2 pt-1 text-goldenrod">
 				<span class="block h-[60px] w-1 bg-goldenrod"></span>
 				<span class="block h-[60px] w-1 bg-goldenrod"></span>
 				<span class="block h-[60px] w-1 bg-goldenrod"></span>
 			</div>
 
-			<h1 class="mt-[50px] font-heading text-d1 uppercase leading-[80px] text-white max-md:text-d1-md max-md:leading-[5rem]">
+			<h1 class="max-w-[860px] font-heading text-d1 uppercase leading-[80px] text-white max-md:text-d1-md max-md:leading-[5rem]">
 				{{ post.title }}
 			</h1>
 		</div>
 
-		<div class="overflow-hidden rounded-xl bg-birch/10">
+		<div class="overflow-hidden rounded-xl bg-birch/10 shadow-[0_24px_60px_rgba(42,35,26,0.18)]">
 			{% if article_image_url %}
-				<img class="h-full min-h-[320px] w-full object-cover lg:min-h-[540px]" src="{{ article_image_url }}" alt="{{ post.title|e }}" />
+				<img class="h-full min-h-[320px] w-full object-cover lg:min-h-[640px]" src="{{ article_image_url }}" alt="{{ post.title|e }}" />
 			{% else %}
-				<div class="h-[320px] w-full bg-white/10 lg:h-[540px]"></div>
+				<div class="h-[320px] w-full bg-white/10 lg:h-[640px]"></div>
 			{% endif %}
 		</div>
 	</div>

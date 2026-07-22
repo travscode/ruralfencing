@@ -2,53 +2,101 @@
 {% set categories = function('get_the_category', post.ID) %}
 {% set primary_category = categories ? categories|first : null %}
 {% set card_surface_class = surface_class|default('bg-white') %}
+{% set card_variant = variant|default('default') %}
+{% set is_related_variant = card_variant == 'related' %}
 
-<article class="flex h-full flex-col gap-[10px]">
-	<a class="block overflow-hidden rounded-xl bg-birch/10 no-underline" href="{{ post.link }}">
-		{% if image_url %}
-			<img class="h-[240px] w-full object-cover lg:h-[374px]" src="{{ image_url }}" alt="{{ post.title|e }}" loading="lazy" />
-		{% else %}
-			<div class="h-[240px] w-full bg-birch/10 lg:h-[374px]"></div>
-		{% endif %}
-	</a>
+{% if is_related_variant %}
+	<article class="h-full">
+		<a class="group flex h-full flex-col gap-[10px] no-underline" href="{{ post.link }}">
+			<div class="overflow-hidden rounded-xl bg-birch/10">
+				{% if image_url %}
+					<img class="h-[240px] w-full object-cover transition-transform duration-200 group-hover:scale-[1.02] lg:h-[315px]" src="{{ image_url }}" alt="{{ post.title|e }}" loading="lazy" />
+				{% else %}
+					<div class="h-[240px] w-full bg-birch/10 lg:h-[315px]"></div>
+				{% endif %}
+			</div>
 
-	<div class="flex flex-1 flex-col rounded-xl px-6 pb-8 pt-0 lg:px-10 lg:pb-10 {{ card_surface_class }}">
-		<div class="flex flex-wrap items-center gap-3 pb-6 pt-5">
-			<span class="rounded-md bg-goldenrod px-3 py-2 text-t7 leading-[23px] text-birch">
-				{{ function('get_the_date', 'd M Y', post.ID) }}
-			</span>
+			<div class="flex flex-1 flex-col rounded-xl bg-eggshell px-6 py-6 lg:px-10 lg:pt-10 lg:pb-[34px]">
+				<div class="flex flex-wrap items-center gap-3">
+					<span class="rounded-md bg-goldenrod px-3 py-2 text-t7 leading-[23px] text-birch">
+						{{ function('get_the_date', 'd M Y', post.ID) }}
+					</span>
 
-			{% if primary_category %}
-				<a
-					class="rounded-md bg-eggshell px-3 py-2 text-t7 leading-[23px] text-birch no-underline transition-colors duration-200 hover:bg-goldenrod/20"
-					href="{{ function('home_url', '/tips/' ~ primary_category.slug ~ '/') }}"
-				>
-					{{ primary_category.name }}
-				</a>
+					{% if primary_category %}
+						<span class="rounded-md bg-white px-3 py-2 text-t7 leading-[23px] text-birch">
+							{{ primary_category.name }}
+						</span>
+					{% endif %}
+				</div>
+
+				<div class="mt-6 flex items-start gap-4">
+					<span class="flex h-10 w-10 flex-none items-center justify-center bg-goldenrod text-birch">
+						{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } only %}
+					</span>
+
+					<div class="flex min-w-0 flex-1 flex-col">
+						<h3 class="font-heading text-d3 uppercase leading-[38px] text-birch transition-colors duration-200 group-hover:text-deep-green">
+							{{ post.title }}
+						</h3>
+
+						{% if post.preview %}
+							<p class="mt-6 flex-1 text-t1 leading-[26px] text-birch">
+								{{ post.preview.read_more('') }}
+							</p>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</a>
+	</article>
+{% else %}
+	<article class="flex h-full flex-col gap-[10px]">
+		<a class="block overflow-hidden rounded-xl bg-birch/10 no-underline" href="{{ post.link }}">
+			{% if image_url %}
+				<img class="h-[240px] w-full object-cover lg:h-[374px]" src="{{ image_url }}" alt="{{ post.title|e }}" loading="lazy" />
+			{% else %}
+				<div class="h-[240px] w-full bg-birch/10 lg:h-[374px]"></div>
 			{% endif %}
-		</div>
+		</a>
 
-		<h2 class="font-heading text-d3 uppercase leading-[38px] text-birch">
-			<a class="no-underline transition-colors duration-200 hover:text-deep-green" href="{{ post.link }}">
-				{{ post.title }}
-			</a>
-		</h2>
-
-		{% if post.preview %}
-			<p class="mt-6 flex-1 text-t1 leading-[26px] text-birch">
-				{{ post.preview.read_more('') }}
-			</p>
-		{% endif %}
-
-		<div class="mt-8">
-			<a class="inline-flex overflow-hidden rounded-md no-underline" href="{{ post.link }}">
-				<span class="flex items-center bg-goldenrod px-[19px] py-[19px] text-birch" aria-hidden="true">
-					{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } only %}
+		<div class="flex flex-1 flex-col rounded-xl px-6 pb-8 pt-0 lg:px-10 lg:pb-10 {{ card_surface_class }}">
+			<div class="flex flex-wrap items-center gap-3 pb-6 pt-5">
+				<span class="rounded-md bg-goldenrod px-3 py-2 text-t7 leading-[23px] text-birch">
+					{{ function('get_the_date', 'd M Y', post.ID) }}
 				</span>
-				<span class="flex items-center bg-white py-[17.5px] pl-5 pr-[30px] font-heading text-b2 uppercase text-birch">
-					Read More
-				</span>
-			</a>
+
+				{% if primary_category %}
+					<a
+						class="rounded-md bg-eggshell px-3 py-2 text-t7 leading-[23px] text-birch no-underline transition-colors duration-200 hover:bg-goldenrod/20"
+						href="{{ function('home_url', '/tips/' ~ primary_category.slug ~ '/') }}"
+					>
+						{{ primary_category.name }}
+					</a>
+				{% endif %}
+			</div>
+
+			<h2 class="font-heading text-d3 uppercase leading-[38px] text-birch">
+				<a class="no-underline transition-colors duration-200 hover:text-deep-green" href="{{ post.link }}">
+					{{ post.title }}
+				</a>
+			</h2>
+
+			{% if post.preview %}
+				<p class="mt-6 flex-1 text-t1 leading-[26px] text-birch">
+					{{ post.preview.read_more('') }}
+				</p>
+			{% endif %}
+
+			<div class="mt-8">
+				<a class="inline-flex overflow-hidden rounded-md no-underline" href="{{ post.link }}">
+					<span class="flex items-center bg-goldenrod px-[19px] py-[19px] text-birch" aria-hidden="true">
+						{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } only %}
+					</span>
+					<span class="flex items-center bg-white py-[17.5px] pl-5 pr-[30px] font-heading text-b2 uppercase text-birch">
+						Read More
+					</span>
+				</a>
+			</div>
 		</div>
-	</div>
-</article>
+	</article>
+{% endif %}

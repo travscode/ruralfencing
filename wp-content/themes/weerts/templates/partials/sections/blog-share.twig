@@ -5,9 +5,9 @@
 				Share this post:
 			</p>
 
-			<div class="flex flex-wrap items-center gap-3">
+			<div class="flex flex-wrap items-center gap-[10px]">
 				<button
-					class="inline-flex h-[50px] w-[50px] items-center justify-center rounded-full border border-birch text-birch transition-colors duration-200 hover:bg-white"
+					class="inline-flex h-[50px] w-[50px] items-center justify-center rounded-full bg-goldenrod text-birch transition-colors duration-200 hover:bg-goldenrod/90"
 					type="button"
 					aria-label="Copy article link"
 					onclick="if (navigator.clipboard) { navigator.clipboard.writeText('{{ share_url|e('js') }}'); }"
@@ -17,7 +17,7 @@
 
 				{% for item in share_links %}
 					<a
-						class="inline-flex h-[50px] w-[50px] items-center justify-center rounded-full border border-birch text-birch no-underline transition-colors duration-200 hover:bg-white"
+						class="inline-flex h-[50px] w-[50px] items-center justify-center rounded-full bg-goldenrod text-birch no-underline transition-colors duration-200 hover:bg-goldenrod/90"
 						href="{{ item.url }}"
 						target="_blank"
 						rel="noopener noreferrer"
