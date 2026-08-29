@@ -156,7 +156,11 @@ $context['regular_price_html'] = $regular_price !== '' ? wc_price((float) $regul
 $context['sale_price_html'] = $sale_price !== '' ? wc_price((float) $sale_price) : '';
 $context['price_html'] = (string) $product->get_price_html();
 $enquire_only = $product->get_meta('_weerts_enquire_only', true) === 'yes';
+$is_in_stock = $product->is_in_stock();
+$is_purchasable = $product->is_purchasable();
 $context['enquire_only'] = $enquire_only;
+$context['is_in_stock'] = $is_in_stock;
+$context['is_purchasable'] = $is_purchasable;
 $context['enquiry_status'] = isset($_GET['enquiry']) ? sanitize_key((string) wp_unslash($_GET['enquiry'])) : '';
 $context['enquiry_form_action'] = admin_url('admin-post.php');
 $context['enquiry_intro'] =
@@ -203,7 +207,7 @@ if ($product instanceof WC_Product_Variable) {
 $context['variation_ui'] = $variation_ui;
 
 ob_start();
-if (!$enquire_only && $product instanceof WC_Product_Variable) {
+if (!$enquire_only && $is_purchasable && $is_in_stock && $product instanceof WC_Product_Variable) {
     $available_variations = $product->get_available_variations();
     $attributes = $product->get_variation_attributes();
     $selected_attributes = $product->get_default_attributes();
@@ -255,7 +259,7 @@ if (!$enquire_only && $product instanceof WC_Product_Variable) {
 
     echo '</div>';
     echo '</form>';
-} elseif (!$enquire_only) {
+} elseif (!$enquire_only && $is_purchasable && $is_in_stock) {
     printf(
         '<form class="cart rural-product__cart" action="%s" method="post" enctype="multipart/form-data">',
         esc_url($product->get_permalink())
@@ -277,6 +281,24 @@ if (!$enquire_only && $product instanceof WC_Product_Variable) {
     echo '<span class="!flex items-center bg-white py-8 pl-[30px] pr-[60px] font-heading text-b3 uppercase tracking-button text-birch hover:bg-goldenrod">Add to Cart</span>';
     echo '</button>';
     echo '</form>';
+} elseif (!$enquire_only) {
+    echo '<div class="flex flex-col gap-4">';
+    echo '<div class="inline-flex overflow-hidden rounded-md opacity-60">';
+    echo '<span class="flex items-center bg-goldenrod px-[26px] py-7 text-birch" aria-hidden="true">';
+    echo Timber::compile('icons/cart.twig', ['class' => 'h-6 w-6']);
+    echo '</span>';
+    echo '<span class="flex items-center bg-white py-8 pl-[30px] pr-[60px] font-heading text-b3 uppercase tracking-button text-birch">';
+    echo esc_html($is_in_stock ? __('Unavailable', 'rural-boilerplate') : __('Out of Stock', 'rural-boilerplate'));
+    echo '</span>';
+    echo '</div>';
+    echo '<p class="text-t7 leading-[23px] text-birch/70">';
+    echo esc_html(
+        $is_in_stock
+            ? __('This product is currently unavailable for purchase.', 'rural-boilerplate')
+            : __('This product is currently out of stock and cannot be added to the cart.', 'rural-boilerplate')
+    );
+    echo '</p>';
+    echo '</div>';
 }
 $context['add_to_cart_html'] = (string) ob_get_clean();
 
