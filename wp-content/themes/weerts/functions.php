@@ -614,6 +614,17 @@ class RuralBoilerplateSite extends Site
     }
 
     /**
+     * Normalizes encoded text for frontend search UI labels.
+     */
+    private function decode_search_display_text(string $value): string
+    {
+        $charset = get_bloginfo('charset');
+        $decoded = html_entity_decode($value, ENT_QUOTES | ENT_HTML5, is_string($charset) && $charset !== '' ? $charset : 'UTF-8');
+
+        return trim(wp_strip_all_tags($decoded));
+    }
+
+    /**
      * Returns the default suggestions shown when the header search first receives focus.
      *
      * @return array<int, array{label:string}>
@@ -624,7 +635,7 @@ class RuralBoilerplateSite extends Site
         $suggestions = [];
 
         foreach (array_slice($categories, 0, 6) as $category) {
-            $label = isset($category['name']) ? trim((string) $category['name']) : '';
+            $label = isset($category['name']) ? $this->decode_search_display_text((string) $category['name']) : '';
             if ($label === '') {
                 continue;
             }
@@ -679,15 +690,15 @@ class RuralBoilerplateSite extends Site
             if (is_array($terms) && $terms !== []) {
                 $first_term = reset($terms);
                 if ($first_term instanceof WP_Term) {
-                    $meta = (string) $first_term->name;
+                    $meta = $this->decode_search_display_text((string) $first_term->name);
                 }
             }
 
             $featured[] = [
-                'label' => (string) $product->get_name(),
+                'label' => $this->decode_search_display_text((string) $product->get_name()),
                 'url' => (string) $product->get_permalink(),
                 'meta' => $meta,
-                'price' => wp_strip_all_tags((string) $product->get_price_html()),
+                'price' => $this->decode_search_display_text((string) $product->get_price_html()),
                 'image' => $image,
             ];
         }
@@ -729,7 +740,7 @@ class RuralBoilerplateSite extends Site
             while ($product_query->have_posts()) {
                 $product_query->the_post();
 
-                $label = trim((string) get_the_title());
+                $label = $this->decode_search_display_text((string) get_the_title());
                 if ($label === '') {
                     continue;
                 }
@@ -763,7 +774,7 @@ class RuralBoilerplateSite extends Site
                     continue;
                 }
 
-                $label = trim((string) $term->name);
+                $label = $this->decode_search_display_text((string) $term->name);
                 if ($label === '') {
                     continue;
                 }
