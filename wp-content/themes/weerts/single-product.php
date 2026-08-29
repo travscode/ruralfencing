@@ -246,7 +246,7 @@ if (!$enquire_only && $product instanceof WC_Product_Variable) {
     echo '<span class="!flex items-center bg-goldenrod px-[26px] py-7 text-birch" aria-hidden="true">';
     echo Timber::compile('icons/cart.twig', ['class' => 'h-6 w-6']);
     echo '</span>';
-    echo '<span class="!flex items-center bg-white py-8 pl-[30px] pr-[60px] font-heading text-b3 uppercase tracking-button text-birch">Add to Cart</span>';
+    echo '<span class="!flex items-center bg-white py-8 pl-[30px] pr-[60px] font-heading text-b3 uppercase tracking-button text-birch hover:bg-goldenrod">Add to Cart</span>';
     echo '</button>';
     printf('<input type="hidden" name="add-to-cart" value="%d" />', (int) $product->get_id());
     printf('<input type="hidden" name="product_id" value="%d" />', (int) $product->get_id());
@@ -274,7 +274,7 @@ if (!$enquire_only && $product instanceof WC_Product_Variable) {
     echo '<span class="!flex items-center bg-goldenrod px-[26px] py-7 text-birch" aria-hidden="true">';
     echo Timber::compile('icons/cart.twig', ['class' => 'h-6 w-6']);
     echo '</span>';
-    echo '<span class="!flex items-center bg-white py-8 pl-[30px] pr-[60px] font-heading text-b3 uppercase tracking-button text-birch">Add to Cart</span>';
+    echo '<span class="!flex items-center bg-white py-8 pl-[30px] pr-[60px] font-heading text-b3 uppercase tracking-button text-birch hover:bg-goldenrod">Add to Cart</span>';
     echo '</button>';
     echo '</form>';
 }
