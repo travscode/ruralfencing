@@ -16,8 +16,8 @@
 				{% endif %}
 			</div>
 
-			<div class="flex flex-1 flex-col rounded-xl bg-eggshell px-6 py-6 lg:px-10 lg:pt-10 lg:pb-[34px]">
-				<div class="flex flex-wrap items-center gap-3">
+			<div class="flex flex-1 flex-col rounded-xl bg-eggshell py-6 lg:py-10">
+				<div class="flex flex-wrap items-center gap-3 px-6 lg:px-10 hidden">
 					<span class="rounded-md bg-goldenrod px-3 py-2 text-t7 leading-[23px] text-birch">
 						{{ function('get_the_date', 'd M Y', post.ID) }}
 					</span>
@@ -34,7 +34,7 @@
 						{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } only %}
 					</span>
 
-					<div class="flex min-w-0 flex-1 flex-col">
+					<div class="flex min-w-0 flex-1 flex-col pr-6 lg:pr-10">
 						<h3 class="font-heading text-d3 uppercase leading-[38px] text-birch transition-colors duration-200 group-hover:text-deep-green">
 							{{ post.title }}
 						</h3>

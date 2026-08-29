@@ -1,0 +1,435 @@
+/**
+ * Custom WooCommerce Cart Styles for Rural Fencing Theme
+ * Matches the Figma design with clean, modern cart layout
+ */
+
+/* ==========================================================================
+   Cart Page Layout
+   ========================================================================== */
+
+.weerts-cart-page {
+	@apply min-h-screen bg-eggshell pb-16;
+}
+
+.weerts-cart-header {
+	@apply border-b border-birch/10 bg-white py-8;
+}
+
+.weerts-cart-header .container {
+	@apply mx-auto max-w-6xl px-6 lg:px-8;
+}
+
+.weerts-cart-title {
+	@apply font-display text-d2 text-birch;
+}
+
+.weerts-cart-count {
+	@apply mt-2 block text-t2 text-birch/70;
+}
+
+.weerts-cart-content {
+	@apply py-8;
+}
+
+.weerts-cart-content .container {
+	@apply mx-auto max-w-6xl px-6 lg:px-8;
+}
+
+/* ==========================================================================
+   Cart Layout Grid
+   ========================================================================== */
+
+.weerts-cart-layout {
+	@apply grid gap-8 lg:grid-cols-[1fr_380px] lg:items-start;
+}
+
+/* ==========================================================================
+   Cart Table
+   ========================================================================== */
+
+.weerts-cart-table {
+	@apply overflow-hidden rounded-xl border border-birch/10 bg-white;
+}
+
+.weerts-cart-table-header {
+	@apply grid border-b border-birch/10 bg-eggshell/50 px-6 py-4;
+	grid-template-columns: 2fr 1fr 1fr 1fr 44px;
+}
+
+.weerts-cart-col {
+	@apply text-t7 font-medium text-birch/70;
+}
+
+.weerts-cart-col-product {
+	@apply text-left;
+}
+
+.weerts-cart-col-price,
+.weerts-cart-col-quantity,
+.weerts-cart-col-subtotal {
+	@apply text-center;
+}
+
+.weerts-cart-col-remove {
+	@apply text-right;
+}
+
+/* Cart Row */
+.weerts-cart-row {
+	@apply grid items-center border-b border-birch/10 px-6 py-6 transition-colors hover:bg-eggshell/30;
+	grid-template-columns: 2fr 1fr 1fr 1fr 44px;
+}
+
+.weerts-cart-row:last-child {
+	@apply border-b-0;
+}
+
+/* ==========================================================================
+   Product Info
+   ========================================================================== */
+
+.weerts-cart-product {
+	@apply flex items-center gap-4;
+}
+
+.weerts-cart-product-image {
+	@apply h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-birch/10;
+}
+
+.weerts-cart-product-image img {
+	@apply h-full w-full object-cover;
+}
+
+.weerts-cart-product-details {
+	@apply min-w-0 flex-1;
+}
+
+.weerts-cart-product-category {
+	@apply block text-t8 font-medium uppercase tracking-wide text-birch/50;
+}
+
+.weerts-cart-product-name {
+	@apply mt-0.5 text-t4 font-medium leading-tight text-birch;
+}
+
+.weerts-cart-product-name a {
+	@apply text-birch no-underline transition-colors hover:text-deep-green;
+}
+
+/* Variation Data */
+.weerts-cart-product .variation {
+	@apply mt-2 space-y-1 text-t8 text-birch/60;
+}
+
+.weerts-cart-product .variation dt {
+	@apply inline font-medium;
+}
+
+.weerts-cart-product .variation dd {
+	@apply inline;
+}
+
+/* ==========================================================================
+   Price, Quantity, Subtotal
+   ========================================================================== */
+
+.weerts-cart-col-price,
+.weerts-cart-col-subtotal {
+	@apply text-center;
+}
+
+.weerts-cart-col-price .woocommerce-Price-amount,
+.weerts-cart-col-subtotal .woocommerce-Price-amount {
+	@apply text-t4 font-semibold text-birch;
+}
+
+.weerts-cart-label {
+	@apply mb-1 block text-t8 font-medium text-birch/50 lg:hidden;
+}
+
+/* Quantity Input */
+.weerts-cart-col-quantity {
+	@apply text-center;
+}
+
+.weerts-qty-input {
+	@apply mx-auto block h-10 w-20 rounded-lg border border-birch/20 bg-white px-2 text-center text-t4 font-medium text-birch transition-all focus:border-deep-green focus:outline-none focus:ring-1 focus:ring-deep-green/20;
+}
+
+/* Remove Button */
+.weerts-cart-remove {
+	@apply inline-flex h-10 w-10 items-center justify-center rounded-lg text-birch/40 transition-all hover:bg-red-50 hover:text-red-600;
+}
+
+.weerts-cart-remove-icon {
+	@apply text-2xl font-light leading-none;
+}
+
+.weerts-cart-remove-text {
+	@apply sr-only;
+}
+
+/* ==========================================================================
+   Cart Actions
+   ========================================================================== */
+
+.weerts-cart-actions {
+	@apply mt-6 flex flex-col gap-6 border-t border-birch/10 pt-6 lg:flex-row lg:items-end lg:justify-between;
+}
+
+.weerts-cart-coupon {
+	@apply flex-1;
+}
+
+.weerts-coupon-form {
+	@apply flex flex-col gap-3;
+}
+
+.weerts-coupon-label {
+	@apply text-t7 font-medium text-birch;
+}
+
+.weerts-coupon-input-group {
+	@apply flex gap-2;
+}
+
+.weerts-coupon-input {
+	@apply h-12 flex-1 rounded-lg border border-birch/20 bg-white px-4 text-t4 text-birch placeholder:text-birch/40 focus:border-deep-green focus:outline-none focus:ring-1 focus:ring-deep-green/20;
+}
+
+.weerts-coupon-btn {
+	@apply inline-flex h-12 items-center justify-center rounded-lg bg-birch px-6 text-t7 font-medium text-white transition-colors hover:bg-birch/90;
+}
+
+.weerts-cart-update {
+	@apply flex justify-end;
+}
+
+/* ==========================================================================
+   Cart Sidebar / Order Summary
+   ========================================================================== */
+
+.weerts-cart-sidebar {
+	@apply lg:sticky lg:top-8;
+}
+
+.weerts-cart-collaterals {
+	@apply rounded-xl border border-birch/10 bg-white p-6;
+}
+
+.weerts-cart-totals-title {
+	@apply mb-6 font-display text-d3 text-birch;
+}
+
+.weerts-cart-totals-table {
+	@apply space-y-3 border-b border-birch/10 pb-6;
+}
+
+.weerts-cart-total-row {
+	@apply flex items-center justify-between text-t4;
+}
+
+.weerts-cart-total-label {
+	@apply text-birch/70;
+}
+
+.weerts-cart-total-value {
+	@apply font-semibold text-birch;
+}
+
+.weerts-cart-total-row.weerts-cart-order-total {
+	@apply mt-4 border-t border-birch/10 pt-4;
+}
+
+.weerts-cart-order-total .weerts-cart-total-value {
+	@apply text-xl text-terracotta-clay;
+}
+
+.weerts-cart-totals-actions {
+	@apply mt-6 space-y-4;
+}
+
+/* Buttons */
+.weerts-btn {
+	@apply inline-flex items-center justify-center rounded-lg px-6 py-4 text-t7 font-medium transition-all;
+}
+
+.weerts-btn--primary {
+	@apply bg-birch text-white hover:bg-birch/90;
+}
+
+.weerts-btn--full {
+	@apply w-full;
+}
+
+.weerts-btn--outline {
+	@apply border border-birch/20 bg-white text-birch hover:bg-eggshell;
+}
+
+.weerts-btn--text {
+	@apply bg-transparent px-0 py-2 text-birch underline hover:text-deep-green;
+}
+
+.weerts-btn--checkout {
+	@apply bg-goldenrod text-birch hover:bg-goldenrod/90;
+}
+
+/* ==========================================================================
+   Empty Cart
+   ========================================================================== */
+
+.weerts-cart-empty {
+	@apply flex flex-col items-center justify-center py-16 text-center;
+}
+
+.weerts-cart-empty-icon {
+	@apply mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-eggshell text-birch/30;
+}
+
+.weerts-cart-empty-icon svg {
+	@apply h-10 w-10;
+}
+
+.weerts-cart-empty-title {
+	@apply font-display text-d3 text-birch;
+}
+
+.weerts-cart-empty-text {
+	@apply mt-2 max-w-md text-t2 text-birch/70;
+}
+
+.weerts-cart-empty .weerts-btn {
+	@apply mt-8;
+}
+
+/* ==========================================================================
+   Cross-sells (handled by WooCommerce defaults)
+   ========================================================================== */
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+	.weerts-cart-layout {
+		@apply grid-cols-1;
+	}
+
+	.weerts-cart-sidebar {
+		@apply order-2;
+	}
+
+	.weerts-cart-main {
+		@apply order-1;
+	}
+
+	.weerts-cart-table-header {
+		display: none;
+	}
+
+	.weerts-cart-row {
+		@apply grid gap-4 px-4 py-4;
+		grid-template-columns: 1fr;
+	}
+
+	.weerts-cart-product {
+		@apply gap-3;
+	}
+
+	.weerts-cart-product-image {
+		@apply h-16 w-16;
+	}
+
+	.weerts-cart-col-price,
+	.weerts-cart-col-quantity,
+	.weerts-cart-col-subtotal {
+		@apply flex items-center justify-between text-left;
+	}
+
+	.weerts-cart-col-remove {
+		@apply flex justify-end;
+	}
+
+	.weerts-cart-actions {
+		@apply flex-col gap-4;
+	}
+
+	.weerts-cart-coupon,
+	.weerts-cart-update {
+		@apply w-full;
+	}
+
+	.weerts-coupon-input-group {
+		@apply flex-col gap-2;
+	}
+
+	.weerts-coupon-btn {
+		@apply w-full;
+	}
+
+	.weerts-cart-update .weerts-btn {
+		@apply w-full;
+	}
+}
+
+@media (max-width: 639px) {
+	.weerts-cart-header {
+		@apply py-6;
+	}
+
+	.weerts-cart-title {
+		@apply text-d3;
+	}
+
+	.weerts-cart-empty {
+		@apply px-4 py-12;
+	}
+
+	.weerts-cart-empty-title {
+		@apply text-d4;
+	}
+}
+
+/* ==========================================================================
+   WooCommerce Default Overrides
+   ========================================================================== */
+
+.woocommerce-cart .woocommerce-message,
+.woocommerce-cart .woocommerce-info,
+.woocommerce-cart .woocommerce-error {
+	@apply mb-6 rounded-lg border-0 px-6 py-4;
+}
+
+.woocommerce-cart .woocommerce-message {
+	@apply bg-deep-green/10 text-deep-green;
+}
+
+.woocommerce-cart .woocommerce-info {
+	@apply bg-pacific-cyan/10 text-pacific-cyan;
+}
+
+.woocommerce-cart .woocommerce-error {
+	@apply bg-terracotta-clay/10 text-terracotta-clay;
+}
+
+/* Shipping Calculator */
+.weerts-cart-shipping .shipping-calculator-form {
+	@apply mt-4 space-y-3;
+}
+
+.weerts-cart-shipping .shipping-calculator-button {
+	@apply text-sm text-deep-green underline hover:text-birch;
+}
+
+/* Cart notifications */
+.weerts-cart-notice {
+	@apply mb-4 rounded-lg px-4 py-3 text-t7;
+}
+
+.weerts-cart-notice--success {
+	@apply bg-deep-green/10 text-deep-green;
+}
+
+.weerts-cart-notice--error {
+	@apply bg-terracotta-clay/10 text-terracotta-clay;
+}
