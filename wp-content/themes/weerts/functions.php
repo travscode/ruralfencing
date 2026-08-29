@@ -648,6 +648,28 @@ class RuralBoilerplateSite extends Site
             );
         }
 
+        // Enqueue product add to cart script on product pages
+        if (function_exists('is_product') && is_product()) {
+            $product_js_path = $theme_path . '/js/product-add-to-cart.js';
+            if (file_exists($product_js_path)) {
+                wp_enqueue_script(
+                    'weerts-product-add-to-cart',
+                    $theme_uri . '/js/product-add-to-cart.js',
+                    ['rural-boilerplate-theme'],
+                    (string) filemtime($product_js_path),
+                    true
+                );
+
+                // Localize script with cart data for product page
+                wp_localize_script('weerts-product-add-to-cart', 'weertsCartData', [
+                    'ajaxUrl' => admin_url('admin-ajax.php'),
+                    'wcAjaxUrl' => WC_AJAX::get_endpoint('%%endpoint%%'),
+                    'cartUrl' => wc_get_cart_url(),
+                    'addToCartNonce' => wp_create_nonce('wc-add-to-cart'),
+                ]);
+            }
+        }
+
         // Enqueue cart styles on cart page
         if (function_exists('is_cart') && is_cart()) {
             $cart_css_path = $theme_path . '/css/cart.css';

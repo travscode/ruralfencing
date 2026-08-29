@@ -44,7 +44,7 @@ jobs:
         working-directory: wp-content/themes/weerts
         run: pnpm build
 
-      - name: Deploy via rsync
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
@@ -52,16 +52,21 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -p "${{ secrets.SSH_PORT }}" -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
 
+      - name: Create remote directories
+        run: |
+          # Calculate paths
           THEME_PATH="${{ secrets.SSH_PATH }}"
           THEMES_DIR="$(dirname "${THEME_PATH%/}")"
           WP_CONTENT_DIR="$(dirname "$THEMES_DIR")"
           PLUGINS_PATH="$WP_CONTENT_DIR/plugins"
-          REMOTE_UPLOADS_PATH="/home/ruralfencing/public_html/wp-content/uploads"
 
+          # Create directories on remote server (note: uploads directory should already exist on server)
           ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_ed25519 \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
-            "mkdir -p '${{ secrets.SSH_PATH }}' '$PLUGINS_PATH' '$REMOTE_UPLOADS_PATH'"
+            "mkdir -p '${{ secrets.SSH_PATH }}' '$PLUGINS_PATH'"
 
+      - name: Deploy theme via rsync
+        run: |
           rsync -az --delete \
             -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
             --exclude node_modules \
@@ -69,6 +74,14 @@ jobs:
             --exclude .github \
             wp-content/themes/weerts/ \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}"
+
+      - name: Deploy plugins via rsync
+        run: |
+          # Calculate plugins path
+          THEME_PATH="${{ secrets.SSH_PATH }}"
+          THEMES_DIR="$(dirname "${THEME_PATH%/}")"
+          WP_CONTENT_DIR="$(dirname "$THEMES_DIR")"
+          PLUGINS_PATH="$WP_CONTENT_DIR/plugins"
 
           rsync -az \
             -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
@@ -78,13 +91,15 @@ jobs:
             wp-content/plugins/ \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$PLUGINS_PATH/"
 
-          if [ -d wp-content/uploads ]; then
+      - name: Deploy uploads (if exists and configured)
+        run: |
+          if [ -d wp-content/uploads ] && [ -n "${{ secrets.SSH_UPLOADS_PATH }}" ]; then
             rsync -az \
               -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
               --exclude .git \
               --exclude .github \
               wp-content/uploads/ \
-              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$REMOTE_UPLOADS_PATH/"
+              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_UPLOADS_PATH }}/"
           else
-            echo "Skipping uploads sync because wp-content/uploads does not exist in the repository checkout."
+            echo "Skipping uploads sync (either directory doesn't exist or SSH_UPLOADS_PATH not set)."
           fi
