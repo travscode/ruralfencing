@@ -33,16 +33,63 @@
 		</div>
 
 		<div class="flex items-center gap-[31px]">
-			<form class="relative" method="get" action="{{ function('home_url', '/') }}">
+			<form class="header-search relative" method="get" action="{{ function('home_url', '/') }}" data-header-search>
+				<input type="hidden" name="post_type" value="product" />
 				<span class="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-birch">
 					{% include 'icons/search.twig' with { class: 'h-[14px] w-[14px]', title: 'Search' } %}
 				</span>
 				<input
-					class="h-10 w-[min(520px,40vw)] rounded-md bg-white pl-[55px] pr-6 text-[15px] leading-[22px] text-birch placeholder:text-birch/60 focus:outline-none"
+					id="site-header-search"
+					class="h-10 w-[min(520px,40vw)] rounded-md bg-white pl-[55px] pr-[56px] text-[15px] leading-[22px] text-birch placeholder:text-birch/60 focus:outline-none"
 					name="s"
+					autocomplete="off"
 					placeholder="What can we help you find today?"
 					type="search"
+					role="combobox"
+					aria-expanded="false"
+					aria-controls="site-header-search-dropdown"
+					aria-autocomplete="list"
+					data-advanced-search-input
+					data-header-search-input
 				/>
+				<button
+					class="advanced-search-trigger absolute right-[6px] top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-birch transition-all duration-200 hover:bg-goldenrod hover:text-white focus:outline-none"
+					type="button"
+					aria-label="Open advanced search"
+					data-advanced-search-trigger
+				>
+					{% include 'icons/advanced-search.twig' with { class: 'h-3 w-[18px]', title: 'Open advanced search' } %}
+				</button>
+				<div
+					id="site-header-search-dropdown"
+					class="header-search__dropdown absolute left-0 right-0 top-[calc(100%+12px)] hidden rounded-[20px] bg-white p-5 text-birch shadow-[0_24px_48px_rgba(42,35,26,0.16)]"
+					role="listbox"
+					aria-label="Search suggestions"
+					data-header-search-dropdown
+				>
+					<div class="header-search__section flex flex-col gap-3" data-header-search-empty-state>
+						<div class="header-search__section-label">Popular searches</div>
+						<div class="flex flex-wrap gap-2" data-header-search-popular></div>
+					</div>
+					<div class="header-search__section mt-5 hidden flex-col gap-3" data-header-search-recent-section>
+						<div class="flex items-center justify-between gap-3">
+							<div class="header-search__section-label">Recent searches</div>
+							<button class="text-t7 leading-[23px] text-birch/60 transition-colors duration-200 hover:text-birch" type="button" data-header-search-clear>
+								Clear
+							</button>
+						</div>
+						<div class="flex flex-wrap gap-2" data-header-search-recent></div>
+					</div>
+					<div class="header-search__section hidden flex-col gap-3" data-header-search-results-section>
+						<div class="header-search__section-label" data-header-search-results-title>Suggestions</div>
+						<div class="flex flex-col gap-1" data-header-search-results></div>
+					</div>
+								<div class="header-search__section mt-5 flex flex-col gap-3" data-header-search-featured-section>
+									<div class="header-search__section-label">Featured products</div>
+									<div class="flex flex-col gap-3" data-header-search-featured></div>
+								</div>
+					<div class="header-search__section mt-2 hidden" data-header-search-status></div>
+				</div>
 			</form>
 
 			<div class="flex h-full items-center">

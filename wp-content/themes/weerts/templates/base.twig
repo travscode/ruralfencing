@@ -33,6 +33,7 @@
                 <script id="product-cat-tree" type="application/json">{{ product_cat_tree|json_encode|raw }}</script>
             </div>
         {% endif %}
+        {% include 'partials/advanced-search-drawer.twig' %}
         <main id="content" class="bg-eggshell">
             {% block content %}{% endblock %}
         </main>

@@ -216,7 +216,11 @@
 	}
 
 	.rural-search-strip__field {
-		@apply h-[102px] w-full rounded-l-xl bg-white px-[30px] text-[19px] leading-[26px] text-birch placeholder:text-birch/60 focus:outline-none;
+                @apply h-[102px] w-full bg-white px-[30px] text-[19px] leading-[26px] text-birch placeholder:text-birch/60 focus:outline-none;
+        }
+
+        .rural-search-strip__advanced-trigger {
+                @apply inline-flex h-[102px] w-[82px] items-center justify-center bg-white text-birch transition-all duration-200 hover:bg-deep-green hover:text-white;
 	}
 
 	.rural-search-strip__submit {

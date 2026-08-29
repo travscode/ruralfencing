@@ -1,0 +1,23 @@
+{% set svg_title = title|default(null) %}
+
+<svg
+        class="{{ class|default('') }}"
+        width="18"
+        height="12"
+        viewBox="0 0 18 12"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        {% if svg_title %}
+                role="img"
+                aria-label="{{ svg_title|e }}"
+        {% else %}
+                aria-hidden="true"
+        {% endif %}
+>
+        {% if svg_title %}
+                <title>{{ svg_title }}</title>
+        {% endif %}
+        <rect x="18" y="0" width="1.71429" height="18" transform="rotate(90 18 0)" fill="currentColor" />
+        <rect x="18" y="5.14282" width="1.71429" height="18" transform="rotate(90 18 5.14282)" fill="currentColor" />
+        <rect x="18" y="10.2856" width="1.71429" height="18" transform="rotate(90 18 10.2856)" fill="currentColor" />
+</svg>

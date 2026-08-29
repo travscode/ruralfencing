@@ -59,6 +59,7 @@ class RuralBoilerplateSite extends Site
         add_action('init', [$this, 'maybe_flush_blog_rewrites'], 105);
         add_action('init', [$this, 'maybe_flush_root_product_cat_rewrites'], 110);
         add_action('pre_get_posts', [$this, 'configure_blog_queries']);
+        add_action('pre_get_posts', [$this, 'configure_product_search_queries']);
         add_action('after_switch_theme', [$this, 'flush_blog_rewrites'], 10, 0);
         add_action('after_switch_theme', [$this, 'flush_root_product_cat_rewrites'], 10, 0);
         add_action('created_product_cat', [$this, 'flush_root_product_cat_rewrites'], 10, 0);
@@ -75,6 +76,8 @@ class RuralBoilerplateSite extends Site
         add_action('admin_post_nopriv_weerts_product_enquiry', [$this, 'handle_product_enquiry']);
         add_action('admin_post_weerts_contact_enquiry', [$this, 'handle_contact_enquiry']);
         add_action('admin_post_nopriv_weerts_contact_enquiry', [$this, 'handle_contact_enquiry']);
+        add_action('wp_ajax_weerts_search_suggestions', [$this, 'handle_search_suggestions']);
+        add_action('wp_ajax_nopriv_weerts_search_suggestions', [$this, 'handle_search_suggestions']);
         add_filter('timber/context', [$this, 'add_to_context']);
         add_filter('post_link', [$this, 'filter_blog_post_link'], 10, 2);
         add_filter('term_link', [$this, 'filter_product_cat_term_link'], 10, 3);
@@ -540,6 +543,257 @@ class RuralBoilerplateSite extends Site
     }
 
     /**
+     * Applies advanced product-search filters from the shared search drawer.
+     */
+    public function configure_product_search_queries(WP_Query $query): void
+    {
+        if (is_admin() || !$query->is_main_query() || !$query->is_search()) {
+            return;
+        }
+
+        $post_type = $query->get('post_type');
+        $requested_post_type = isset($_GET['post_type']) ? sanitize_key((string) wp_unslash($_GET['post_type'])) : '';
+
+        if ($post_type !== 'product' && $requested_post_type !== 'product') {
+            return;
+        }
+
+        $query->set('post_type', 'product');
+
+        $category_slug = isset($_GET['product_cat']) ? sanitize_title((string) wp_unslash($_GET['product_cat'])) : '';
+        if ($category_slug !== '') {
+            $query->set('tax_query', [
+                [
+                    'taxonomy' => 'product_cat',
+                    'field' => 'slug',
+                    'terms' => [$category_slug],
+                    'include_children' => true,
+                ],
+            ]);
+        }
+
+        $availability = isset($_GET['weerts_availability']) ? sanitize_key((string) wp_unslash($_GET['weerts_availability'])) : '';
+        $meta_query = $query->get('meta_query');
+        if (!is_array($meta_query)) {
+            $meta_query = [];
+        }
+
+        if ($availability === 'instock') {
+            $meta_query[] = [
+                'key' => '_stock_status',
+                'value' => 'instock',
+            ];
+        } elseif ($availability === 'onsale') {
+            $product_ids_on_sale = wc_get_product_ids_on_sale();
+            $query->set('post__in', !empty($product_ids_on_sale) ? array_map('intval', $product_ids_on_sale) : [0]);
+        }
+
+        if ($meta_query !== []) {
+            $query->set('meta_query', $meta_query);
+        }
+
+        $sort = isset($_GET['weerts_sort']) ? sanitize_key((string) wp_unslash($_GET['weerts_sort'])) : '';
+        switch ($sort) {
+            case 'newest':
+                $query->set('orderby', 'date');
+                $query->set('order', 'DESC');
+                break;
+            case 'price_low':
+                $query->set('meta_key', '_price');
+                $query->set('orderby', 'meta_value_num');
+                $query->set('order', 'ASC');
+                break;
+            case 'price_high':
+                $query->set('meta_key', '_price');
+                $query->set('orderby', 'meta_value_num');
+                $query->set('order', 'DESC');
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Returns the default suggestions shown when the header search first receives focus.
+     *
+     * @return array<int, array{label:string}>
+     */
+    private function get_header_popular_searches(): array
+    {
+        $categories = $this->get_product_cat_tree();
+        $suggestions = [];
+
+        foreach (array_slice($categories, 0, 6) as $category) {
+            $label = isset($category['name']) ? trim((string) $category['name']) : '';
+            if ($label === '') {
+                continue;
+            }
+
+            $suggestions[] = ['label' => $label];
+        }
+
+        return $suggestions;
+    }
+
+    /**
+     * Returns featured products for the header search dropdown.
+     *
+     * @return array<int, array{label:string,url:string,meta:string,price:string,image:string}>
+     */
+    private function get_header_featured_products(): array
+    {
+        if (!function_exists('wc_get_products')) {
+            return [];
+        }
+
+        $products = wc_get_products([
+            'status' => 'publish',
+            'limit' => 4,
+            'featured' => true,
+            'orderby' => 'date',
+            'order' => 'DESC',
+        ]);
+
+        $featured = [];
+
+        foreach ($products as $product) {
+            if (!$product instanceof WC_Product) {
+                continue;
+            }
+
+            $image = '';
+            $image_id = $product->get_image_id();
+            if ($image_id) {
+                $image_src = wp_get_attachment_image_url($image_id, 'thumbnail');
+                if (is_string($image_src)) {
+                    $image = $image_src;
+                }
+            }
+
+            if ($image === '' && function_exists('wc_placeholder_img_src')) {
+                $image = (string) wc_placeholder_img_src('thumbnail');
+            }
+
+            $terms = get_the_terms($product->get_id(), 'product_cat');
+            $meta = '';
+            if (is_array($terms) && $terms !== []) {
+                $first_term = reset($terms);
+                if ($first_term instanceof WP_Term) {
+                    $meta = (string) $first_term->name;
+                }
+            }
+
+            $featured[] = [
+                'label' => (string) $product->get_name(),
+                'url' => (string) $product->get_permalink(),
+                'meta' => $meta,
+                'price' => wp_strip_all_tags((string) $product->get_price_html()),
+                'image' => $image,
+            ];
+        }
+
+        return $featured;
+    }
+
+    /**
+     * Responds with matching product and category suggestions for the header search autocomplete.
+     */
+    public function handle_search_suggestions(): void
+    {
+        check_ajax_referer('weerts_search_suggestions', 'nonce');
+
+        $query = isset($_GET['query']) ? sanitize_text_field((string) wp_unslash($_GET['query'])) : '';
+        $query = trim($query);
+        $query_length = function_exists('mb_strlen') ? mb_strlen($query) : strlen($query);
+
+        if ($query === '' || $query_length < 2) {
+            wp_send_json_success([
+                'query' => $query,
+                'items' => [],
+            ]);
+        }
+
+        $suggestions = [];
+        $seen_labels = [];
+
+        $product_query = new WP_Query([
+            'post_type' => 'product',
+            'post_status' => 'publish',
+            'posts_per_page' => 6,
+            's' => $query,
+            'no_found_rows' => true,
+            'ignore_sticky_posts' => true,
+        ]);
+
+        if ($product_query->have_posts()) {
+            while ($product_query->have_posts()) {
+                $product_query->the_post();
+
+                $label = trim((string) get_the_title());
+                if ($label === '') {
+                    continue;
+                }
+
+                $normalized_label = strtolower($label);
+                if (isset($seen_labels[$normalized_label])) {
+                    continue;
+                }
+
+                $suggestions[] = [
+                    'label' => $label,
+                    'url' => get_permalink(),
+                    'meta' => 'Product',
+                ];
+                $seen_labels[$normalized_label] = true;
+            }
+
+            wp_reset_postdata();
+        }
+
+        $terms = get_terms([
+            'taxonomy' => 'product_cat',
+            'hide_empty' => true,
+            'number' => 4,
+            'name__like' => $query,
+        ]);
+
+        if (is_array($terms)) {
+            foreach ($terms as $term) {
+                if (!$term instanceof WP_Term) {
+                    continue;
+                }
+
+                $label = trim((string) $term->name);
+                if ($label === '') {
+                    continue;
+                }
+
+                $normalized_label = strtolower($label);
+                if (isset($seen_labels[$normalized_label])) {
+                    continue;
+                }
+
+                $term_link = get_term_link($term, 'product_cat');
+                if (is_wp_error($term_link)) {
+                    continue;
+                }
+
+                $suggestions[] = [
+                    'label' => $label,
+                    'url' => (string) $term_link,
+                    'meta' => 'Category',
+                ];
+                $seen_labels[$normalized_label] = true;
+            }
+        }
+
+        wp_send_json_success([
+            'query' => $query,
+            'items' => $suggestions,
+        ]);
+    }
+
+    /**
      * Flushes rewrite rules once in wp-admin after the custom blog routes are deployed.
      */
     public function maybe_flush_blog_rewrites(): void
@@ -646,6 +900,13 @@ class RuralBoilerplateSite extends Site
                 (string) filemtime($script_path),
                 true
             );
+
+            wp_localize_script('rural-boilerplate-theme', 'weertsThemeData', [
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'searchSuggestionsNonce' => wp_create_nonce('weerts_search_suggestions'),
+                'popularSearches' => $this->get_header_popular_searches(),
+                'featuredProducts' => $this->get_header_featured_products(),
+            ]);
         }
 
         // Enqueue product add to cart script on product pages

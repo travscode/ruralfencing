@@ -2,6 +2,7 @@
 {% set body_html = body_html|default('') %}
 {% set action_url = action_url|default(function('home_url', '/')) %}
 {% set icon_url = icon_url|default('') %}
+{% set input_id = input_id|default('rural-search-strip-field') %}
 
 <section class="rural-search-strip px-6 pb-[180px]">
 	<div class="mx-auto w-full max-w-[1720px] rounded-xl bg-goldenrod px-6 py-10 lg:px-20 lg:py-20">
@@ -14,10 +15,25 @@
 				{% endif %}
 			</div>
 
-			<form class="rural-search-strip__form w-full md:max-w-1/2 role="search" method="get" action="{{ action_url }}" aria-label="Search products">
+			<form class="rural-search-strip__form w-full md:max-w-1/2" role="search" method="get" action="{{ action_url }}" aria-label="Search products">
 				<div class="rural-search-strip__bar">
-					<label class="sr-only" for="rural-search-strip-field">Search</label>
-					<input id="rural-search-strip-field" class="rural-search-strip__field" type="search" name="s" placeholder="What can we help you find today?" />
+					<label class="sr-only" for="{{ input_id }}">Search</label>
+					<input
+						id="{{ input_id }}"
+						class="rural-search-strip__field"
+						type="search"
+						name="s"
+						placeholder="What can we help you find today?"
+						data-advanced-search-input
+					/>
+					<button
+						class="rural-search-strip__advanced-trigger"
+						type="button"
+						aria-label="Open advanced search"
+						data-advanced-search-trigger
+					>
+						{% include 'icons/advanced-search.twig' with { class: 'h-3 w-[18px]', title: 'Open advanced search' } %}
+					</button>
 					<button class="rural-search-strip__submit" type="submit" aria-label="Search">
 						{% if icon_url %}
 							<img src="{{ icon_url }}" width="30" height="30" alt="" aria-hidden="true" />

@@ -1,0 +1,135 @@
+{% set search_action_url = function('home_url', '/') %}
+{% set search_query = function('get_search_query') %}
+{% set product_categories = product_cat_tree|default([]) %}
+
+<div
+        id="advanced-search-drawer"
+        class="advanced-search-drawer fixed inset-0 z-[70] hidden"
+        data-advanced-search-drawer
+        data-open="false"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="advanced-search-title"
+>
+        <button
+                class="advanced-search-drawer__overlay absolute inset-0 bg-black/70"
+                type="button"
+                aria-label="Close advanced search"
+                data-advanced-search-overlay
+        ></button>
+
+        <aside class="advanced-search-drawer__panel relative ml-auto flex h-full w-full max-w-[540px] flex-col overflow-y-auto bg-eggshell px-6 pb-8 pt-16 text-birch lg:px-10 lg:pb-10 lg:pt-20">
+                <button
+                        class="absolute right-6 top-6 inline-flex h-10 w-10 items-center justify-center rounded-full text-terracotta-clay transition-colors duration-200 hover:bg-white/80 hover:text-birch lg:right-8 lg:top-8"
+                        type="button"
+                        aria-label="Close advanced search"
+                        data-advanced-search-close
+                >
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M2 2L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+                                <path d="M18 2L2 18" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+                        </svg>
+                </button>
+
+                <div class="flex flex-col gap-14">
+                        <section class="flex flex-col gap-5">
+                                <div class="flex flex-col gap-3">
+                                        <h2 id="advanced-search-title" class="font-heading text-d3 uppercase leading-[38px] text-birch">Quick Search</h2>
+                                        <p class="text-t1 leading-[26px] text-birch/80">Search via keyword, product type or product code</p>
+                                </div>
+
+                                <form class="advanced-search-drawer__quick-form" role="search" method="get" action="{{ search_action_url }}">
+                                        <input type="hidden" name="post_type" value="product" />
+                                        <div class="advanced-search-drawer__quick-bar">
+                                                <label class="sr-only" for="advanced-search-quick-field">Quick search</label>
+                                                <input
+                                                        id="advanced-search-quick-field"
+                                                        class="advanced-search-drawer__quick-field"
+                                                        type="search"
+                                                        name="s"
+                                                        value="{{ search_query }}"
+                                                        placeholder="What can we help you find today?"
+                                                        data-advanced-search-primary-input
+                                                />
+                                                <button class="advanced-search-drawer__quick-submit" type="submit" aria-label="Search products">
+                                                        {% include 'icons/search.twig' with { class: 'h-[24px] w-[24px]' } %}
+                                                </button>
+                                        </div>
+                                </form>
+                        </section>
+
+                        <section class="flex flex-col gap-6">
+                                <div class="flex flex-col gap-3">
+                                        <h3 class="font-heading text-d3 uppercase leading-[38px] text-birch">Advanced Search</h3>
+                                        <p class="text-t1 leading-[26px] text-birch/80">Not sure what you need? Maybe our advanced search can help.</p>
+                                </div>
+
+                                <form class="advanced-search-form flex flex-col gap-5" method="get" action="{{ search_action_url }}" data-advanced-search-form>
+                                        <input type="hidden" name="post_type" value="product" />
+                                        <input type="hidden" name="product_cat" value="" data-advanced-search-category-target />
+
+                                        <label class="contact-enquiry-form__field">
+                                                <span class="contact-enquiry-form__label">Search term or product code</span>
+                                                <input
+                                                        class="contact-enquiry-form__input"
+                                                        type="search"
+                                                        name="s"
+                                                        value="{{ search_query }}"
+                                                        placeholder="Field text/selection"
+                                                        data-advanced-search-secondary-input
+                                                />
+                                        </label>
+
+                                        <label class="contact-enquiry-form__field">
+                                                <span class="contact-enquiry-form__label">Category</span>
+                                                <span class="contact-enquiry-form__select-wrap">
+                                                        <select class="contact-enquiry-form__input contact-enquiry-form__select" name="weerts_parent_cat" data-advanced-search-parent>
+                                                                <option value="">Field text/selection</option>
+                                                                {% for category in product_categories %}
+                                                                        <option value="{{ category.slug }}">{{ category.name }}</option>
+                                                                {% endfor %}
+                                                        </select>
+                                                </span>
+                                        </label>
+
+                                        <label class="contact-enquiry-form__field">
+                                                <span class="contact-enquiry-form__label">Subcategory</span>
+                                                <span class="contact-enquiry-form__select-wrap">
+                                                        <select class="contact-enquiry-form__input contact-enquiry-form__select" name="weerts_child_cat" disabled data-advanced-search-child>
+                                                                <option value="">Field text/selection</option>
+                                                        </select>
+                                                </span>
+                                        </label>
+
+                                        <label class="contact-enquiry-form__field">
+                                                <span class="contact-enquiry-form__label">Availability</span>
+                                                <span class="contact-enquiry-form__select-wrap">
+                                                        <select class="contact-enquiry-form__input contact-enquiry-form__select" name="weerts_availability">
+                                                                <option value="">Field text/selection</option>
+                                                                <option value="instock">In stock only</option>
+                                                                <option value="onsale">On sale only</option>
+                                                        </select>
+                                                </span>
+                                        </label>
+
+                                        <label class="contact-enquiry-form__field">
+                                                <span class="contact-enquiry-form__label">Sort by</span>
+                                                <span class="contact-enquiry-form__select-wrap">
+                                                        <select class="contact-enquiry-form__input contact-enquiry-form__select" name="weerts_sort">
+                                                                <option value="">Field text/selection</option>
+                                                                <option value="relevance">Relevance</option>
+                                                                <option value="newest">Newest first</option>
+                                                                <option value="price_low">Price: low to high</option>
+                                                                <option value="price_high">Price: high to low</option>
+                                                        </select>
+                                                </span>
+                                        </label>
+
+                                        <button class="advanced-search-form__submit" type="submit">Search</button>
+                                </form>
+                        </section>
+                </div>
+
+                <script id="advanced-search-category-tree" type="application/json">{{ product_categories|json_encode|raw }}</script>
+        </aside>
+</div>

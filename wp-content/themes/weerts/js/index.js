@@ -8,6 +8,8 @@ function initSite() {
 	initHeaderHeightVar()
 	initGoogleMapsSections()
 	initProductsMegaMenu()
+	initAdvancedSearchDrawer()
+	initHeaderSearchAutocomplete()
 	initProductCarousels()
 	initTestimonialsCarousels()
 	initFadeTestimonialsCarousels()
@@ -50,7 +52,9 @@ function loadGoogleMapsApi(apiKey) {
 		}
 
 		const script = document.createElement('script')
-		script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&callback=${callbackName}`
+		script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(
+			apiKey
+		)}&callback=${callbackName}`
 		script.async = true
 		script.defer = true
 		script.dataset.googleMapsLoader = 'true'
@@ -88,8 +92,8 @@ function initGoogleMapsSections() {
 	const sections = Array.from(document.querySelectorAll('[data-google-map]'))
 	if (!sections.length) return
 
-	const sectionsWithKeys = sections.filter(
-		(section) => section.getAttribute('data-api-key')?.trim()
+	const sectionsWithKeys = sections.filter((section) =>
+		section.getAttribute('data-api-key')?.trim()
 	)
 	if (!sectionsWithKeys.length) return
 
@@ -392,6 +396,576 @@ function initProductsMegaMenu() {
 	})
 }
 
+function initAdvancedSearchDrawer() {
+	const drawer = document.querySelector('[data-advanced-search-drawer]')
+	if (!drawer) return
+
+	const panel = drawer.querySelector('.advanced-search-drawer__panel')
+	const overlay = drawer.querySelector('[data-advanced-search-overlay]')
+	const closeButtons = drawer.querySelectorAll('[data-advanced-search-close]')
+	const triggers = document.querySelectorAll('[data-advanced-search-trigger]')
+	const primaryInput = drawer.querySelector(
+		'[data-advanced-search-primary-input]'
+	)
+	const secondaryInput = drawer.querySelector(
+		'[data-advanced-search-secondary-input]'
+	)
+	const categoryTarget = drawer.querySelector(
+		'[data-advanced-search-category-target]'
+	)
+	const parentSelect = drawer.querySelector('[data-advanced-search-parent]')
+	const childSelect = drawer.querySelector('[data-advanced-search-child]')
+	const categoryTreeEl = document.getElementById(
+		'advanced-search-category-tree'
+	)
+
+	if (!panel || !overlay || !primaryInput || !secondaryInput) return
+
+	let categoryTree = []
+	try {
+		categoryTree = JSON.parse(categoryTreeEl?.textContent || '[]')
+	} catch {
+		categoryTree = []
+	}
+
+	let isOpen = false
+	let activeTrigger = null
+
+	const advancedIconSvg =
+		'<svg class="h-3 w-[18px]" width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="18" y="0" width="1.71429" height="18" transform="rotate(90 18 0)" fill="currentColor"></rect><rect x="18" y="5.14282" width="1.71429" height="18" transform="rotate(90 18 5.14282)" fill="currentColor"></rect><rect x="18" y="10.2856" width="1.71429" height="18" transform="rotate(90 18 10.2856)" fill="currentColor"></rect></svg>'
+
+	const syncTriggerIcons = () => {
+		triggers.forEach((trigger) => {
+			if (!trigger.querySelector('svg')) {
+				trigger.innerHTML = advancedIconSvg
+			}
+		})
+	}
+
+	const getAssociatedInput = (trigger) => {
+		const wrapper = trigger.closest('form, .rural-search-strip__bar, .relative')
+		return wrapper?.querySelector('[data-advanced-search-input]') || null
+	}
+
+	const setOpen = (nextOpen) => {
+		if (nextOpen === isOpen) return
+
+		isOpen = nextOpen
+		drawer.dataset.open = nextOpen ? 'true' : 'false'
+
+		if (nextOpen) {
+			drawer.classList.remove('hidden')
+			document.body.style.overflow = 'hidden'
+			requestAnimationFrame(() => {
+				drawer.dataset.open = 'true'
+			})
+			window.setTimeout(() => {
+				primaryInput.focus()
+			}, 180)
+			return
+		}
+
+		drawer.dataset.open = 'false'
+		document.body.style.overflow = ''
+		window.setTimeout(() => {
+			if (isOpen) return
+			drawer.classList.add('hidden')
+		}, 260)
+
+		if (activeTrigger instanceof HTMLElement) {
+			activeTrigger.focus()
+		}
+	}
+
+	const syncSearchValues = (value) => {
+		primaryInput.value = value
+		secondaryInput.value = value
+	}
+
+	const getChildrenForSlug = (slug) => {
+		const selectedParent = categoryTree.find((item) => item.slug === slug)
+		return Array.isArray(selectedParent?.children)
+			? selectedParent.children
+			: []
+	}
+
+	const updateChildOptions = (parentSlug) => {
+		if (!(childSelect instanceof HTMLSelectElement)) return
+
+		const children = getChildrenForSlug(parentSlug)
+		childSelect.innerHTML = '<option value="">Field text/selection</option>'
+
+		if (!children.length) {
+			childSelect.disabled = true
+			return
+		}
+
+		children.forEach((child) => {
+			const option = document.createElement('option')
+			option.value = child.slug || ''
+			option.textContent = child.name || ''
+			childSelect.appendChild(option)
+		})
+
+		childSelect.disabled = false
+	}
+
+	const syncCategoryTarget = () => {
+		if (!(categoryTarget instanceof HTMLInputElement)) return
+		const childValue =
+			childSelect instanceof HTMLSelectElement ? childSelect.value : ''
+		const parentValue =
+			parentSelect instanceof HTMLSelectElement ? parentSelect.value : ''
+		categoryTarget.value = childValue || parentValue || ''
+	}
+
+	syncTriggerIcons()
+	updateChildOptions('')
+	syncCategoryTarget()
+
+	triggers.forEach((trigger) => {
+		trigger.addEventListener('click', () => {
+			activeTrigger = trigger
+			const associatedInput = getAssociatedInput(trigger)
+			const currentValue =
+				associatedInput instanceof HTMLInputElement ? associatedInput.value : ''
+			syncSearchValues(currentValue)
+			setOpen(true)
+		})
+	})
+
+	overlay.addEventListener('click', () => setOpen(false))
+	closeButtons.forEach((button) => {
+		button.addEventListener('click', () => setOpen(false))
+	})
+
+	drawer.addEventListener('click', (event) => {
+		if (!isOpen) return
+		const clickedInsidePanel = event.target.closest(
+			'.advanced-search-drawer__panel'
+		)
+		if (!clickedInsidePanel) setOpen(false)
+	})
+
+	document.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape') setOpen(false)
+	})
+
+	primaryInput.addEventListener('input', () => {
+		secondaryInput.value = primaryInput.value
+	})
+
+	secondaryInput.addEventListener('input', () => {
+		primaryInput.value = secondaryInput.value
+	})
+
+	if (parentSelect instanceof HTMLSelectElement) {
+		parentSelect.addEventListener('change', () => {
+			updateChildOptions(parentSelect.value)
+			syncCategoryTarget()
+		})
+	}
+
+	if (childSelect instanceof HTMLSelectElement) {
+		childSelect.addEventListener('change', syncCategoryTarget)
+	}
+
+	const advancedForm = drawer.querySelector('[data-advanced-search-form]')
+	if (advancedForm) {
+		advancedForm.addEventListener('submit', syncCategoryTarget)
+	}
+}
+
+/**
+ * Adds a focus-first autocomplete dropdown to the header search form.
+ */
+function initHeaderSearchAutocomplete() {
+	const form = document.querySelector('[data-header-search]')
+	if (!(form instanceof HTMLFormElement)) return
+
+	const input = form.querySelector('[data-header-search-input]')
+	const dropdown = form.querySelector('[data-header-search-dropdown]')
+	const popularRoot = form.querySelector('[data-header-search-popular]')
+	const recentRoot = form.querySelector('[data-header-search-recent]')
+	const recentSection = form.querySelector(
+		'[data-header-search-recent-section]'
+	)
+	const featuredRoot = form.querySelector('[data-header-search-featured]')
+	const featuredSection = form.querySelector(
+		'[data-header-search-featured-section]'
+	)
+	const resultsRoot = form.querySelector('[data-header-search-results]')
+	const resultsSection = form.querySelector(
+		'[data-header-search-results-section]'
+	)
+	const resultsTitle = form.querySelector('[data-header-search-results-title]')
+	const statusRoot = form.querySelector('[data-header-search-status]')
+	const clearButton = form.querySelector('[data-header-search-clear]')
+	const emptyState = form.querySelector('[data-header-search-empty-state]')
+	const config = window.weertsThemeData || {}
+	const popularSearches = Array.isArray(config.popularSearches)
+		? config.popularSearches
+		: []
+	const featuredProducts = Array.isArray(config.featuredProducts)
+		? config.featuredProducts
+		: []
+	const recentStorageKey = 'weerts-header-search-recent'
+
+	if (
+		!(input instanceof HTMLInputElement) ||
+		!(dropdown instanceof HTMLElement) ||
+		!(popularRoot instanceof HTMLElement) ||
+		!(recentRoot instanceof HTMLElement) ||
+		!(recentSection instanceof HTMLElement) ||
+		!(featuredRoot instanceof HTMLElement) ||
+		!(featuredSection instanceof HTMLElement) ||
+		!(resultsRoot instanceof HTMLElement) ||
+		!(resultsSection instanceof HTMLElement) ||
+		!(resultsTitle instanceof HTMLElement) ||
+		!(statusRoot instanceof HTMLElement) ||
+		!(emptyState instanceof HTMLElement)
+	) {
+		return
+	}
+
+	let debounceTimer = null
+	let activeController = null
+
+	/**
+	 * Reads recent searches stored in localStorage for the header form.
+	 */
+	function getRecentSearches() {
+		try {
+			const raw = window.localStorage.getItem(recentStorageKey)
+			const parsed = raw ? JSON.parse(raw) : []
+			return Array.isArray(parsed)
+				? parsed.filter(
+						(item) => typeof item === 'string' && item.trim() !== ''
+				  )
+				: []
+		} catch {
+			return []
+		}
+	}
+
+	/**
+	 * Persists a recent search term so the dropdown has useful focus-state content.
+	 */
+	function saveRecentSearch(term) {
+		const normalized = term.trim()
+		if (!normalized) return
+
+		const next = [
+			normalized,
+			...getRecentSearches().filter(
+				(item) => item.toLowerCase() !== normalized.toLowerCase()
+			),
+		].slice(0, 6)
+
+		try {
+			window.localStorage.setItem(recentStorageKey, JSON.stringify(next))
+		} catch {
+			// Ignore storage failures and keep the search interaction working.
+		}
+	}
+
+	/**
+	 * Clears the stored recent search list from localStorage and the UI.
+	 */
+	function clearRecentSearches() {
+		try {
+			window.localStorage.removeItem(recentStorageKey)
+		} catch {
+			// Ignore storage failures and keep the search interaction working.
+		}
+		renderRecentSearches()
+	}
+
+	/**
+	 * Opens the dropdown under the search field and updates combobox state.
+	 */
+	function openDropdown() {
+		dropdown.classList.remove('hidden')
+		dropdown.dataset.open = 'true'
+		input.setAttribute('aria-expanded', 'true')
+	}
+
+	/**
+	 * Closes the dropdown and resets any transient loading state.
+	 */
+	function closeDropdown() {
+		dropdown.dataset.open = 'false'
+		dropdown.classList.add('hidden')
+		input.setAttribute('aria-expanded', 'false')
+		hideStatus()
+	}
+
+	/**
+	 * Shows a lightweight status row for loading and empty-result states.
+	 */
+	function showStatus(message) {
+		statusRoot.textContent = message
+		statusRoot.className = 'header-search__section mt-2 header-search__status'
+		statusRoot.classList.remove('hidden')
+	}
+
+	/**
+	 * Hides the status row when the dropdown has richer content to show.
+	 */
+	function hideStatus() {
+		statusRoot.textContent = ''
+		statusRoot.className = 'header-search__section mt-2 hidden'
+	}
+
+	/**
+	 * Submits the current form value as a product search and stores it locally.
+	 */
+	function submitSearch(term) {
+		input.value = term
+		saveRecentSearch(term)
+		form.requestSubmit()
+	}
+
+	/**
+	 * Renders pill-style suggestions used by the empty dropdown state.
+	 */
+	function renderPills(root, items, onClick) {
+		root.replaceChildren()
+
+		items.forEach((item) => {
+			const button = document.createElement('button')
+			button.type = 'button'
+			button.className = 'header-search__pill'
+			button.textContent = item.label
+			button.addEventListener('click', () => onClick(item))
+			root.appendChild(button)
+		})
+	}
+
+	/**
+	 * Renders the recent-search pill group and toggles its section visibility.
+	 */
+	function renderRecentSearches() {
+		const recentSearches = getRecentSearches().map((item) => ({ label: item }))
+
+		if (!recentSearches.length) {
+			recentRoot.replaceChildren()
+			recentSection.classList.add('hidden')
+			recentSection.classList.remove('flex')
+			return
+		}
+
+		recentSection.classList.remove('hidden')
+		recentSection.classList.add('flex')
+		renderPills(recentRoot, recentSearches, (item) => submitSearch(item.label))
+	}
+
+	/**
+	 * Renders featured product cards that stay visible in the dropdown.
+	 */
+	function renderFeaturedProducts() {
+		featuredRoot.replaceChildren()
+
+		if (!featuredProducts.length) {
+			featuredSection.classList.add('hidden')
+			featuredSection.classList.remove('flex')
+			return
+		}
+
+		featuredSection.classList.remove('hidden')
+		featuredSection.classList.add('flex')
+
+		featuredProducts.forEach((item) => {
+			const link = document.createElement('a')
+			link.href = item.url || '#'
+			link.className = 'header-search__featured-card'
+
+			const imageWrap = document.createElement('span')
+			imageWrap.className = 'header-search__featured-image'
+
+			const image = document.createElement('img')
+			image.src = item.image || ''
+			image.alt = item.label || ''
+			image.loading = 'lazy'
+			imageWrap.appendChild(image)
+
+			const content = document.createElement('span')
+			content.className = 'min-w-0 flex-1'
+
+			const title = document.createElement('span')
+			title.className = 'header-search__featured-title block'
+			title.textContent = item.label || ''
+			content.appendChild(title)
+
+			if (item.meta) {
+				const meta = document.createElement('span')
+				meta.className = 'header-search__featured-meta block'
+				meta.textContent = item.meta
+				content.appendChild(meta)
+			}
+
+			if (item.price) {
+				const price = document.createElement('span')
+				price.className = 'header-search__featured-price block'
+				price.textContent = item.price
+				content.appendChild(price)
+			}
+
+			link.appendChild(imageWrap)
+			link.appendChild(content)
+			featuredRoot.appendChild(link)
+		})
+	}
+
+	/**
+	 * Renders the focus-state dropdown with popular and recent suggestions.
+	 */
+	function renderEmptyState() {
+		emptyState.classList.remove('hidden')
+		resultsSection.classList.add('hidden')
+		resultsSection.classList.remove('flex')
+		hideStatus()
+
+		renderPills(popularRoot, popularSearches, (item) =>
+			submitSearch(item.label)
+		)
+		renderRecentSearches()
+		renderFeaturedProducts()
+	}
+
+	/**
+	 * Renders AJAX-backed product and category suggestions for the active query.
+	 */
+	function renderResults(items, query) {
+		resultsRoot.replaceChildren()
+		resultsSection.classList.remove('hidden')
+		resultsSection.classList.add('flex')
+		emptyState.classList.add('hidden')
+		hideStatus()
+		resultsTitle.textContent = `Suggestions for "${query}"`
+
+		items.forEach((item) => {
+			const link = document.createElement('a')
+			link.href = item.url || '#'
+			link.className = 'header-search__suggestion'
+
+			const label = document.createElement('span')
+			label.textContent = item.label || ''
+			link.appendChild(label)
+
+			if (item.meta) {
+				const meta = document.createElement('span')
+				meta.className = 'header-search__suggestion-meta'
+				meta.textContent = item.meta
+				link.appendChild(meta)
+			}
+
+			link.addEventListener('click', () => {
+				saveRecentSearch(item.label || query)
+			})
+
+			resultsRoot.appendChild(link)
+		})
+	}
+
+	/**
+	 * Loads live suggestions from WordPress based on the current search term.
+	 */
+	async function fetchSuggestions(query) {
+		if (!config.ajaxUrl || !config.searchSuggestionsNonce) {
+			showStatus('Search suggestions are not available right now.')
+			return
+		}
+
+		if (activeController) {
+			activeController.abort()
+		}
+
+		activeController = new AbortController()
+		showStatus('Searching...')
+
+		const url = new URL(config.ajaxUrl, window.location.origin)
+		url.searchParams.set('action', 'weerts_search_suggestions')
+		url.searchParams.set('nonce', config.searchSuggestionsNonce)
+		url.searchParams.set('query', query)
+
+		try {
+			const response = await fetch(url.toString(), {
+				signal: activeController.signal,
+			})
+			const data = await response.json()
+
+			if (!data?.success) {
+				showStatus('No suggestions found.')
+				resultsSection.classList.add('hidden')
+				resultsSection.classList.remove('flex')
+				return
+			}
+
+			const items = Array.isArray(data.data?.items) ? data.data.items : []
+			if (!items.length) {
+				showStatus('No suggestions found.')
+				resultsSection.classList.add('hidden')
+				resultsSection.classList.remove('flex')
+				return
+			}
+
+			renderResults(items, query)
+		} catch (error) {
+			if (error?.name === 'AbortError') return
+			showStatus('Search suggestions are unavailable right now.')
+			resultsSection.classList.add('hidden')
+			resultsSection.classList.remove('flex')
+		}
+	}
+
+	renderEmptyState()
+
+	input.addEventListener('focus', () => {
+		openDropdown()
+		if (input.value.trim().length < 2) {
+			renderEmptyState()
+		}
+	})
+
+	input.addEventListener('input', () => {
+		const query = input.value.trim()
+		openDropdown()
+
+		if (debounceTimer) {
+			window.clearTimeout(debounceTimer)
+		}
+
+		if (query.length < 2) {
+			if (activeController) activeController.abort()
+			renderEmptyState()
+			return
+		}
+
+		debounceTimer = window.setTimeout(() => {
+			fetchSuggestions(query)
+		}, 180)
+	})
+
+	input.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape') {
+			closeDropdown()
+			input.blur()
+		}
+	})
+
+	form.addEventListener('submit', () => {
+		saveRecentSearch(input.value)
+	})
+
+	clearButton?.addEventListener('click', clearRecentSearches)
+
+	document.addEventListener('click', (event) => {
+		if (form.contains(event.target)) return
+		closeDropdown()
+	})
+}
+
 function initProductCarousels() {
 	const carousels = document.querySelectorAll('.rural-product-carousel')
 	if (!carousels.length) return
@@ -413,7 +987,9 @@ function initProductCarousels() {
 		)
 
 		const getList = () =>
-			viewport.querySelector('[data-carousel-track], .woocommerce ul.products, ul.products')
+			viewport.querySelector(
+				'[data-carousel-track], .woocommerce ul.products, ul.products'
+			)
 
 		let raf = null
 		let resizeTimer = null
