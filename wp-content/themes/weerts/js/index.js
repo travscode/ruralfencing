@@ -71,13 +71,15 @@ function loadGoogleMapsApi(apiKey) {
 }
 
 function initHeaderHeightVar() {
+	const stickyNav = document.querySelector('[data-sticky-nav]')
 	const header = document.querySelector('header')
-	if (!header) return
+	const measuredElement = stickyNav || header
+	if (!measuredElement) return
 
 	const set = () => {
 		document.documentElement.style.setProperty(
 			'--site-header-height',
-			`${header.offsetHeight}px`
+			`${measuredElement.offsetHeight}px`
 		)
 	}
 
@@ -152,6 +154,7 @@ function initProductsMegaMenu() {
 	const toggle = document.getElementById('products-menu-toggle')
 	const menu = document.getElementById('products-mega-menu')
 	if (!toggle || !menu) return
+	const header = document.querySelector('header')
 
 	const overlay = menu.querySelector('[data-products-menu="overlay"]')
 	const level1Root = menu.querySelector('[data-products-menu="level1"]')
@@ -186,6 +189,7 @@ function initProductsMegaMenu() {
 	indexTree(tree)
 
 	let closeTimer = null
+	let pendingOpenTimer = null
 
 	const decodeHtml = (value) => {
 		if (typeof value !== 'string') return value == null ? '' : String(value)
@@ -195,6 +199,15 @@ function initProductsMegaMenu() {
 		return el.textContent || ''
 	}
 
+	/**
+	 * Clears any delayed mega-menu open triggered by a smooth scroll.
+	 */
+	const clearPendingOpen = () => {
+		if (!pendingOpenTimer) return
+		window.clearTimeout(pendingOpenTimer)
+		pendingOpenTimer = null
+	}
+
 	const setOpen = (nextOpen, options = {}) => {
 		const fastClose = Boolean(options.fastClose)
 
@@ -202,6 +215,8 @@ function initProductsMegaMenu() {
 			clearTimeout(closeTimer)
 			closeTimer = null
 		}
+
+		clearPendingOpen()
 
 		state.open = nextOpen
 		toggle.setAttribute('aria-expanded', nextOpen ? 'true' : 'false')
@@ -236,6 +251,41 @@ function initProductsMegaMenu() {
 				menu.classList.add('hidden')
 				closeTimer = null
 			}, closeMs)
+		}
+	}
+
+	/**
+	 * Scrolls the page until the sticky nav reaches the top, then opens the mega menu.
+	 */
+	const openFromStickyPosition = () => {
+		const headerHeight = header instanceof HTMLElement ? header.offsetHeight : 0
+		if (headerHeight <= 0 || window.scrollY >= headerHeight - 2) {
+			setOpen(true)
+			return
+		}
+
+		window.scrollTo({
+			top: headerHeight,
+			behavior: 'smooth',
+		})
+
+		pendingOpenTimer = window.setTimeout(() => {
+			pendingOpenTimer = null
+			setOpen(true)
+		}, 320)
+	}
+
+	/**
+	 * Opens the mega menu only when the sticky nav is already at the top of the viewport.
+	 */
+	const openOnlyWhenSticky = () => {
+		const headerHeight = header instanceof HTMLElement ? header.offsetHeight : 0
+		if (headerHeight > 0 && window.scrollY < headerHeight - 2) {
+			return
+		}
+
+		if (!state.open) {
+			setOpen(true)
 		}
 	}
 
@@ -326,7 +376,8 @@ function initProductsMegaMenu() {
 		rootEl.replaceChildren()
 
 		const list = document.createElement('div')
-		list.className = 'flex flex-col'
+		list.className =
+			'flex flex-col ' + (level > 1 ? ' bg-eggshell' : ' bg-white')
 
 		if (level > 1 && parent && parent.link) {
 			const showAll = document.createElement('a')
@@ -375,13 +426,16 @@ function initProductsMegaMenu() {
 	level2Root.addEventListener('focusin', (e) => handleActivate(e, 2))
 	level2Root.addEventListener('click', (e) => handleClick(e, 2))
 
-	toggle.addEventListener('click', () => setOpen(!state.open))
-	toggle.addEventListener('mouseenter', () => {
-		if (!state.open) setOpen(true)
+	toggle.addEventListener('click', () => {
+		if (state.open) {
+			setOpen(false)
+			return
+		}
+
+		openFromStickyPosition()
 	})
-	toggle.addEventListener('focus', () => {
-		if (!state.open) setOpen(true)
-	})
+	toggle.addEventListener('mouseenter', openOnlyWhenSticky)
+	toggle.addEventListener('focus', openOnlyWhenSticky)
 	overlay.addEventListener('click', () => setOpen(false, { fastClose: true }))
 
 	menu.addEventListener('click', (e) => {
