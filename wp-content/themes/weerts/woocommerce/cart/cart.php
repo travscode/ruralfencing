@@ -40,7 +40,6 @@ do_action( 'woocommerce_before_cart' );
     <!-- Cart Header -->
     <div class="weerts-cart-header">
         <div class="container">
-            <h1 class="weerts-cart-title"><?php esc_html_e( 'Shopping Cart', 'weerts' ); ?></h1>
             <?php if ( ! $is_cart_empty ) : ?>
                 <span class="weerts-cart-count">
                     <?php
@@ -158,7 +157,7 @@ do_action( 'woocommerce_before_cart' );
                                                                 'max_value'    => $_product->get_max_purchase_quantity(),
                                                                 'min_value'    => '0',
                                                                 'product_name' => $_product->get_name(),
-                                                                'classes'      => 'weerts-qty-input',
+                                                                'classes'      => ['input-text', 'qty', 'text', 'weerts-qty-input'],
                                                             ),
                                                             $_product,
                                                             false
@@ -230,71 +229,7 @@ do_action( 'woocommerce_before_cart' );
                         <div class="weerts-cart-collaterals">
                             <?php do_action( 'woocommerce_cart_collaterals' ); ?>
                             
-                            <div class="weerts-cart-totals">
-                                <h2 class="weerts-cart-totals-title"><?php esc_html_e( 'Order Summary', 'weerts' ); ?></h2>
-                                
-                                <div class="weerts-cart-totals-table">
-                                    <div class="weerts-cart-total-row weerts-cart-subtotal">
-                                        <span class="weerts-cart-total-label"><?php esc_html_e( 'Subtotal', 'weerts' ); ?></span>
-                                        <span class="weerts-cart-total-value"><?php echo wp_kses_post( $cart_subtotal ); ?></span>
-                                    </div>
-                                    
-                                    <?php if ( WC()->cart->needs_shipping() && WC()->cart->show_shipping() ) : ?>
-                                        <div class="weerts-cart-total-row weerts-cart-shipping">
-                                            <span class="weerts-cart-total-label"><?php esc_html_e( 'Shipping', 'weerts' ); ?></span>
-                                            <span class="weerts-cart-total-value">
-                                                <?php if ( WC()->cart->get_shipping_total() > 0 ) : ?>
-                                                    <?php echo wp_kses_post( wc_price( WC()->cart->get_shipping_total() ) ); ?>
-                                                <?php else : ?>
-                                                    <?php esc_html_e( 'Calculated at checkout', 'weerts' ); ?>
-                                                <?php endif; ?>
-                                            </span>
-                                        </div>
-                                    <?php endif; ?>
-                                    
-                                    <?php foreach ( WC()->cart->get_coupons() as $code => $coupon ) : ?>
-                                        <div class="weerts-cart-total-row weerts-cart-coupon">
-                                            <span class="weerts-cart-total-label">
-                                                <?php 
-                                                /* translators: %s: coupon code */
-                                                printf( esc_html__( 'Coupon: %s', 'weerts' ), esc_html( $code ) ); 
-                                                ?>
-                                            </span>
-                                            <span class="weerts-cart-total-value">-<?php echo wp_kses_post( wc_price( WC()->cart->get_coupon_discount_amount( $code ) ) ); ?></span>
-                                        </div>
-                                    <?php endforeach; ?>
-                                    
-                                    <?php if ( wc_tax_enabled() && ! WC()->cart->display_prices_including_tax() ) : ?>
-                                        <?php if ( 'itemized' === get_option( 'woocommerce_tax_total_display' ) ) : ?>
-                                            <?php foreach ( WC()->cart->get_tax_totals() as $code => $tax ) : ?>
-                                                <div class="weerts-cart-total-row weerts-cart-tax">
-                                                    <span class="weerts-cart-total-label"><?php echo esc_html( $tax->label ); ?></span>
-                                                    <span class="weerts-cart-total-value"><?php echo wp_kses_post( $tax->formatted_amount ); ?></span>
-                                                </div>
-                                            <?php endforeach; ?>
-                                        <?php else : ?>
-                                            <div class="weerts-cart-total-row weerts-cart-tax">
-                                                <span class="weerts-cart-total-label"><?php echo esc_html( WC()->countries->tax_or_vat() ); ?></span>
-                                                <span class="weerts-cart-total-value"><?php echo wp_kses_post( wc_price( WC()->cart->get_taxes_total() ) ); ?></span>
-                                            </div>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                    
-                                    <div class="weerts-cart-total-row weerts-cart-order-total">
-                                        <span class="weerts-cart-total-label"><?php esc_html_e( 'Total', 'weerts' ); ?></span>
-                                        <span class="weerts-cart-total-value"><?php echo wp_kses_post( $cart_total ); ?></span>
-                                    </div>
-                                </div>
-                                
-                                <div class="weerts-cart-totals-actions">
-                                    <a href="<?php echo esc_url( wc_get_checkout_url() ); ?>" class="weerts-btn weerts-btn--primary weerts-btn--full weerts-btn--checkout">
-                                        <?php esc_html_e( 'Proceed to Checkout', 'weerts' ); ?>
-                                    </a>
-                                    <a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>" class="weerts-btn weerts-btn--text weerts-btn--continue">
-                                        <?php esc_html_e( 'Continue Shopping', 'weerts' ); ?>
-                                    </a>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>

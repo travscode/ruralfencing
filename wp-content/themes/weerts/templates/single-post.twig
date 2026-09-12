@@ -17,7 +17,5 @@
 		share_links: share_links
 	} only %}
 
-	{% include 'partials/sections/blog-related-posts.twig' with {
-		posts: related_posts
-	} only %}
+	{% include 'partials/sections/where-to-next.twig' with { site: site } only %}
 {% endblock %}

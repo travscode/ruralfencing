@@ -3,6 +3,7 @@ module.exports = {
 		'./*.php',
 		'./templates/**/*.{twig,php}',
 		'./includes/**/*.{html,php}',
+		'./woocommerce/**/*.php',
 		'./js/**/*.js',
 	],
 	theme: {

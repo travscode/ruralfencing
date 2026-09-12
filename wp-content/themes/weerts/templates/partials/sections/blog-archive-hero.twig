@@ -4,15 +4,15 @@
 {% set active_category_slug = selected_category_slug|default('') %}
 {% set active_category_label = selected_category_label|default('Show all') %}
 
-<section class="bg-birch px-6 py-[80px] lg:px-[100px] lg:py-[100px]">
+<section class="blog-archive-hero bg-birch px-6 py-[80px] lg:px-[100px] lg:py-[100px]">
 	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-[80px]">
-		<div class="max-w-[995px]">
+		<div class="blog-archive-hero__intro">
 			<div class="flex items-center gap-2 text-goldenrod">
 				<span class="block h-[60px] w-1 bg-goldenrod"></span>
 				<span class="block h-[60px] w-1 bg-goldenrod"></span>
 				<span class="block h-[60px] w-1 bg-goldenrod"></span>
 			</div>
-			<h1 class="mt-[52px] font-heading text-d1 uppercase leading-[80px] text-white max-md:text-d1-md max-md:leading-[5rem]">
+			<h1 class="font-heading text-d1-md uppercase text-white">
 				{{ section_title }}
 			</h1>
 			{% if section_body %}
@@ -33,7 +33,7 @@
 				<div class="relative">
 					<select
 						id="blog-category-filter"
-						class="w-full appearance-none rounded-md border border-white bg-transparent px-5 py-6 pr-16 text-t1 leading-[26px] text-white focus:outline-none"
+						class="w-full appearance-none rounded-md border border-white bg-transparent px-5 py-3 pr-16 text-t1 leading-[26px] text-white focus:outline-none"
 						aria-label="Filter posts by category"
 						onchange="if (this.value) { window.location.href = this.value; }"
 					>

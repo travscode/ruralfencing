@@ -2,6 +2,9 @@
     <meta charset="{{ site.charset }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="pingback" href="{{ site.pingback_url }}" />
+    {% if not function('has_site_icon') %}
+        <link rel="icon" type="image/png" href="{{ function('get_stylesheet_directory_uri') }}/images/favicon-rural-fencing.png" />
+    {% endif %}
     {{ function('wp_head') }}
     {% block head %}{% endblock %}
 </head>

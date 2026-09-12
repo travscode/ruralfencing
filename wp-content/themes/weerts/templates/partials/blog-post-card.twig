@@ -6,7 +6,7 @@
 {% set is_related_variant = card_variant == 'related' %}
 
 {% if is_related_variant %}
-	<article class="h-full">
+	<article class="blog-card h-full">
 		<a class="group flex h-full flex-col gap-[10px] no-underline" href="{{ post.link }}">
 			<div class="overflow-hidden rounded-xl bg-birch/10">
 				{% if image_url %}
@@ -18,12 +18,12 @@
 
 			<div class="flex flex-1 flex-col rounded-xl bg-eggshell py-6 lg:py-10">
 				<div class="flex flex-wrap items-center gap-3 px-6 lg:px-10 hidden">
-					<span class="rounded-md bg-goldenrod px-3 py-2 text-t7 leading-[23px] text-birch">
+					<span class="rounded-md bg-goldenrod px-3 py-2 text-t8 text-birch">
 						{{ function('get_the_date', 'd M Y', post.ID) }}
 					</span>
 
 					{% if primary_category %}
-						<span class="rounded-md bg-white px-3 py-2 text-t7 leading-[23px] text-birch">
+						<span class="rounded-md bg-white px-3 py-2 text-t8 text-birch">
 							{{ primary_category.name }}
 						</span>
 					{% endif %}
@@ -50,7 +50,7 @@
 		</a>
 	</article>
 {% else %}
-	<article class="flex h-full flex-col gap-[10px]">
+	<article class="blog-card flex h-full flex-col gap-[10px]">
 		<a class="block overflow-hidden rounded-xl bg-birch/10 no-underline" href="{{ post.link }}">
 			{% if image_url %}
 				<img class="h-[240px] w-full object-cover lg:h-[374px]" src="{{ image_url }}" alt="{{ post.title|e }}" loading="lazy" />
@@ -61,13 +61,13 @@
 
 		<div class="flex flex-1 flex-col rounded-xl px-6 pb-8 pt-0 lg:px-10 lg:pb-10 {{ card_surface_class }}">
 			<div class="flex flex-wrap items-center gap-3 pb-6 pt-5">
-				<span class="rounded-md bg-goldenrod px-3 py-2 text-t7 leading-[23px] text-birch">
+				<span class="rounded-md bg-goldenrod px-3 py-2 text-t8 text-birch">
 					{{ function('get_the_date', 'd M Y', post.ID) }}
 				</span>
 
 				{% if primary_category %}
 					<a
-						class="rounded-md bg-eggshell px-3 py-2 text-t7 leading-[23px] text-birch no-underline transition-colors duration-200 hover:bg-goldenrod/20"
+						class="rounded-md bg-eggshell px-3 py-2 text-t8 text-birch no-underline transition-colors duration-200 hover:bg-goldenrod/20"
 						href="{{ function('home_url', '/tips/' ~ primary_category.slug ~ '/') }}"
 					>
 						{{ primary_category.name }}
@@ -88,7 +88,7 @@
 			{% endif %}
 
 			<div class="mt-8">
-				<a class="inline-flex overflow-hidden rounded-md no-underline" href="{{ post.link }}">
+				<a class="rural-button" href="{{ post.link }}">
 					<span class="flex items-center bg-goldenrod px-[19px] py-[19px] text-birch" aria-hidden="true">
 						{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } only %}
 					</span>
