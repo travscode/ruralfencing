@@ -1,10 +1,10 @@
-<section class="bg-eggshell px-6 pb-[180px] lg:px-[100px]">
+<section class="product-details bg-eggshell px-6 pb-[180px] lg:px-[100px]">
 	<div class="mx-auto w-full max-w-[1720px]">
 		<div class="flex flex-col gap-10 lg:flex-row lg:gap-[165px]">
 			<div class="w-full lg:w-[850px]">
 				<div class="relative overflow-hidden rounded-xl bg-white">
 					{% if product_badge %}
-						<span class="absolute left-[18px] top-[18px] z-10 rounded-md border border-white/50 bg-goldenrod px-4 py-[10px] text-t7 leading-[23px] text-cinder">{{ product_badge }}</span>
+						<span class="weerts-product-badge {% if product_badge|lower in ['special', 'specials', 'sale'] %}weerts-product-badge--specials{% endif %} absolute left-[18px] top-[18px] z-10 bg-goldenrod text-birch">{{ product_badge }}</span>
 					{% endif %}
 
 					{% if image_url %}
@@ -55,7 +55,7 @@
 					<div class="flex flex-col gap-5 pt-5 lg:flex-row lg:items-center lg:gap-9">
 						{% if enquire_only %}
 							<button
-								class="inline-flex overflow-hidden rounded-md no-underline"
+								class="rural-button"
 								type="button"
 								data-enquiry-open
 							>
@@ -66,7 +66,7 @@
 							</button>
 						{% else %}
 							{{ add_to_cart_html|raw }}
-							<a class="rounded-md border border-birch px-3 py-3 text-b1 text-birch no-underline transition-colors hover:border-deep-green hover:text-deep-green" href="{{ site.url }}/contact/">Or Contact Us</a>
+							<button class="rural-category-spotlight__pill" type="button" data-enquiry-open>Or Contact Us</button>
 						{% endif %}
 					</div>
 

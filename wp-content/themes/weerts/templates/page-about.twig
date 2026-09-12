@@ -42,27 +42,6 @@
 		}
 	] %}
 
-	{% set quicklink_cards = [
-		{
-			title: 'Fencing Supplies & Enclosures',
-			text: 'Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.',
-			image_url: theme_uri ~ '/images/about-quicklink-1.png',
-			href: site.url ~ '/product-category/fencing/'
-		},
-		{
-			title: 'Gates & Accessories',
-			text: 'Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.',
-			image_url: theme_uri ~ '/images/about-quicklink-2.png',
-			href: site.url ~ '/product-category/gates/'
-		},
-		{
-			title: 'Irrigation, Pumps & Water Tanks',
-			text: 'Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.',
-			image_url: theme_uri ~ '/images/about-quicklink-3.png',
-			href: site.url ~ '/product-category/irrigation/'
-		}
-	] %}
-
 	{% include 'partials/sections/internal-banner.twig' with {
 		title: post.title,
 		background_url: theme_uri ~ '/images/about-banner-bg.png'
@@ -102,11 +81,7 @@
 		quote_icon_url: theme_uri ~ '/images/icon-quote-marks.svg'
 	} only %}
 
-	{% include 'partials/sections/quicklinks.twig' with {
-		eyebrow: 'Where to next?',
-		title: 'Explore our product range',
-		cards: quicklink_cards
-	} only %}
+	{% include 'partials/sections/where-to-next.twig' with { site: site } only %}
 
 	{% include 'partials/sections/cta-primary.twig' with {
 		title: 'Not sure what you need?',

@@ -5,7 +5,7 @@
 {% set facebook_url = facebook_url|default('https://www.facebook.com/') %}
 {% set instagram_url = instagram_url|default('https://www.instagram.com/') %}
 
-<section class="bg-eggshell px-6 lg:px-[100px]">
+<section class="location-block bg-eggshell px-6 lg:px-[100px]">
 	<div class="bg-white mx-auto w-full max-w-[1720px] rounded-b-xl px-6 py-[60px] lg:px-[80px]">
 		<div class="grid gap-10 lg:grid-cols-[260px_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.1fr)_auto] lg:gap-5">
 			<div class="flex flex-col gap-[30px]">
@@ -42,7 +42,7 @@
 
 			<div class="flex items-start gap-3">
 				<a
-					class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-goldenrod text-birch transition-colors hover:bg-goldenrod/90"
+					class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-goldenrod text-birch transition-colors hover:bg-deep-green hover:text-white"
 					href="{{ facebook_url }}"
 					target="_blank"
 					rel="noopener noreferrer"
@@ -51,7 +51,7 @@
 					{% include 'icons/facebook.twig' with { class: 'h-6 w-6', title: 'Facebook' } %}
 				</a>
 				<a
-					class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-goldenrod text-birch transition-colors hover:bg-goldenrod/90"
+					class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-goldenrod text-birch transition-colors hover:bg-deep-green hover:text-white"
 					href="{{ instagram_url }}"
 					target="_blank"
 					rel="noopener noreferrer"

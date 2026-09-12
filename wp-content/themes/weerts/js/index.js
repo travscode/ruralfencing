@@ -5,6 +5,9 @@ function initSite() {
 	document.documentElement.classList.remove('no-js')
 	document.documentElement.classList.add('js')
 
+	initResponsiveNavigation()
+	initCtaCarousels()
+	initArticleSharing()
 	initHeaderHeightVar()
 	initGoogleMapsSections()
 	initProductsMegaMenu()
@@ -379,6 +382,20 @@ function initProductsMegaMenu() {
 		list.className =
 			'flex flex-col ' + (level > 1 ? ' bg-eggshell' : ' bg-white')
 
+		const back = document.createElement('button')
+		back.type = 'button'
+		back.className = 'w-full px-6 py-4 text-left font-bold text-deep-green'
+		back.setAttribute('data-mobile-back', '')
+		back.textContent = level === 1 ? 'Close categories' : 'Back to categories'
+		back.addEventListener('click', () => {
+			if (level === 1) { setOpen(false); toggle.focus(); return }
+			menu.dataset.level3Open = 'false'
+			if (level === 2) menu.dataset.level2Open = 'false'
+			const previous = level === 2 ? level1Root : level2Root
+			previous.querySelector('button, a')?.focus()
+		})
+		list.appendChild(back)
+
 		if (level > 1 && parent && parent.link) {
 			const showAll = document.createElement('a')
 			showAll.href = parent.link
@@ -416,14 +433,15 @@ function initProductsMegaMenu() {
 		if (link.dataset.hasChildren !== 'true') return
 		e.preventDefault()
 		handleActivate(e, level)
+		if (window.innerWidth < 1024) (level === 1 ? level2Root : level3Root).querySelector('button, a')?.focus()
 	}
 
-	level1Root.addEventListener('mouseover', (e) => handleActivate(e, 1))
-	level1Root.addEventListener('focusin', (e) => handleActivate(e, 1))
+	level1Root.addEventListener('mouseover', (e) => { if (window.matchMedia('(hover: hover) and (min-width: 1024px)').matches) handleActivate(e, 1) })
+	level1Root.addEventListener('focusin', (e) => { if (window.innerWidth >= 1024) handleActivate(e, 1) })
 	level1Root.addEventListener('click', (e) => handleClick(e, 1))
 
-	level2Root.addEventListener('mouseover', (e) => handleActivate(e, 2))
-	level2Root.addEventListener('focusin', (e) => handleActivate(e, 2))
+	level2Root.addEventListener('mouseover', (e) => { if (window.matchMedia('(hover: hover) and (min-width: 1024px)').matches) handleActivate(e, 2) })
+	level2Root.addEventListener('focusin', (e) => { if (window.innerWidth >= 1024) handleActivate(e, 2) })
 	level2Root.addEventListener('click', (e) => handleClick(e, 2))
 
 	toggle.addEventListener('click', () => {
@@ -434,8 +452,9 @@ function initProductsMegaMenu() {
 
 		openFromStickyPosition()
 	})
-	toggle.addEventListener('mouseenter', openOnlyWhenSticky)
-	toggle.addEventListener('focus', openOnlyWhenSticky)
+	toggle.addEventListener('mouseenter', () => {
+		if (window.matchMedia('(min-width: 1024px) and (hover: hover)').matches) openOnlyWhenSticky()
+	})
 	overlay.addEventListener('click', () => setOpen(false, { fastClose: true }))
 
 	menu.addEventListener('click', (e) => {
@@ -446,7 +465,7 @@ function initProductsMegaMenu() {
 	})
 
 	document.addEventListener('keydown', (e) => {
-		if (e.key === 'Escape') setOpen(false, { fastClose: true })
+		if (e.key === 'Escape' && state.open) { setOpen(false, { fastClose: true }); toggle.focus() }
 	})
 }
 
@@ -547,7 +566,7 @@ function initAdvancedSearchDrawer() {
 		if (!(childSelect instanceof HTMLSelectElement)) return
 
 		const children = getChildrenForSlug(parentSlug)
-		childSelect.innerHTML = '<option value="">Field text/selection</option>'
+		childSelect.innerHTML = '<option value="">All subcategories</option>'
 
 		if (!children.length) {
 			childSelect.disabled = true
@@ -602,7 +621,14 @@ function initAdvancedSearchDrawer() {
 	})
 
 	document.addEventListener('keydown', (event) => {
+		if (!isOpen) return
 		if (event.key === 'Escape') setOpen(false)
+		if (event.key === 'Tab') {
+			const controls = Array.from(panel.querySelectorAll('button, input:not([type="hidden"]), select, a[href]')).filter(el => !el.disabled)
+			const first = controls[0], last = controls[controls.length - 1]
+			if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus() }
+			if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus() }
+		}
 	})
 
 	primaryInput.addEventListener('input', () => {
@@ -1416,11 +1442,14 @@ function initProductEnquiryModal() {
 			: base
 	}
 
+	let returnFocus = null
 	const setOpen = (nextOpen) => {
+		if (nextOpen) returnFocus = document.activeElement
 		modal.classList.toggle('hidden', !nextOpen)
 		modal.classList.toggle('flex', nextOpen)
 		document.body.style.overflow = nextOpen ? 'hidden' : ''
-		if (nextOpen) updateInterest()
+		if (nextOpen) { updateInterest(); closeButton?.focus() }
+		else returnFocus?.focus()
 	}
 
 	for (const button of openButtons) {
@@ -1430,7 +1459,14 @@ function initProductEnquiryModal() {
 	overlay?.addEventListener('click', () => setOpen(false))
 	closeButton?.addEventListener('click', () => setOpen(false))
 	document.addEventListener('keydown', (event) => {
+		if (modal.classList.contains('hidden')) return
 		if (event.key === 'Escape') setOpen(false)
+		if (event.key === 'Tab') {
+			const controls = Array.from(modal.querySelectorAll('button, input:not([type="hidden"]), textarea, select, a[href]')).filter(el => !el.disabled)
+			const first = controls[0], last = controls[controls.length - 1]
+			if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus() }
+			if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus() }
+		}
 	})
 
 	if (modal.getAttribute('data-enquiry-modal-open') === 'true') {
@@ -1439,3 +1475,60 @@ function initProductEnquiryModal() {
 }
 
 document.addEventListener('DOMContentLoaded', initSite)
+
+/** Copies the article URL and reports clipboard failures to the reader. */
+function initArticleSharing() {
+	for (const button of document.querySelectorAll('[data-copy-article-link]')) {
+		button.addEventListener('click', async () => {
+			const url = button.getAttribute('data-copy-article-link')
+			const status = button.closest('section').querySelector('[data-copy-article-status]')
+			try {
+				await navigator.clipboard.writeText(url)
+				if (status) status.textContent = 'Article link copied.'
+			} catch {
+				if (status) status.textContent = 'Copy the article link from the address bar.'
+			}
+		})
+	}
+}
+
+function initResponsiveNavigation() {
+	const mobile = document.querySelector('.site-mobile-menu')
+	const dropdowns = document.querySelectorAll('.nav-dropdown')
+	const media = window.matchMedia('(min-width: 1024px)')
+	const setDetails = () => document.querySelectorAll('[data-responsive-details]').forEach(el => { el.open = media.matches })
+	setDetails()
+	media.addEventListener('change', setDetails)
+	document.addEventListener('click', event => {
+		if (mobile && !mobile.contains(event.target)) mobile.open = false
+		for (const dropdown of dropdowns) if (!dropdown.contains(event.target)) dropdown.open = false
+	})
+	document.addEventListener('keydown', event => {
+		if (event.key !== 'Escape') return
+		for (const dropdown of dropdowns) dropdown.open = false
+		if (mobile?.open) { mobile.open = false; mobile.querySelector('summary').focus() }
+	})
+}
+
+function initCtaCarousels() {
+	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+	for (const carousel of document.querySelectorAll('[data-cta-carousel]')) {
+		const track = carousel.querySelector('[data-cta-track]')
+		const status = carousel.querySelector('[data-cta-status]')
+		const slides = Array.from(track.children)
+		const previous = carousel.querySelector('[data-cta-prev]')
+		const next = carousel.querySelector('[data-cta-next]')
+		const index = () => Math.round(track.scrollLeft / Math.max(track.clientWidth, 1))
+		const go = direction => track.scrollTo({left:Math.max(0,Math.min(slides.length-1,index()+direction))*track.clientWidth,behavior:reducedMotion.matches?'auto':'smooth'})
+		previous.addEventListener('click', () => go(-1))
+		next.addEventListener('click', () => go(1))
+		track.addEventListener('keydown', event => {
+			if (!['ArrowLeft','ArrowRight'].includes(event.key)) return
+			event.preventDefault(); go(event.key === 'ArrowRight' ? 1 : -1)
+		})
+		const update = () => { const i=index(); status.textContent=`${i+1} / ${slides.length}`; previous.disabled=i===0; next.disabled=i===slides.length-1 }
+		track.addEventListener('scroll', update, {passive:true})
+		window.addEventListener('resize', update)
+		update()
+	}
+}

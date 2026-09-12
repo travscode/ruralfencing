@@ -83,6 +83,9 @@ class RuralBoilerplateSite extends Site
         add_filter('term_link', [$this, 'filter_product_cat_term_link'], 10, 3);
         add_filter('template_include', [$this, 'force_blog_template'], 15, 1);
         add_filter('template_include', [$this, 'force_root_product_cat_template'], 20, 1);
+        add_action('woocommerce_before_shop_loop_item_title', [$this, 'open_product_image'], 8);
+        add_action('woocommerce_before_shop_loop_item_title', [$this, 'close_product_image'], 12);
+        add_filter('cfw_custom_css_properties', [$this, 'checkout_css_properties']);
         add_filter('woocommerce_is_purchasable', [$this, 'filter_enquire_only_purchasable'], 10, 2);
 
         parent::__construct();
@@ -103,6 +106,13 @@ class RuralBoilerplateSite extends Site
         $context['footer_menu'] = Timber::get_menu('footer');
         $context['product_categories_menu'] = Timber::get_menu('product_categories');
         $context['product_cat_tree'] = $this->get_product_cat_tree();
+        $context['help_pages'] = [];
+        $help_page = get_page_by_path('help');
+        if ($help_page instanceof WP_Post) {
+            foreach (get_pages(['child_of' => $help_page->ID, 'post_status' => 'publish', 'sort_column' => 'menu_order,post_title']) as $help_child) {
+                $context['help_pages'][] = ['title' => get_the_title($help_child), 'link' => get_permalink($help_child)];
+            }
+        }
         $context['account_url'] = function_exists('wc_get_page_permalink')
             ? wc_get_page_permalink('myaccount')
             : wp_login_url();
@@ -117,6 +127,46 @@ class RuralBoilerplateSite extends Site
         $context['google_maps_api_key'] = $this->get_google_maps_api_key();
 
         return $context;
+    }
+
+    /** Keep product hover artwork aligned with the thumbnail, including sale badges. */
+    public function open_product_image(): void
+    {
+        echo '<div class="rural-product-image">';
+    }
+
+    public function close_product_image(): void
+    {
+        echo '<span class="product-hover" aria-hidden="true">' . esc_html__('View Product', 'rural-boilerplate') . '</span></div>';
+    }
+
+    /** Apply the brand through CheckoutWC's supported styling API, preserving its layout. */
+    public function checkout_css_properties(array $properties): array
+    {
+        return array_merge($properties, [
+            '--cfw-body-background-color' => '#F1EDE2',
+            '--cfw-body-text-color' => '#2A231A',
+            '--cfw-body-font-family' => 'Tenon, sans-serif',
+            '--cfw-heading-font-family' => '"Dharma Gothic E", Impact, sans-serif',
+            '--cfw-header-background-color' => '#F1EDE2',
+            '--cfw-footer-background-color' => '#2A231A',
+            '--cfw-footer-text-color' => '#FFFFFF',
+            '--cfw-cart-summary-background-color' => '#FFFFFF',
+            '--cfw-cart-summary-mobile-background-color' => '#FFFFFF',
+            '--cfw-cart-summary-text-color' => '#2A231A',
+            '--cfw-cart-summary-link-color' => '#006600',
+            '--cfw-body-link-color' => '#006600',
+            '--cfw-buttons-primary-background-color' => '#DB9D16',
+            '--cfw-buttons-primary-text-color' => '#2A231A',
+            '--cfw-buttons-primary-hover-background-color' => '#006600',
+            '--cfw-buttons-primary-hover-text-color' => '#FFFFFF',
+            '--cfw-buttons-secondary-background-color' => '#FFFFFF',
+            '--cfw-buttons-secondary-text-color' => '#2A231A',
+            '--cfw-buttons-secondary-hover-background-color' => '#DB9D16',
+            '--cfw-buttons-secondary-hover-text-color' => '#2A231A',
+            '--cfw-cart-summary-item-quantity-background-color' => '#DB9D16',
+            '--cfw-cart-summary-item-quantity-text-color' => '#2A231A',
+        ]);
     }
 
     /**
@@ -942,18 +992,8 @@ class RuralBoilerplateSite extends Site
             }
         }
 
-        // Enqueue cart styles on cart page
+        // Cart styles are compiled into the theme CSS; load its behavior on cart pages.
         if (function_exists('is_cart') && is_cart()) {
-            $cart_css_path = $theme_path . '/css/cart.css';
-            if (file_exists($cart_css_path)) {
-                wp_enqueue_style(
-                    'weerts-cart-styles',
-                    $theme_uri . '/css/cart.css',
-                    ['rural-boilerplate-theme'],
-                    (string) filemtime($cart_css_path)
-                );
-            }
-
             // Enqueue cart JavaScript
             $cart_js_path = $theme_path . '/js/cart.js';
             if (file_exists($cart_js_path)) {

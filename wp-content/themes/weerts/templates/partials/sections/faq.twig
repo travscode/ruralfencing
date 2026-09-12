@@ -1,6 +1,7 @@
 {% set section_title = title|default('') %}
 {% set items = items|default([]) %}
 {% set items_per_column = ((items|length) / 2)|round(0, 'ceil') %}
+{% if items_per_column < 1 %}{% set items_per_column = 1 %}{% endif %}
 {% set columns = items|batch(items_per_column, null) %}
 
 <section class="rural-faq px-6 pb-[180px] lg:px-[100px]">
@@ -10,7 +11,7 @@
 			<h2 class="font-heading text-d2 uppercase leading-[58px] text-birch">{{ section_title }}</h2>
 		</div>
 
-		<div class="grid gap-x-5 lg:grid-cols-2">
+		<div class="grid gap-x-[60px] lg:grid-cols-2">
 			{% for column in columns %}
 				<div>
 					{% for item in column %}

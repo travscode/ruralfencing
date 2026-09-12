@@ -6,17 +6,17 @@
 	{% set hero_buttons = [
 		{
 			label: 'Fencing',
-			url: site.url ~ '/product-category/fencing/',
+			url: '#fencing-supplies',
 			style: 'is-style-rural-hero-fencing'
 		},
 		{
 			label: 'Gates',
-			url: site.url ~ '/product-category/gates/',
+			url: site.url ~ '/gates/',
 			style: 'is-style-rural-hero-gates'
 		},
 		{
 			label: 'Irrigation',
-			url: site.url ~ '/product-category/irrigation/',
+			url: site.url ~ '/irrigation/',
 			style: 'is-style-rural-hero-irrigation'
 		}
 	] %}
@@ -100,16 +100,34 @@
 
 	{% include 'partials/sections/category-spotlight.twig' with {
 		title: 'Fencing Supplies & Enclosures',
+		section_id: 'fencing-supplies',
 		paragraphs: [
 			'We stock practical fencing solutions for rural properties, acreage, and domestic projects, including meshes, wires, posts, strainers, fittings, and enclosure products.',
 			'Whether you are managing livestock, securing boundaries, protecting gardens, or setting up pet and vermin exclusion, we can help you choose products that are strong, durable, and fit for purpose.'
 		],
 		helper_html: 'Browse our fencing categories to find what you need, or <a class="underline underline-offset-4" href="' ~ site.url ~ '/contact/">talk to one of our team</a> for guidance based on your project.',
 		category_shortcode: '[weerts_product_category_pills parent_slug="fencing" limit="12"]',
+		category_links: [{label: 'Rural Fencing', url: site.url ~ '/fencing-rural/'}, {label: 'Security Fencing', url: site.url ~ '/fencing-security/'}, {label: 'Panels & Gates', url: site.url ~ '/fencing-panels-gates/'}, {label: 'Electric Fencing', url: site.url ~ '/electric-fencing/'}, {label: 'Pet Enclosures', url: site.url ~ '/pet-enclosures/'}],
 		icon_url: theme_uri ~ '/images/icon-fencing.svg',
 		image_hero_url: theme_uri ~ '/images/category-fencing-1.png',
 		image_small_url: theme_uri ~ '/images/category-fencing-2-62a8e6.png',
 		image_medium_url: theme_uri ~ '/images/category-fencing-3.png'
+	} only %}
+
+	{% include 'partials/sections/category-spotlight.twig' with {
+		title: 'Gates & Accessories',
+		paragraphs: [
+			'Find gates and accessories for rural properties, driveways, yards and enclosures. We stock farm gates, gate fittings and automatic gate equipment.',
+			'Our workshop can also help with custom and decorative gates. Talk to our team about the opening size, site and finish you need.'
+		],
+		helper_html: 'Explore our gates and accessories, or <a class="underline" href="' ~ site.url ~ '/contact/">ask our team</a> for help choosing the right setup.',
+		category_shortcode: '[weerts_product_category_pills parent_slug="gates" limit="12"]',
+		category_links: [{label: 'Gates', url: site.url ~ '/gates/'}, {label: 'Automatic Gates', url: site.url ~ '/automatic-gates/'}, {label: 'Gate Latches & Hinges', url: site.url ~ '/safety-gate-latches-hinges/'}],
+		icon_url: theme_uri ~ '/images/icon-gates.svg',
+		image_hero_url: theme_uri ~ '/images/category-gates-3.png',
+		image_small_url: theme_uri ~ '/images/category-gates-1.png',
+		image_medium_url: theme_uri ~ '/images/category-gates-2.png',
+		reverse: true
 	} only %}
 
 	{% include 'partials/sections/category-spotlight.twig' with {
@@ -120,11 +138,12 @@
 		],
 		helper_html: 'Browse our irrigation range, or <a class="underline underline-offset-4" href="' ~ site.url ~ '/contact/">get in touch</a> if you would like help working out what you need.',
 		category_shortcode: '[weerts_product_category_pills parent_slug="irrigation" limit="12"]',
-		icon_url: theme_uri ~ '/images/icon-fencing.svg',
-		image_hero_url: theme_uri ~ '/images/about-quicklink-3.png',
-		image_small_url: theme_uri ~ '/images/about-gallery-1.png',
-		image_medium_url: theme_uri ~ '/images/about-gallery-2.png',
-		reverse: true
+		category_links: [{label: 'Irrigation', url: site.url ~ '/irrigation/'}, {label: 'Pumps', url: site.url ~ '/pumps/'}, {label: 'Water Tanks', url: site.url ~ '/water-tanks/'}],
+		icon_url: theme_uri ~ '/images/icon-irrigation.svg',
+		image_hero_url: theme_uri ~ '/images/category-irrigation-3.png',
+		image_small_url: theme_uri ~ '/images/category-irrigation-1.png',
+		image_medium_url: theme_uri ~ '/images/category-irrigation-2.png',
+		reverse: false
 	} only %}
 
 	{% include 'partials/sections/search-strip.twig' with {

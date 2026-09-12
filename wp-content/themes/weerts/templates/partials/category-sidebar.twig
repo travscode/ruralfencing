@@ -1,0 +1,6 @@
+<aside class="category-sidebar">
+	<details data-responsive-details open>
+		<summary>Product Categories</summary>
+		{% include 'partials/category-tree.twig' with { items: product_cat_tree } only %}
+	</details>
+</aside>

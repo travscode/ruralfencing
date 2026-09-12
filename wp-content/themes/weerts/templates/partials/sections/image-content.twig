@@ -13,8 +13,8 @@
 {% set cta2_icon = cta2_icon|default('arrow-right') %}
 {% set layout_class = reverse ? 'lg:flex-row-reverse' : 'lg:flex-row' %}
 
-<section class="bg-eggshell px-6 pb-[180px] lg:px-[100px]">
-	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-10 py-[90px] lg:gap-[165px] lg:py-[120px] {{ layout_class }}">
+<section class="rural-text-image bg-eggshell px-6 pb-[60px] lg:px-[100px]">
+	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-10 py-8 lg:gap-[80px] lg:py-10 {{ layout_class }}">
 		<div class="flex w-full gap-10 lg:w-auto">
 			<div class="w-10 pt-[19px]">
 				{% include 'icons/horiz-line.twig' with { class: 'h-1 w-10 text-deep-green' } %}
@@ -54,7 +54,7 @@
 				{% if (cta_url and cta_text) or (cta2_url and cta2_text) %}
 					<div class="mt-10 flex flex-col gap-4 sm:flex-row">
 						{% if cta_url and cta_text %}
-							<a class="inline-flex overflow-hidden rounded-md no-underline" href="{{ cta_url }}">
+							<a class="rural-button" href="{{ cta_url }}">
 								<span class="flex items-center bg-goldenrod p-[19px] text-birch" aria-hidden="true">
 									{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } %}
 								</span>
@@ -63,7 +63,7 @@
 						{% endif %}
 
 						{% if cta2_url and cta2_text %}
-							<a class="inline-flex overflow-hidden rounded-md no-underline" href="{{ cta2_url }}">
+							<a class="rural-button" href="{{ cta2_url }}">
 								{% set cta2_icon_path = 'icons/' ~ cta2_icon ~ '.twig' %}
 								{% set cta2_icon_wrap_class = cta2_icon == 'pdf' ? 'bg-deep-green px-[18px] py-[15px] text-white' : 'bg-goldenrod p-[19px] text-birch' %}
 								{% set cta2_icon_class = cta2_icon == 'pdf' ? 'h-5 w-auto' : 'h-3 w-3' %}

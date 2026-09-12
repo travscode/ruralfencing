@@ -1,3 +1,5 @@
+{% set theme_uri = function('get_stylesheet_directory_uri') %}
+
 <section class="bg-eggshell px-6 pb-[100px] lg:px-[100px] lg:pb-[140px]">
 	<div class="mx-auto w-full max-w-[1140px] border-t border-deep-green pt-5">
 		<div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
@@ -7,26 +9,27 @@
 
 			<div class="flex flex-wrap items-center gap-[10px]">
 				<button
-					class="inline-flex h-[50px] w-[50px] items-center justify-center rounded-full bg-goldenrod text-birch transition-colors duration-200 hover:bg-goldenrod/90"
+					class="article-share-link"
 					type="button"
 					aria-label="Copy article link"
-					onclick="if (navigator.clipboard) { navigator.clipboard.writeText('{{ share_url|e('js') }}'); }"
+					data-copy-article-link="{{ share_url|e('html_attr') }}"
 				>
-					{% include 'icons/link.twig' with { class: 'h-5 w-5' } only %}
+					<img class="h-[50px] w-[50px]" src="{{ theme_uri }}/images/share-copy.svg" width="50" height="50" alt="" />
 				</button>
 
 				{% for item in share_links %}
 					<a
-						class="inline-flex h-[50px] w-[50px] items-center justify-center rounded-full bg-goldenrod text-birch no-underline transition-colors duration-200 hover:bg-goldenrod/90"
+						class="article-share-link"
 						href="{{ item.url }}"
 						target="_blank"
 						rel="noopener noreferrer"
-						aria-label="Share on {{ item.label }}"
+						aria-label="{{ item.label == 'ChatGPT' ? 'Summarise with ChatGPT' : 'Share on ' ~ item.label }}"
 					>
-						{% include 'icons/' ~ item.icon ~ '.twig' with { class: 'h-5 w-5' } only %}
+						<img class="h-[50px] w-[50px]" src="{{ theme_uri }}/images/share-{{ item.icon }}.svg" width="50" height="50" alt="" />
 					</a>
 				{% endfor %}
 			</div>
 		</div>
+		<p class="sr-only" role="status" data-copy-article-status></p>
 	</div>
 </section>

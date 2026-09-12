@@ -75,7 +75,7 @@
                                                         type="search"
                                                         name="s"
                                                         value="{{ search_query }}"
-                                                        placeholder="Field text/selection"
+                                                        placeholder="Enter a keyword or product code"
                                                         data-advanced-search-secondary-input
                                                 />
                                         </label>
@@ -84,7 +84,7 @@
                                                 <span class="contact-enquiry-form__label">Category</span>
                                                 <span class="contact-enquiry-form__select-wrap">
                                                         <select class="contact-enquiry-form__input contact-enquiry-form__select" name="weerts_parent_cat" data-advanced-search-parent>
-                                                                <option value="">Field text/selection</option>
+                                                                <option value="">All categories</option>
                                                                 {% for category in product_categories %}
                                                                         <option value="{{ category.slug }}">{{ category.name }}</option>
                                                                 {% endfor %}
@@ -96,7 +96,7 @@
                                                 <span class="contact-enquiry-form__label">Subcategory</span>
                                                 <span class="contact-enquiry-form__select-wrap">
                                                         <select class="contact-enquiry-form__input contact-enquiry-form__select" name="weerts_child_cat" disabled data-advanced-search-child>
-                                                                <option value="">Field text/selection</option>
+                                                                <option value="">All subcategories</option>
                                                         </select>
                                                 </span>
                                         </label>
@@ -105,7 +105,7 @@
                                                 <span class="contact-enquiry-form__label">Availability</span>
                                                 <span class="contact-enquiry-form__select-wrap">
                                                         <select class="contact-enquiry-form__input contact-enquiry-form__select" name="weerts_availability">
-                                                                <option value="">Field text/selection</option>
+                                                                <option value="">Any availability</option>
                                                                 <option value="instock">In stock only</option>
                                                                 <option value="onsale">On sale only</option>
                                                         </select>
@@ -116,7 +116,7 @@
                                                 <span class="contact-enquiry-form__label">Sort by</span>
                                                 <span class="contact-enquiry-form__select-wrap">
                                                         <select class="contact-enquiry-form__input contact-enquiry-form__select" name="weerts_sort">
-                                                                <option value="">Field text/selection</option>
+                                                                <option value="">Relevance</option>
                                                                 <option value="relevance">Relevance</option>
                                                                 <option value="newest">Newest first</option>
                                                                 <option value="price_low">Price: low to high</option>

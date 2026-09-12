@@ -1,11 +1,12 @@
-{% if enquire_only %}
+{% if product %}
 	<div
-		class="fixed inset-0 z-50 hidden items-center justify-center p-6"
+		role="dialog" aria-modal="true" aria-label="Product enquiry"
+		class="fixed inset-0 z-[80] hidden items-center justify-center p-6"
 		data-enquiry-modal
 		data-enquiry-modal-open="{{ enquiry_status in ['sent', 'invalid', 'error'] ? 'true' : 'false' }}"
 	>
 		<div class="absolute inset-0 bg-birch/70" data-enquiry-overlay></div>
-		<div class="relative z-10 w-full max-w-[760px] rounded-xl bg-white p-8 lg:p-10">
+		<div class="enquiry-dialog relative z-10 w-full max-w-[760px] rounded-xl bg-white p-6 pt-16 lg:p-10">
 			<button
 				class="absolute right-5 top-5 flex h-10 w-10 items-center justify-center text-terracotta-clay"
 				type="button"
@@ -70,7 +71,7 @@
 					</label>
 					<label class="relative flex flex-col">
 						<span class="absolute left-4 top-[-8px] bg-white px-1 text-t7 text-deep-green">Phone</span>
-						<input class="h-[62px] rounded-md border border-birch px-4 text-t1 text-birch" type="text" name="phone" />
+						<input class="h-[62px] rounded-md border border-birch px-4 text-t1 text-birch" type="tel" name="phone" />
 					</label>
 				</div>
 

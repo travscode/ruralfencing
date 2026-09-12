@@ -1,0 +1,19 @@
+{% for item in items %}
+	{% set children = item.children|default([]) %}
+	{% if not children and item.title|lower in ['helpful info', 'helpful information'] %}
+		{% set children = help_pages|default([]) %}
+	{% endif %}
+	<li>
+		{% if children %}
+			<details class="nav-dropdown">
+				<summary>{{ item.title }} {% include 'icons/chevron-down.twig' with { class: 'h-2 w-3' } only %}</summary>
+				<ul class="nav-dropdown__items">
+					<li><a href="{{ item.link }}">All {{ item.title }}</a></li>
+					{% include 'partials/menu-items.twig' with { items: children, help_pages: [] } only %}
+				</ul>
+			</details>
+		{% else %}
+			<a class="nav-link" href="{{ item.link }}" target="{{ item.target|default('_self') }}">{{ item.title }}</a>
+		{% endif %}
+	</li>
+{% endfor %}
