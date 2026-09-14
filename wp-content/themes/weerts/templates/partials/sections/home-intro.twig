@@ -1,13 +1,13 @@
 {% set lead = lead|default('') %}
 {% set body = body|default('') %}
 
-<section class="rural-home-intro px-6 py-[120px] lg:px-6 lg:pb-[180px] lg:pl-[245px] lg:pr-[390px] lg:pt-[160px]">
-	<div class="flex flex-col gap-[72px]">
+<section class="rural-home-intro px-6 py-16 lg:px-6 lg:pb-[180px] lg:pl-[245px] lg:pr-[390px] lg:pt-[160px]">
+	<div class="flex flex-col gap-10 lg:gap-[72px]">
 		{% if lead %}
-			<p class="text-t6 font-medium leading-[42px] text-birch">{{ lead }}</p>
+			<p class="text-[26px] font-medium leading-[34px] text-birch lg:text-t6 lg:leading-[42px]">{{ lead }}</p>
 		{% endif %}
 
-		<div class="flex flex-col gap-8 lg:flex-row lg:gap-[104px]">
+		<div class="flex flex-col gap-6 lg:flex-row lg:gap-[104px]">
 			<div class="mt-[11px] h-1 w-10 flex-none bg-deep-green" aria-hidden="true"></div>
 
 			{% if body %}

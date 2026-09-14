@@ -1,0 +1,22 @@
+{# One product tile. Used by category pages and search results. #}
+<a class="rural-product-card block no-underline" href="{{ product.link }}">
+	<div class="rural-product-image relative overflow-hidden rounded-xl bg-white">
+		{% if product.badge %}
+			<span class="weerts-product-badge weerts-product-badge--specials absolute left-3 top-3 z-10">{{ product.badge }}</span>
+		{% endif %}
+		{% if product.in_stock is defined and not product.in_stock %}
+			<span class="absolute right-3 top-3 z-10 rounded-md bg-birch/80 px-3 py-1 text-t8 uppercase text-white">Out of stock</span>
+		{% endif %}
+		<span class="product-hover" aria-hidden="true">View Product</span>
+		{% if product.image_url %}
+			<img class="h-[276px] w-full object-cover" src="{{ product.image_url }}" alt="" loading="lazy" />
+		{% endif %}
+	</div>
+	<div class="mt-4">
+		{% if show_category|default(false) and product.category %}
+			<p class="text-t8 uppercase tracking-wide text-birch/60">{{ product.category }}</p>
+		{% endif %}
+		<p class="font-body text-d4 text-birch">{{ product.title }}</p>
+		<div class="mt-2">{{ product.price_html|raw }}</div>
+	</div>
+</a>

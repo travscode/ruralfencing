@@ -16,8 +16,8 @@
 			<div class="w-full lg:w-[705px]">
 				<div class="flex flex-col gap-10">
 					<div class="flex flex-col gap-6">
-						{% if sku %}
-							<p class="text-t1 leading-[26px] text-deep-green">SKU: {{ sku }}</p>
+						{% if sku or variation_ui %}
+							<p class="text-t1 leading-[26px] text-deep-green">SKU: <span data-product-sku>{{ sku }}</span></p>
 						{% endif %}
 
 						<h1 class="font-heading text-d2 uppercase leading-[58px] text-birch">{{ title }}</h1>
@@ -25,7 +25,7 @@
 
 					<div class="h-1 w-10 bg-deep-green"></div>
 
-					<div class="flex items-center gap-3">
+					<div class="flex items-center gap-3" data-product-price>
 						{% if sale_price_html and regular_price_html %}
 							<p class="text-[28px] leading-[30px] text-terracotta-clay line-through">{{ regular_price_html|raw }}</p>
 							<p class="text-[28px] font-bold leading-[30px] text-terracotta-clay">{{ sale_price_html|raw }}</p>
@@ -38,17 +38,20 @@
 						<div class="flex flex-col gap-6">
 							<p class="text-t4 font-bold leading-[30px] text-birch">Select a {{ variation_ui.label|lower }}:</p>
 
-							<div class="flex flex-wrap gap-3" data-variation-attribute="{{ variation_ui.name }}">
+							<div class="flex flex-wrap gap-3" data-variation-attribute="{{ variation_ui.name }}" role="group" aria-label="{{ variation_ui.label }}">
 								{% for opt in variation_ui.buttons %}
 									<button
 										type="button"
-										class="rounded-md border border-birch px-3 py-3 text-b1 text-birch transition-colors hover:border-deep-green hover:text-deep-green"
+										class="rounded-md border px-3 py-3 text-b1 transition-colors hover:border-deep-green {{ opt.selected ? 'border-deep-green bg-deep-green text-white' : 'border-birch text-birch hover:text-deep-green' }} {{ not opt.in_stock ? 'is-out-of-stock' : '' }}"
 										data-variation-value="{{ opt.value }}"
+										{% if opt.selected %}data-selected aria-pressed="true"{% else %}aria-pressed="false"{% endif %}
+										{% if not opt.in_stock %}title="Out of stock"{% endif %}
 									>
-										{{ opt.label }}
+										{{ opt.label }}{% if not opt.in_stock %}<span class="ml-2 text-t8 opacity-70">(out of stock)</span>{% endif %}
 									</button>
 								{% endfor %}
 							</div>
+							<p class="hidden text-t7 leading-[23px] text-terracotta-clay" data-variation-stock></p>
 						</div>
 					{% endif %}
 

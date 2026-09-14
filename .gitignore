@@ -50,3 +50,8 @@ wp-content/plugins/plugins.zip
 !.github/workflows/
 !.github/workflows/deploy.yml
 !.github/workflows/deploy.yaml
+
+# Catalogue pipeline (data stays in ignore/, code is tracked)
+!scripts/
+!scripts/catalogue/
+!scripts/catalogue/**

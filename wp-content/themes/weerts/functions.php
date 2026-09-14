@@ -38,6 +38,7 @@ if (!class_exists(Timber::class)) {
 Timber::$dirname = ['templates'];
 
 require_once __DIR__ . '/includes/block-patterns.php';
+require_once __DIR__ . '/includes/product-listing.php';
 
 /**
  * Sets up the shared Timber site configuration.
@@ -972,12 +973,17 @@ class RuralBoilerplateSite extends Site
 
         // Enqueue product add to cart script on product pages
         if (function_exists('is_product') && is_product()) {
+            // Woo only loads its variation resolver when its own template renders the form; ours does not.
+            $current_product = function_exists('wc_get_product') ? wc_get_product(get_queried_object_id()) : null;
+            if ($current_product instanceof WC_Product_Variable) {
+                wp_enqueue_script('wc-add-to-cart-variation');
+            }
             $product_js_path = $theme_path . '/js/product-add-to-cart.js';
             if (file_exists($product_js_path)) {
                 wp_enqueue_script(
                     'weerts-product-add-to-cart',
                     $theme_uri . '/js/product-add-to-cart.js',
-                    ['rural-boilerplate-theme'],
+                    ['rural-boilerplate-theme', 'jquery'],
                     (string) filemtime($product_js_path),
                     true
                 );

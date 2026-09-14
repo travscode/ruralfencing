@@ -18,6 +18,7 @@ function initSite() {
 	initFadeTestimonialsCarousels()
 	initProductVariationButtons()
 	initProductEnquiryModal()
+	initResponsivePlaceholders()
 }
 
 let googleMapsApiPromise = null
@@ -1383,32 +1384,102 @@ function initFadeTestimonialsCarousels() {
 	}
 }
 
+function initResponsivePlaceholders() {
+	const inputs = document.querySelectorAll('input[data-placeholder-mobile]')
+	if (!inputs.length) return
+	const media = window.matchMedia('(max-width: 767px)')
+	const apply = () => {
+		for (const input of inputs) {
+			if (!input.dataset.placeholderDesktop) input.dataset.placeholderDesktop = input.placeholder
+			input.placeholder = media.matches ? input.dataset.placeholderMobile : input.dataset.placeholderDesktop
+		}
+	}
+	apply()
+	media.addEventListener('change', apply)
+}
+
 function initProductVariationButtons() {
 	const containers = document.querySelectorAll('[data-variation-attribute]')
 	if (!containers.length) return
+
+	// The buttons live outside the <form>, so look the form up on the page rather than via closest().
+	const form = document.querySelector('form.variations_form')
+	if (!form) return
+	const $ = window.jQuery
+	const submitButton = form.querySelector('.single_add_to_cart_button')
+	const priceEl = document.querySelector('[data-product-price]')
+	const skuEl = document.querySelector('[data-product-sku]')
+	const stockEl = document.querySelector('[data-variation-stock]')
+	const defaultPriceHtml = priceEl ? priceEl.innerHTML : ''
+	const defaultSku = skuEl ? skuEl.textContent : ''
+
+	const activeClasses = ['bg-deep-green', 'text-white', 'border-deep-green']
+	const idleClasses = ['border-birch', 'text-birch', 'hover:text-deep-green']
+
+	const setActive = (buttons, active) => {
+		for (const b of buttons) {
+			const on = b === active
+			b.classList.remove(...(on ? idleClasses : activeClasses))
+			b.classList.add(...(on ? activeClasses : idleClasses))
+			b.setAttribute('aria-pressed', on ? 'true' : 'false')
+		}
+	}
 
 	for (const container of containers) {
 		const attrName = container.getAttribute('data-variation-attribute')
 		if (!attrName) continue
 
-		const form = container.closest('form.variations_form')
-		if (!form) continue
-
-		const select = form.querySelector(`select[name="attribute_${attrName}"]`)
+		const select =
+			form.querySelector(`select[data-attribute_name="attribute_${attrName}"]`) ||
+			form.querySelector(`select[name="attribute_${attrName}"]`) ||
+			form.querySelector(`select[name="attribute_${attrName.toLowerCase()}"]`)
 		if (!(select instanceof HTMLSelectElement)) continue
 
 		const buttons = container.querySelectorAll('button[data-variation-value]')
 		for (const button of buttons) {
 			button.addEventListener('click', () => {
-				const value = button.getAttribute('data-variation-value') || ''
-				select.value = value
-				select.dispatchEvent(new Event('change', { bubbles: true }))
-
-				for (const b of buttons)
-					b.classList.remove('bg-deep-green', 'text-white', 'border-deep-green')
-				button.classList.add('bg-deep-green', 'text-white', 'border-deep-green')
+				select.value = button.getAttribute('data-variation-value') || ''
+				setActive(buttons, button)
+				if ($) $(select).trigger('change')
+				else select.dispatchEvent(new Event('change', { bubbles: true }))
 			})
 		}
+
+		// Preselected option (first in-stock variation, or Woo's default)
+		const preselected = container.querySelector('button[data-selected]')
+		if (preselected) {
+			select.value = preselected.getAttribute('data-variation-value') || ''
+			setActive(buttons, preselected)
+		}
+	}
+
+	// Woo's variation script talks in jQuery events; mirror them onto the theme's own elements.
+	if ($) {
+		const $form = $(form)
+		$form.on('found_variation', (event, variation) => {
+			if (!variation) return
+			if (priceEl && variation.price_html) priceEl.innerHTML = variation.price_html
+			if (skuEl) skuEl.textContent = variation.sku || defaultSku
+			if (stockEl) {
+				const unavailable = !variation.is_in_stock || !variation.is_purchasable
+				stockEl.textContent = unavailable
+					? 'This option is currently out of stock. Choose another option or contact us.'
+					: ''
+				stockEl.classList.toggle('hidden', !unavailable)
+			}
+			if (submitButton) submitButton.disabled = !variation.is_in_stock || !variation.is_purchasable
+		})
+		$form.on('reset_data', () => {
+			if (priceEl) priceEl.innerHTML = defaultPriceHtml
+			if (skuEl) skuEl.textContent = defaultSku
+			if (stockEl) stockEl.classList.add('hidden')
+			if (submitButton) submitButton.disabled = true
+		})
+		// Woo initialises on DOM ready; if it already ran before we attached, re-evaluate now.
+		window.setTimeout(() => {
+			const anySelect = form.querySelector('.variations select')
+			if (anySelect && anySelect.value) $(anySelect).trigger('change')
+		}, 0)
 	}
 }
 

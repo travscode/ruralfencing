@@ -146,7 +146,7 @@ if (isset($context['site']) && $context['site'] instanceof RuralBoilerplateSite)
 $context['optional_seo_content'] = $optional_seo_content;
 
 $products = [];
-$pagination = '';
+$pagination = null;
 $showing_count = 0;
 $total_count = 0;
 $price_min = null;
@@ -155,36 +155,20 @@ $price_min_possible = null;
 $price_max_possible = null;
 
 if (!$has_children && function_exists('wc_get_product')) {
-    $raw_min_price = isset($_GET['min_price']) ? (float) wp_unslash($_GET['min_price']) : null;
-    $raw_max_price = isset($_GET['max_price']) ? (float) wp_unslash($_GET['max_price']) : null;
-    $price_min = is_numeric($raw_min_price) ? max(0.0, (float) $raw_min_price) : null;
-    $price_max = is_numeric($raw_max_price) ? max(0.0, (float) $raw_max_price) : null;
+    $raw_min_price = isset($_GET['min_price']) && $_GET['min_price'] !== '' ? (float) wp_unslash($_GET['min_price']) : null;
+    $raw_max_price = isset($_GET['max_price']) && $_GET['max_price'] !== '' ? (float) wp_unslash($_GET['max_price']) : null;
+    $price_min = $raw_min_price !== null ? max(0.0, $raw_min_price) : null;
+    $price_max = $raw_max_price !== null ? max(0.0, $raw_max_price) : null;
 
-    $sort = isset($_GET['sort']) ? sanitize_text_field((string) wp_unslash($_GET['sort'])) : '';
-    $sort = $sort !== '' ? $sort : 'name_asc';
-
-    $sort_map = [
-        'name_asc' => ['orderby' => 'title', 'order' => 'ASC'],
-        'name_desc' => ['orderby' => 'title', 'order' => 'DESC'],
-        'price_asc' => ['orderby' => 'meta_value_num', 'order' => 'ASC', 'meta_key' => '_price'],
-        'price_desc' => ['orderby' => 'meta_value_num', 'order' => 'DESC', 'meta_key' => '_price'],
-        'newest' => ['orderby' => 'date', 'order' => 'DESC'],
-        'oldest' => ['orderby' => 'date', 'order' => 'ASC'],
-    ];
-
+    $sort = isset($_GET['sort']) ? sanitize_key((string) wp_unslash($_GET['sort'])) : '';
+    $sort_map = weerts_listing_sort_map(false);
     if (!array_key_exists($sort, $sort_map)) {
         $sort = 'name_asc';
     }
-
     $context['sort'] = $sort;
+    $context['sort_options'] = weerts_listing_sort_options(false);
 
-    $paged = (int) get_query_var('paged');
-    if ($paged < 1) {
-        $paged = (int) get_query_var('page');
-    }
-    if ($paged < 1) {
-        $paged = 1;
-    }
+    $paged = weerts_current_page_number();
 
     $tax_query = [
         [
@@ -195,24 +179,6 @@ if (!$has_children && function_exists('wc_get_product')) {
         ],
     ];
 
-    $meta_query = [];
-    if ($price_min !== null) {
-        $meta_query[] = [
-            'key' => '_price',
-            'value' => (string) $price_min,
-            'compare' => '>=',
-            'type' => 'DECIMAL(10,2)',
-        ];
-    }
-    if ($price_max !== null) {
-        $meta_query[] = [
-            'key' => '_price',
-            'value' => (string) $price_max,
-            'compare' => '<=',
-            'type' => 'DECIMAL(10,2)',
-        ];
-    }
-
     $per_page = 9;
     $query_args = [
         'post_type' => 'product',
@@ -220,11 +186,10 @@ if (!$has_children && function_exists('wc_get_product')) {
         'posts_per_page' => $per_page,
         'paged' => $paged,
         'tax_query' => $tax_query,
-        'meta_query' => $meta_query,
+        'meta_query' => weerts_listing_price_meta_query($price_min, $price_max),
         'orderby' => $sort_map[$sort]['orderby'],
         'order' => $sort_map[$sort]['order'],
     ];
-
     if (isset($sort_map[$sort]['meta_key'])) {
         $query_args['meta_key'] = $sort_map[$sort]['meta_key'];
     }
@@ -235,88 +200,21 @@ if (!$has_children && function_exists('wc_get_product')) {
     $showing_count = is_array($query->posts) ? count($query->posts) : 0;
 
     foreach ($query->posts as $product_post) {
-        if (!$product_post instanceof WP_Post) {
-            continue;
+        $card = weerts_product_card_data($product_post);
+        if ($card) {
+            $products[] = $card;
         }
-        $product = wc_get_product($product_post->ID);
-        if (!$product instanceof WC_Product) {
-            continue;
-        }
-
-        $image_url = '';
-        $image_id = (int) $product->get_image_id();
-        if ($image_id) {
-            $img = wp_get_attachment_image_url($image_id, 'large');
-            if (is_string($img)) {
-                $image_url = $img;
-            }
-        }
-        if (!$image_url && function_exists('wc_placeholder_img_src')) {
-            $image_url = (string) wc_placeholder_img_src('large');
-        }
-
-        $price_html = '';
-        if ($product->is_on_sale()) {
-            $regular = $product->get_regular_price();
-            $sale = $product->get_sale_price();
-            if ($regular !== '' && $sale !== '') {
-                $price_html =
-                    '<span class="text-t1 leading-[26px] text-terracotta-clay line-through">' .
-                    wp_kses_post(wc_price((float) $regular)) .
-                    '</span> ' .
-                    '<span class="text-t3 font-bold leading-[26px] text-birch">' .
-                    wp_kses_post(wc_price((float) $sale)) .
-                    '</span>';
-            }
-        }
-        if ($price_html === '') {
-            $price_html =
-                '<span class="text-t3 font-bold leading-[26px] text-birch">' .
-                wp_kses_post($product->get_price_html()) .
-                '</span>';
-        }
-
-        $published_ts = strtotime((string) get_the_date('c', $product_post));
-        $is_new = $published_ts ? ($published_ts > (time() - 30 * DAY_IN_SECONDS)) : false;
-
-        $badge = null;
-        if ($product->is_featured()) {
-            $badge = 'FEATURED';
-        } elseif ($is_new) {
-            $badge = 'NEW';
-        }
-
-        $products[] = [
-            'id' => (int) $product_post->ID,
-            'title' => (string) get_the_title($product_post),
-            'link' => (string) get_permalink($product_post),
-            'image_url' => (string) $image_url,
-            'price_html' => (string) $price_html,
-            'badge' => $badge,
-        ];
     }
 
-    if ($query->max_num_pages > 1) {
-        $add_args = [];
-        if ($price_min !== null) {
-            $add_args['min_price'] = (string) $price_min;
-        }
-        if ($price_max !== null) {
-            $add_args['max_price'] = (string) $price_max;
-        }
-        if ($sort !== '') {
-            $add_args['sort'] = $sort;
-        }
-
-        $pagination = (string) paginate_links(
-            [
-                'total' => (int) $query->max_num_pages,
-                'current' => $paged,
-                'add_args' => $add_args,
-                'type' => 'list',
-            ]
-        );
-    }
+    $pagination = weerts_build_pagination(
+        (int) $query->max_num_pages,
+        $paged,
+        [
+            'min_price' => $price_min !== null ? (string) $price_min : '',
+            'max_price' => $price_max !== null ? (string) $price_max : '',
+            'sort' => $sort !== 'name_asc' ? $sort : '',
+        ]
+    );
 
     $min_post = get_posts(
         [

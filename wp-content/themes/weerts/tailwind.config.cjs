@@ -30,7 +30,9 @@ module.exports = {
 			fontSize: {
 				d1: ['6.875rem', { lineHeight: '6.625rem', fontWeight: '700' }],
 				'd1-md': ['5.375rem', { lineHeight: '5rem', fontWeight: '700' }],
+				'd1-sm': ['3.25rem', { lineHeight: '3rem', fontWeight: '700' }],
 				d2: ['3.75rem', { lineHeight: '3.625rem', fontWeight: '700' }],
+				'd2-sm': ['2.75rem', { lineHeight: '2.625rem', fontWeight: '700' }],
 				d3: ['2.375rem', { lineHeight: '2.375rem', fontWeight: '700' }],
 				d4: ['1.375rem', { lineHeight: '1.625rem', fontWeight: '500' }],
 				t1: ['1.1875rem', { lineHeight: '1.625rem', fontWeight: '400' }],

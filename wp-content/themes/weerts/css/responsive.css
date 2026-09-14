@@ -135,6 +135,11 @@ li.product:hover .product-hover,li.product:focus-within .product-hover,.rural-pr
  .site-footer .site-width { max-width:none; }
  .category-sidebar { width:100%; padding-top:0; }
  .rural-cta { padding-top:56px; }
+ .rural-cta__heading { gap:16px; align-items:center; }
+ .rural-stripes { padding-top:0; }
+ .rural-stripes i { height:40px; }
+ .rural-cta__content { gap:24px; }
+ .rural-cta__content > p { font-size:19px; line-height:26px; }
  .rural-cta__inner { grid-template-columns:1fr; gap:0; padding:32px; }
  .rural-cta__content { grid-row:1; padding:0 0 32px; }
  .rural-cta__gallery { margin-top:0; }

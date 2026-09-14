@@ -1,0 +1,74 @@
+{#
+	Count + price range + sort controls above a product grid.
+	hidden_fields: {name: value} carried through the GET form (e.g. s, post_type on search results).
+#}
+{% set sort = sort|default('name_asc') %}
+{% set hidden_fields = hidden_fields|default({}) %}
+{% set sort_options = sort_options|default([
+	{ value: 'name_asc', label: 'Product Name (A–Z)' },
+	{ value: 'name_desc', label: 'Product Name (Z–A)' },
+	{ value: 'price_asc', label: 'Price (Low–High)' },
+	{ value: 'price_desc', label: 'Price (High–Low)' },
+	{ value: 'newest', label: 'Newest' },
+	{ value: 'oldest', label: 'Oldest' }
+]) %}
+
+<div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+	<p class="pt-2 text-t7 leading-[23px] text-birch">
+		{% if total_count > 0 %}
+			Showing {{ showing_count }} of {{ total_count }} {{ noun|default('products') }}
+		{% else %}
+			No {{ noun|default('products') }} found
+		{% endif %}
+	</p>
+
+	<form class="flex flex-col gap-3 lg:flex-row lg:items-end lg:gap-10" method="get" action="{{ form_action|default('') }}">
+		{% for name, value in hidden_fields %}
+			<input type="hidden" name="{{ name }}" value="{{ value }}" />
+		{% endfor %}
+
+		<div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-4">
+			<p class="pt-2 text-t7 font-bold leading-[23px] text-birch">Price Range</p>
+
+			<div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-2">
+				<div class="relative">
+					<div class="flex w-[124px] items-center gap-2 rounded-md border border-birch bg-eggshell px-5 py-5">
+						<span class="text-t7 leading-[23px] text-birch">$</span>
+						<input class="w-full bg-transparent text-t7 leading-[23px] text-birch outline-none" type="number" name="min_price" step="0.01" min="0" value="{% if price_min is not null %}{{ price_min|number_format(2, '.', '') }}{% endif %}" />
+					</div>
+					<div class="absolute left-4 top-0 -translate-y-1/2 bg-eggshell px-[5px] pb-[5px]">
+						<span class="text-t7 leading-[23px] text-birch">Min price</span>
+					</div>
+				</div>
+
+				<div class="relative">
+					<div class="flex w-[124px] items-center gap-2 rounded-md border border-birch bg-eggshell px-5 py-5">
+						<span class="text-t7 leading-[23px] text-birch">$</span>
+						<input class="w-full bg-transparent text-t7 leading-[23px] text-birch outline-none" type="number" name="max_price" step="0.01" min="0" value="{% if price_max is not null %}{{ price_max|number_format(2, '.', '') }}{% endif %}" />
+					</div>
+					<div class="absolute left-4 top-0 -translate-y-1/2 bg-eggshell px-[5px] pb-[5px]">
+						<span class="text-t7 leading-[23px] text-birch">Max price</span>
+					</div>
+				</div>
+
+				<button class="rounded-md bg-goldenrod px-4 py-[17.5px] font-heading text-b2 uppercase text-birch" type="submit">Go</button>
+			</div>
+		</div>
+
+		<div class="flex items-center gap-4">
+			<p class="pt-2 text-t7 font-bold leading-[23px] text-birch">Sort by:</p>
+
+			<div class="relative">
+				<select class="w-full max-w-[300px] appearance-none rounded-md border border-birch bg-eggshell px-5 py-5 pr-12 text-t7 leading-[23px] text-birch" name="sort" onchange="this.form.submit()">
+					{% for option in sort_options %}
+						<option value="{{ option.value }}"{% if sort == option.value %} selected{% endif %}>{{ option.label }}</option>
+					{% endfor %}
+				</select>
+
+				<div class="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-birch">
+					{% include 'icons/chevron-down.twig' with { class: 'h-[5px] w-[10px]' } only %}
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

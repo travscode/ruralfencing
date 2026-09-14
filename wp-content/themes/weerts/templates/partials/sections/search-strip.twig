@@ -4,11 +4,11 @@
 {% set icon_url = icon_url|default('') %}
 {% set input_id = input_id|default('rural-search-strip-field') %}
 
-<section class="rural-search-strip px-6 pb-[180px]">
-	<div class="mx-auto w-full max-w-[1720px] rounded-xl bg-goldenrod px-6 py-10 lg:px-20 lg:py-20">
-		<div class="flex flex-col items-stretch justify-between gap-10 lg:flex-row lg:items-center lg:gap-[112px]">
-			<div class="flex w-full flex-col gap-[30px] lg:w-[678px]">
-				<h2 class="font-heading text-d2 uppercase leading-[58px] text-birch">{{ section_title }}</h2>
+<section class="rural-search-strip px-6 pb-20 lg:pb-[180px]">
+	<div class="mx-auto w-full max-w-[1720px] rounded-xl bg-goldenrod px-5 py-8 lg:px-20 lg:py-20">
+		<div class="flex flex-col items-stretch justify-between gap-8 lg:flex-row lg:items-center lg:gap-[112px]">
+			<div class="flex w-full flex-col gap-4 lg:w-[678px] lg:gap-[30px]">
+				<h2 class="font-heading text-d2-sm uppercase text-birch lg:text-d2 lg:leading-[58px]">{{ section_title }}</h2>
 
 				{% if body_html %}
 					<div class="text-t1 leading-[26px] text-birch">{{ body_html|raw }}</div>
@@ -24,16 +24,9 @@
 						type="search"
 						name="s"
 						placeholder="What can we help you find today?"
+						data-placeholder-mobile="Search products"
 						data-advanced-search-input
 					/>
-					<button
-						class="rural-search-strip__advanced-trigger"
-						type="button"
-						aria-label="Open advanced search"
-						data-advanced-search-trigger
-					>
-						{% include 'icons/advanced-search.twig' with { class: 'h-3 w-[18px]', title: 'Open advanced search' } %}
-					</button>
 					<button class="rural-search-strip__submit" type="submit" aria-label="Search">
 						{% if icon_url %}
 							<img src="{{ icon_url }}" width="30" height="30" alt="" aria-hidden="true" />

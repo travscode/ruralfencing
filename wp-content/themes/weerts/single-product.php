@@ -167,8 +167,31 @@ $context['enquiry_intro'] =
     'To make an order or get more information on this product, speak to one of our team on 1800 010 319 or fill in the form below.';
 
 $variation_ui = null;
+$default_selection = [];
 if ($product instanceof WC_Product_Variable) {
     $attrs = $product->get_variation_attributes();
+    $available = $product->get_available_variations();
+    $default_selection = array_filter((array) $product->get_default_attributes());
+
+    // No default set in Woo: preselect the first option that is actually in stock.
+    if (!$default_selection && $available) {
+        $pick = null;
+        $is_pre_order = static fn(array $c): bool => (bool) preg_match('/pre.?order/i', implode(' ', array_map('strval', (array) ($c['attributes'] ?? []))));
+        // first pass: in stock and not a pre-order; second pass: anything in stock
+        foreach ([false, true] as $allow_pre_order) {
+            foreach ($available as $candidate) {
+                if (!empty($candidate['is_in_stock']) && !empty($candidate['is_purchasable']) && ($allow_pre_order || !$is_pre_order($candidate))) {
+                    $pick = $candidate;
+                    break 2;
+                }
+            }
+        }
+        $pick = $pick ?: $available[0];
+        foreach ((array) ($pick['attributes'] ?? []) as $key => $value) {
+            $default_selection[preg_replace('/^attribute_/', '', (string) $key)] = (string) $value;
+        }
+    }
+
     foreach ($attrs as $attr_name => $options) {
         if (!is_array($options) || empty($options)) {
             continue;
@@ -176,6 +199,7 @@ if ($product instanceof WC_Product_Variable) {
 
         $label = wc_attribute_label($attr_name);
         $taxonomy = taxonomy_exists($attr_name) ? $attr_name : null;
+        $field_key = sanitize_title($attr_name);
         $buttons = [];
 
         foreach ($options as $opt) {
@@ -190,14 +214,23 @@ if ($product instanceof WC_Product_Variable) {
                     $btn_label = (string) $term->name;
                 }
             }
+            $in_stock = false;
+            foreach ($available as $candidate) {
+                $cand_value = (string) ($candidate['attributes']['attribute_' . $field_key] ?? '');
+                if ($cand_value === '' || $cand_value === $opt) {
+                    $in_stock = $in_stock || !empty($candidate['is_in_stock']);
+                }
+            }
             $buttons[] = [
                 'value' => $opt,
                 'label' => $btn_label,
+                'selected' => (string) ($default_selection[$field_key] ?? '') === $opt,
+                'in_stock' => $in_stock,
             ];
         }
 
         $variation_ui = [
-            'name' => $attr_name,
+            'name' => $field_key,
             'label' => $label,
             'buttons' => $buttons,
         ];
@@ -210,7 +243,7 @@ ob_start();
 if (!$enquire_only && $is_purchasable && $is_in_stock && $product instanceof WC_Product_Variable) {
     $available_variations = $product->get_available_variations();
     $attributes = $product->get_variation_attributes();
-    $selected_attributes = $product->get_default_attributes();
+    $selected_attributes = $default_selection;
 
     printf(
         '<form class="variations_form cart rural-product__cart" action="%s" method="post" enctype="multipart/form-data" data-product_id="%d" data-product_variations="%s">',
@@ -235,7 +268,10 @@ if (!$enquire_only && $is_purchasable && $is_in_stock && $product instanceof WC_
     echo '</div>';
 
     echo '<div class="single_variation_wrap">';
-    echo '<div class="single_variation"></div>';
+    // Woo renders its own price/availability block here; we keep it out of sight and update the
+    // theme's own price/SKU elements from the found_variation event instead.
+    echo '<div class="single_variation hidden" aria-hidden="true"></div>';
+    wc_get_template('single-product/add-to-cart/variation.php');
 
     echo '<div class="woocommerce-variation-add-to-cart variations_button">';
     woocommerce_quantity_input(

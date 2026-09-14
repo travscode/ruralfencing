@@ -48,6 +48,12 @@
 			return
 		}
 
+		// Variable product with nothing resolved yet: ask for an option instead of posting a bad request.
+		if (form.classList.contains('variations_form') && !Number(formData.get('variation_id') || 0)) {
+			showNotification('Please choose an option first', 'error')
+			return
+		}
+
 		// Update button state to "Adding to cart..."
 		setButtonState(button, textSpan, 'adding', originalText)
 		button.disabled = true

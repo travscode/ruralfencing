@@ -1,1 +1,149 @@
-{% extends 'archive.twig' %}
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% set theme_uri = function('get_stylesheet_directory_uri') %}
+
+	{% include 'partials/sections/product-cat-banner.twig' with {
+		breadcrumb_items: breadcrumb_items,
+		banner_icon_url: banner_icon_url,
+		title: title
+	} only %}
+
+	{% if mode == 'products' %}
+		<section class="catalogue-section bg-eggshell px-6 pb-[90px] lg:px-[100px]">
+			<div class="mx-auto w-full max-w-[1720px]">
+				<div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-10">
+					{% include 'partials/category-sidebar.twig' %}
+
+					<div class="min-w-0 flex-1 pt-[45px]">
+						{% if article_total > 0 %}
+							<a class="mb-6 flex items-center justify-between gap-4 rounded-xl border border-deep-green/30 bg-white px-5 py-4 no-underline transition-colors duration-200 hover:bg-deep-green/5" href="#help-articles">
+								<span class="flex items-center gap-3 text-t7 leading-[23px] text-birch">
+									<span class="flex h-9 w-9 flex-none items-center justify-center rounded-md bg-deep-green text-white">
+										{% include 'icons/pdf.twig' with { class: 'h-4 w-4' } only %}
+									</span>
+									<span>
+										<strong>{{ article_total }} help {{ article_total == 1 ? 'article' : 'articles' }}</strong> also {{ article_total == 1 ? 'mentions' : 'mention' }} “{{ search_term }}”
+									</span>
+								</span>
+								<span class="flex flex-none items-center gap-2 font-heading text-b2 uppercase text-deep-green">
+									See articles
+									{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3 rotate-90' } only %}
+								</span>
+							</a>
+						{% endif %}
+
+						{% if has_filters %}
+							<div class="mb-5 flex flex-wrap items-center gap-2 text-t8 text-birch">
+								<span class="text-birch/60">Filtered by:</span>
+								{% if category_label %}<span class="rounded-md bg-white px-3 py-2">{{ category_label }}</span>{% endif %}
+								{% if availability == 'instock' %}<span class="rounded-md bg-white px-3 py-2">In stock</span>{% endif %}
+								{% if availability == 'onsale' %}<span class="rounded-md bg-white px-3 py-2">On sale</span>{% endif %}
+								{% if price_min is not null or price_max is not null %}<span class="rounded-md bg-white px-3 py-2">Price {% if price_min is not null %}from ${{ price_min|number_format(2) }}{% endif %} {% if price_max is not null %}to ${{ price_max|number_format(2) }}{% endif %}</span>{% endif %}
+								<a class="underline" href="{{ clear_filters_url }}">Clear filters</a>
+							</div>
+						{% endif %}
+
+						{% include 'partials/product-listing-toolbar.twig' with {
+							showing_count: showing_count,
+							total_count: product_total,
+							price_min: price_min,
+							price_max: price_max,
+							sort: sort,
+							sort_options: sort_options,
+							hidden_fields: hidden_fields,
+							form_action: site.url ~ '/'
+						} only %}
+
+						{% if products and products|length %}
+							<div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+								{% for product in products %}
+									{% include 'partials/product-card.twig' with { product: product, show_category: true } only %}
+								{% endfor %}
+							</div>
+
+							{% include 'partials/product-pagination.twig' with { pagination: product_pagination } only %}
+						{% else %}
+							<div class="mt-6 rounded-xl bg-white px-6 py-10 lg:px-10">
+								<h2 class="font-heading text-d3 uppercase text-birch">No products match “{{ search_term }}”</h2>
+								<ul class="mt-4 list-disc space-y-2 pl-5 text-t7 leading-[23px] text-birch">
+									<li>Check the spelling, or try a shorter word like “gate” instead of “gate hinge set”.</li>
+									<li>Part numbers work too. Try the code printed on the product or your old invoice.</li>
+									{% if has_filters %}<li><a class="underline" href="{{ clear_filters_url }}">Remove the filters</a> you have applied.</li>{% endif %}
+									{% if article_total > 0 %}<li><a class="underline" href="#help-articles">Read the help {{ article_total == 1 ? 'article' : 'articles' }}</a> that mention it.</li>{% endif %}
+								</ul>
+								<a class="rural-button mt-8 inline-flex" href="{{ site.url }}/contact/">
+									<span class="flex items-center bg-goldenrod px-[19px] py-[19px] text-birch" aria-hidden="true">
+										{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } only %}
+									</span>
+									<span class="flex items-center bg-eggshell py-[17.5px] pl-5 pr-[30px] font-heading text-b2 uppercase text-birch">Ask our team</span>
+								</a>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</section>
+
+		{% if article_total > 0 %}
+			<section id="help-articles" class="scroll-mt-24 bg-white px-6 py-[70px] lg:px-[100px] lg:py-[100px]">
+				<div class="mx-auto w-full max-w-[1720px]">
+					<div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+						<div>
+							<p class="text-t7 leading-[23px] text-birch/70">From our help articles</p>
+							<h2 class="font-heading text-d2 uppercase text-birch">{{ article_total }} {{ article_total == 1 ? 'article mentions' : 'articles mention' }} “{{ search_term }}”</h2>
+						</div>
+						{% if article_total > articles_preview_count %}
+							<a class="font-heading text-b2 uppercase text-deep-green no-underline hover:underline" href="{{ articles_url }}">View all {{ article_total }} articles &raquo;</a>
+						{% endif %}
+					</div>
+
+					<div class="mt-8 grid gap-x-5 gap-y-10 md:grid-cols-2 xl:grid-cols-3">
+						{% for post in articles %}
+							{% include 'partials/blog-post-card.twig' with { post: post, surface_class: 'bg-eggshell' } only %}
+						{% endfor %}
+					</div>
+				</div>
+			</section>
+		{% endif %}
+	{% else %}
+		<section class="bg-eggshell px-6 py-[60px] lg:px-[100px] lg:pb-[140px]">
+			<div class="mx-auto w-full max-w-[1720px]">
+				<a class="mb-8 flex items-center justify-between gap-4 rounded-xl border border-deep-green/30 bg-white px-5 py-4 no-underline transition-colors duration-200 hover:bg-deep-green/5" href="{{ products_url }}">
+					<span class="text-t7 leading-[23px] text-birch">
+						{% if product_total > 0 %}
+							<strong>{{ product_total }} {{ product_total == 1 ? 'product matches' : 'products match' }}</strong> “{{ search_term }}” in the shop
+						{% else %}
+							No products match “{{ search_term }}” in the shop
+						{% endif %}
+					</span>
+					<span class="flex flex-none items-center gap-2 font-heading text-b2 uppercase text-deep-green">
+						{{ product_total > 0 ? 'View products' : 'Back to search' }}
+						{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } only %}
+					</span>
+				</a>
+
+				<p class="text-t7 leading-[23px] text-birch">
+					{% if article_total > 0 %}Showing {{ articles|length }} of {{ article_total }} help articles{% else %}No help articles mention “{{ search_term }}”{% endif %}
+				</p>
+
+				{% if articles and articles|length %}
+					<div class="mt-6 grid gap-y-[60px] gap-x-5 md:grid-cols-2 3xl:grid-cols-3">
+						{% for post in articles %}
+							{% include 'partials/blog-post-card.twig' with { post: post } only %}
+						{% endfor %}
+					</div>
+					{% include 'partials/product-pagination.twig' with { pagination: article_pagination } only %}
+				{% endif %}
+			</div>
+		</section>
+	{% endif %}
+
+	{% include 'partials/sections/cta-primary.twig' with {
+		title: 'Not sure what you need?',
+		body: 'Tell us what you’re working on – what you’re trying to keep in or out – and we’ll help you figure out what you need. Our team is always happy to point you in the right direction.',
+		button_label: 'Get in touch',
+		button_url: site.url ~ '/contact/',
+		image_url: theme_uri ~ '/images/cta-primary.png'
+	} only %}
+{% endblock %}
