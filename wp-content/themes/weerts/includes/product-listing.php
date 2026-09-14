@@ -89,12 +89,12 @@ if (!function_exists('weerts_product_card_data')) {
             $sale = $product->get_sale_price();
             if ($regular !== '' && $sale !== '') {
                 $price_html =
-                    '<span class="text-t1 leading-[26px] text-terracotta-clay line-through">' . wp_kses_post(wc_price((float) $regular)) . '</span> ' .
-                    '<span class="text-t3 font-bold leading-[26px] text-birch">' . wp_kses_post(wc_price((float) $sale)) . '</span>';
+                    '<span class="text-t1 leading-[26px] text-birch/60 line-through">' . wp_kses_post(wc_price((float) $regular)) . '</span> ' .
+                    '<span class="text-t3 font-bold leading-[26px] text-terracotta-clay">' . wp_kses_post(wc_price((float) $sale)) . '</span>';
             }
         }
         if ($price_html === '') {
-            $price_html = '<span class="text-t3 font-bold leading-[26px] text-birch">' . wp_kses_post($product->get_price_html()) . '</span>';
+            $price_html = '<span class="text-t3 font-bold leading-[26px] text-terracotta-clay">' . wp_kses_post($product->get_price_html()) . '</span>';
         }
 
         $published_ts = strtotime((string) get_the_date('c', $product_post));

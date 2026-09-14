@@ -7,12 +7,14 @@
 			<nav aria-label="Secondary navigation"><ul class="site-header__links">{% include 'partials/menu-items.twig' with { items: top_menu.items, help_pages: help_pages } only %}</ul></nav>
 			<a class="rural-button" href="tel:1800010319" aria-label="Call 1800 010 319"><span>{% include 'icons/phone.twig' with { class: 'h-4 w-4' } only %}</span><span>1800 010 319</span></a>
 		</div>
-		<details class="site-mobile-menu">
-			<summary aria-label="Open navigation menu">{% include 'icons/menu.twig' with { class: 'h-6 w-6' } only %}<span>Menu</span></summary>
-			<nav aria-label="Mobile navigation">
-				<ul>{% include 'partials/menu-items.twig' with { items: menu.items, help_pages: help_pages } only %}{% include 'partials/menu-items.twig' with { items: top_menu.items, help_pages: help_pages } only %}</ul>
-				<a class="rural-button mt-6" href="tel:1800010319"><span>{% include 'icons/phone.twig' with { class: 'h-4 w-4' } only %}</span><span>1800 010 319</span></a>
+		<div class="site-mobile-menu" data-mobile-menu>
+			<button class="site-mobile-menu__toggle" type="button" aria-expanded="false" aria-controls="site-mobile-nav" aria-label="Open menu" data-mobile-menu-toggle>
+				<span class="site-mobile-menu__icon" aria-hidden="true"><i></i><i></i><i></i></span>
+			</button>
+			<nav id="site-mobile-nav" class="site-mobile-menu__panel" aria-label="Mobile navigation" aria-hidden="true" data-mobile-menu-panel>
+				<ul class="site-mobile-menu__list">{% include 'partials/menu-items.twig' with { items: menu.items, help_pages: help_pages } only %}{% include 'partials/menu-items.twig' with { items: top_menu.items, help_pages: help_pages } only %}</ul>
+				<a class="rural-button site-mobile-menu__phone" href="tel:1800010319"><span>{% include 'icons/phone.twig' with { class: 'h-4 w-4' } only %}</span><span>1800 010 319</span></a>
 			</nav>
-		</details>
+		</div>
 	</div>
 </header>

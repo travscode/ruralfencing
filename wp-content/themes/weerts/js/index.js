@@ -505,17 +505,6 @@ function initAdvancedSearchDrawer() {
 	let isOpen = false
 	let activeTrigger = null
 
-	const advancedIconSvg =
-		'<svg class="h-3 w-[18px]" width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="18" y="0" width="1.71429" height="18" transform="rotate(90 18 0)" fill="currentColor"></rect><rect x="18" y="5.14282" width="1.71429" height="18" transform="rotate(90 18 5.14282)" fill="currentColor"></rect><rect x="18" y="10.2856" width="1.71429" height="18" transform="rotate(90 18 10.2856)" fill="currentColor"></rect></svg>'
-
-	const syncTriggerIcons = () => {
-		triggers.forEach((trigger) => {
-			if (!trigger.querySelector('svg')) {
-				trigger.innerHTML = advancedIconSvg
-			}
-		})
-	}
-
 	const getAssociatedInput = (trigger) => {
 		const wrapper = trigger.closest('form, .rural-search-strip__bar, .relative')
 		return wrapper?.querySelector('[data-advanced-search-input]') || null
@@ -593,7 +582,6 @@ function initAdvancedSearchDrawer() {
 		categoryTarget.value = childValue || parentValue || ''
 	}
 
-	syncTriggerIcons()
 	updateChildOptions('')
 	syncCategoryTarget()
 
@@ -1564,21 +1552,68 @@ function initArticleSharing() {
 }
 
 function initResponsiveNavigation() {
-	const mobile = document.querySelector('.site-mobile-menu')
 	const dropdowns = document.querySelectorAll('.nav-dropdown')
 	const media = window.matchMedia('(min-width: 1024px)')
 	const setDetails = () => document.querySelectorAll('[data-responsive-details]').forEach(el => { el.open = media.matches })
 	setDetails()
 	media.addEventListener('change', setDetails)
 	document.addEventListener('click', event => {
-		if (mobile && !mobile.contains(event.target)) mobile.open = false
-		for (const dropdown of dropdowns) if (!dropdown.contains(event.target)) dropdown.open = false
+		for (const dropdown of dropdowns) {
+			// dropdowns inside the mobile panel are plain accordions; only the desktop ones close on outside click
+			if (dropdown.closest('[data-mobile-menu-panel]')) continue
+			if (!dropdown.contains(event.target)) dropdown.open = false
+		}
 	})
 	document.addEventListener('keydown', event => {
 		if (event.key !== 'Escape') return
 		for (const dropdown of dropdowns) dropdown.open = false
-		if (mobile?.open) { mobile.open = false; mobile.querySelector('summary').focus() }
 	})
+	initMobileMenu()
+}
+
+function initMobileMenu() {
+	const root = document.querySelector('[data-mobile-menu]')
+	const toggle = root?.querySelector('[data-mobile-menu-toggle]')
+	const panel = root?.querySelector('[data-mobile-menu-panel]')
+	const header = root?.closest('header')
+	if (!root || !toggle || !panel) return
+
+	// cascade order for the items, and the panel starts below the header so the X stays visible
+	const items = panel.querySelectorAll('.site-mobile-menu__list > li')
+	items.forEach((li, i) => li.style.setProperty('--i', String(i)))
+	panel.style.setProperty('--menu-count', String(items.length))
+	const measure = () => {
+		if (header) document.documentElement.style.setProperty('--mobile-header-height', `${header.offsetHeight}px`)
+	}
+	measure()
+	window.addEventListener('resize', measure)
+
+	let isOpen = false
+	const setOpen = (next) => {
+		if (next === isOpen) return
+		isOpen = next
+		measure()
+		toggle.setAttribute('aria-expanded', next ? 'true' : 'false')
+		toggle.setAttribute('aria-label', next ? 'Close menu' : 'Open menu')
+		panel.dataset.open = next ? 'true' : 'false'
+		panel.setAttribute('aria-hidden', next ? 'false' : 'true')
+		document.body.classList.toggle('mobile-menu-open', next)
+		if (next) {
+			panel.scrollTop = 0
+		} else {
+			for (const d of panel.querySelectorAll('details[open]')) d.open = false
+		}
+	}
+
+	toggle.addEventListener('click', () => setOpen(!isOpen))
+	panel.addEventListener('click', (event) => {
+		if (event.target instanceof Element && event.target.closest('a[href]')) setOpen(false)
+	})
+	document.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape' && isOpen) { setOpen(false); toggle.focus() }
+	})
+	const desktop = window.matchMedia('(min-width: 1280px)')
+	desktop.addEventListener('change', () => { if (desktop.matches) setOpen(false) })
 }
 
 function initCtaCarousels() {

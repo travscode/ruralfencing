@@ -1,0 +1,20 @@
+{# Magnifying glass with a small dropdown indicator: "this opens something", not just decoration. #}
+{% set svg_title = title|default(null) %}
+
+<svg
+	class="{{ class|default('') }}"
+	viewBox="0 0 100 100"
+	fill="currentColor"
+	xmlns="http://www.w3.org/2000/svg"
+	{% if svg_title %}
+		role="img"
+		aria-label="{{ svg_title|e }}"
+	{% else %}
+		aria-hidden="true"
+	{% endif %}
+>
+	{% if svg_title %}
+		<title>{{ svg_title }}</title>
+	{% endif %}
+	<path fill-rule="evenodd" d="m63.238 76.047-18.242-18.246c3.1289-4.1758 5.0039-9.3398 5.0039-14.945 0-13.785-11.219-25-25-25s-25 11.215-25 25c0 13.789 11.219 25 25 25 5.6055 0 10.77-1.875 14.945-5.0039l18.242 18.246c0.69922 0.69531 1.6133 1.0469 2.5273 1.0469 0.91406 0 1.8281-0.35156 2.5234-1.0469 1.3984-1.3984 1.3984-3.6562 0-5.0508m-38.238-51.047c9.8477 0 17.855 8.0117 17.855 17.855 0 9.8477-8.0078 17.859-17.855 17.859s-17.855-8.0117-17.855-17.859c0-9.8438 8.0078-17.855 17.855-17.855zm75 14.285-17.855 17.859-17.859-17.859z" />
+</svg>

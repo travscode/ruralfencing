@@ -13,8 +13,8 @@
 	{ value: 'oldest', label: 'Oldest' }
 ]) %}
 
-<div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-	<p class="pt-2 text-t7 leading-[23px] text-birch">
+<div class="product-listing-toolbar flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+	<p class="text-t7 leading-[23px] text-birch xl:pt-2">
 		{% if total_count > 0 %}
 			Showing {{ showing_count }} of {{ total_count }} {{ noun|default('products') }}
 		{% else %}
@@ -22,53 +22,49 @@
 		{% endif %}
 	</p>
 
-	<form class="flex flex-col gap-3 lg:flex-row lg:items-end lg:gap-10" method="get" action="{{ form_action|default('') }}">
+	<form class="flex w-full flex-col gap-5 xl:w-auto xl:flex-row xl:flex-wrap xl:items-end xl:gap-x-10 xl:gap-y-4" method="get" action="{{ form_action|default('') }}">
 		{% for name, value in hidden_fields %}
 			<input type="hidden" name="{{ name }}" value="{{ value }}" />
 		{% endfor %}
 
-		<div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-4">
-			<p class="pt-2 text-t7 font-bold leading-[23px] text-birch">Price Range</p>
+		<fieldset class="flex min-w-0 flex-col gap-4 xl:flex-row xl:items-center">
+			<legend class="float-left mb-4 text-t7 font-bold leading-[23px] text-birch xl:mb-0 xl:mr-4 xl:pt-2">Price Range</legend>
 
-			<div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-2">
-				<div class="relative">
-					<div class="flex w-[124px] items-center gap-2 rounded-md border border-birch bg-eggshell px-5 py-5">
+			<div class="flex w-full items-end gap-3 xl:w-auto xl:gap-2">
+				<label class="relative block min-w-0 flex-1 xl:w-[124px] xl:flex-none">
+					<span class="absolute left-4 top-0 -translate-y-1/2 bg-eggshell px-[5px] text-t8 leading-4 text-birch xl:text-t7 xl:leading-[23px]">Min price</span>
+					<span class="flex items-center gap-2 rounded-md border border-birch bg-eggshell px-4 py-4 xl:px-5 xl:py-5">
 						<span class="text-t7 leading-[23px] text-birch">$</span>
-						<input class="w-full bg-transparent text-t7 leading-[23px] text-birch outline-none" type="number" name="min_price" step="0.01" min="0" value="{% if price_min is not null %}{{ price_min|number_format(2, '.', '') }}{% endif %}" />
-					</div>
-					<div class="absolute left-4 top-0 -translate-y-1/2 bg-eggshell px-[5px] pb-[5px]">
-						<span class="text-t7 leading-[23px] text-birch">Min price</span>
-					</div>
-				</div>
+						<input class="w-full min-w-0 bg-transparent text-t7 leading-[23px] text-birch outline-none" type="number" name="min_price" inputmode="decimal" step="0.01" min="0" placeholder="0" value="{% if price_min is not null %}{{ price_min|number_format(2, '.', '') }}{% endif %}" />
+					</span>
+				</label>
 
-				<div class="relative">
-					<div class="flex w-[124px] items-center gap-2 rounded-md border border-birch bg-eggshell px-5 py-5">
+				<label class="relative block min-w-0 flex-1 xl:w-[124px] xl:flex-none">
+					<span class="absolute left-4 top-0 -translate-y-1/2 bg-eggshell px-[5px] text-t8 leading-4 text-birch xl:text-t7 xl:leading-[23px]">Max price</span>
+					<span class="flex items-center gap-2 rounded-md border border-birch bg-eggshell px-4 py-4 xl:px-5 xl:py-5">
 						<span class="text-t7 leading-[23px] text-birch">$</span>
-						<input class="w-full bg-transparent text-t7 leading-[23px] text-birch outline-none" type="number" name="max_price" step="0.01" min="0" value="{% if price_max is not null %}{{ price_max|number_format(2, '.', '') }}{% endif %}" />
-					</div>
-					<div class="absolute left-4 top-0 -translate-y-1/2 bg-eggshell px-[5px] pb-[5px]">
-						<span class="text-t7 leading-[23px] text-birch">Max price</span>
-					</div>
-				</div>
+						<input class="w-full min-w-0 bg-transparent text-t7 leading-[23px] text-birch outline-none" type="number" name="max_price" inputmode="decimal" step="0.01" min="0" placeholder="Any" value="{% if price_max is not null %}{{ price_max|number_format(2, '.', '') }}{% endif %}" />
+					</span>
+				</label>
 
-				<button class="rounded-md bg-goldenrod px-4 py-[17.5px] font-heading text-b2 uppercase text-birch" type="submit">Go</button>
+				<button class="flex-none rounded-md bg-goldenrod px-5 py-[15.5px] font-heading text-b2 uppercase text-birch xl:px-4 xl:py-[17.5px]" type="submit">Go</button>
 			</div>
-		</div>
+		</fieldset>
 
-		<div class="flex items-center gap-4">
-			<p class="pt-2 text-t7 font-bold leading-[23px] text-birch">Sort by:</p>
+		<label class="flex items-center gap-4">
+			<span class="flex-none text-t7 font-bold leading-[23px] text-birch xl:pt-2">Sort by:</span>
 
-			<div class="relative">
-				<select class="w-full max-w-[300px] appearance-none rounded-md border border-birch bg-eggshell px-5 py-5 pr-12 text-t7 leading-[23px] text-birch" name="sort" onchange="this.form.submit()">
+			<span class="relative block min-w-0 flex-1 xl:flex-none">
+				<select class="w-full appearance-none rounded-md border border-birch bg-eggshell px-4 py-4 pr-11 text-t7 leading-[23px] text-birch xl:max-w-[300px] xl:px-5 xl:py-5 xl:pr-12" name="sort" onchange="this.form.submit()">
 					{% for option in sort_options %}
 						<option value="{{ option.value }}"{% if sort == option.value %} selected{% endif %}>{{ option.label }}</option>
 					{% endfor %}
 				</select>
 
-				<div class="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-birch">
+				<span class="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-birch">
 					{% include 'icons/chevron-down.twig' with { class: 'h-[5px] w-[10px]' } only %}
-				</div>
-			</div>
-		</div>
+				</span>
+			</span>
+		</label>
 	</form>
 </div>

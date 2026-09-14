@@ -10,12 +10,12 @@
 	} only %}
 
 	{% if mode == 'products' %}
-		<section class="catalogue-section bg-eggshell px-6 pb-[90px] lg:px-[100px]">
+		<section class="catalogue-section bg-eggshell px-6 pb-16 lg:px-[100px] lg:pb-[90px]">
 			<div class="mx-auto w-full max-w-[1720px]">
-				<div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-10">
+				<div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
 					{% include 'partials/category-sidebar.twig' %}
 
-					<div class="min-w-0 flex-1 pt-[45px]">
+					<div class="min-w-0 flex-1 pt-4 lg:pt-[45px]">
 						{% if article_total > 0 %}
 							<a class="mb-6 flex items-center justify-between gap-4 rounded-xl border border-deep-green/30 bg-white px-5 py-4 no-underline transition-colors duration-200 hover:bg-deep-green/5" href="#help-articles">
 								<span class="flex items-center gap-3 text-t7 leading-[23px] text-birch">

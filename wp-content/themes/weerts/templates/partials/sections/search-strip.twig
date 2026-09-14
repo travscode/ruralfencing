@@ -27,10 +27,8 @@
 						data-placeholder-mobile="Search products"
 						data-advanced-search-input
 					/>
-					<button class="rural-search-strip__submit" type="submit" aria-label="Search">
-						{% if icon_url %}
-							<img src="{{ icon_url }}" width="30" height="30" alt="" aria-hidden="true" />
-						{% endif %}
+					<button class="rural-search-strip__submit" type="button" aria-label="Search options" title="Search options" data-advanced-search-trigger>
+						{% include 'icons/search-dropdown.twig' with { class: 'h-[26px] w-[26px] lg:h-[34px] lg:w-[34px]' } %}
 					</button>
 				</div>
 			</form>

@@ -2,8 +2,8 @@
 {% set banner_icon_url = banner_icon_url|default('') %}
 {% set title = title|default('') %}
 
-<section class="bg-goldenrod px-6 pb-[90px] pt-5 lg:px-[100px]">
-	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-[70px]">
+<section class="bg-goldenrod px-6 pb-12 pt-5 lg:px-[100px] lg:pb-[90px]">
+	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-8 lg:gap-[70px]">
 		<nav class="text-t7 leading-[23px] text-birch">
 			{% for item in breadcrumb_items %}
 				{% if loop.first %}
@@ -16,11 +16,11 @@
 			{% endfor %}
 		</nav>
 
-		<div class="flex items-center gap-10">
+		<div class="flex items-center gap-4 lg:gap-10">
 			{% if banner_icon_url %}
-				<img src="{{ banner_icon_url }}" width="40" height="44" alt="" aria-hidden="true" />
+				<img class="h-8 w-auto flex-none lg:h-11" src="{{ banner_icon_url }}" width="40" height="44" alt="" aria-hidden="true" />
 			{% endif %}
-			<h1 class="font-heading text-d1-md uppercase leading-[80px] text-birch">{{ title }}</h1>
+			<h1 class="font-heading text-d1-sm uppercase text-birch md:text-d2 lg:text-d1-md lg:leading-[80px]">{{ title }}</h1>
 		</div>
 	</div>
 </section>

@@ -24,13 +24,19 @@
 		<div class="site-nav__tools">
 			<form class="header-search relative" method="get" action="{{ function('home_url', '/') }}" data-header-search>
 				<input type="hidden" name="post_type" value="product" />
-				<span class="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-birch">
-					{% include 'icons/search.twig' with { class: 'h-[14px] w-[14px]', title: 'Search' } %}
-				</span>
+				<button
+					class="advanced-search-trigger absolute left-[6px] top-1/2 inline-flex h-8 w-9 -translate-y-1/2 items-center justify-center rounded-md text-birch transition-all duration-200 hover:bg-goldenrod hover:text-white focus:outline-none"
+					type="button"
+					aria-label="Search options"
+					title="Search options"
+					data-advanced-search-trigger
+				>
+					{% include 'icons/search-dropdown.twig' with { class: 'h-[22px] w-[22px]' } %}
+				</button>
 				<input
 					id="site-header-search"
 					aria-label="Search products"
-					class="h-11 w-full rounded-md bg-white pl-[55px] pr-[56px] text-[15px] leading-[22px] text-birch placeholder:text-birch/60 focus:outline-none"
+					class="h-11 w-full rounded-md bg-white pl-[52px] pr-4 text-[15px] leading-[22px] text-birch placeholder:text-birch/60 focus:outline-none"
 					name="s"
 					autocomplete="off"
 					placeholder="What can we help you find today?"
@@ -43,14 +49,6 @@
 					data-advanced-search-input
 					data-header-search-input
 				/>
-				<button
-					class="advanced-search-trigger absolute right-[6px] top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-birch transition-all duration-200 hover:bg-goldenrod hover:text-white focus:outline-none"
-					type="button"
-					aria-label="Open advanced search"
-					data-advanced-search-trigger
-				>
-					{% include 'icons/advanced-search.twig' with { class: 'h-3 w-[18px]', title: 'Open advanced search' } %}
-				</button>
 				<div
 					id="site-header-search-dropdown"
 					class="header-search__dropdown absolute left-0 right-0 top-[calc(100%+12px)] hidden rounded-[20px] bg-white p-5 text-birch shadow-[0_24px_48px_rgba(42,35,26,0.16)]"
