@@ -1618,23 +1618,59 @@ function initMobileMenu() {
 
 function initCtaCarousels() {
 	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+	const HOLD = 5000 // how long each photo sits before the next fade starts
+
 	for (const carousel of document.querySelectorAll('[data-cta-carousel]')) {
 		const track = carousel.querySelector('[data-cta-track]')
 		const status = carousel.querySelector('[data-cta-status]')
 		const slides = Array.from(track.children)
 		const previous = carousel.querySelector('[data-cta-prev]')
 		const next = carousel.querySelector('[data-cta-next]')
-		const index = () => Math.round(track.scrollLeft / Math.max(track.clientWidth, 1))
-		const go = direction => track.scrollTo({left:Math.max(0,Math.min(slides.length-1,index()+direction))*track.clientWidth,behavior:reducedMotion.matches?'auto':'smooth'})
-		previous.addEventListener('click', () => go(-1))
-		next.addEventListener('click', () => go(1))
-		track.addEventListener('keydown', event => {
-			if (!['ArrowLeft','ArrowRight'].includes(event.key)) return
-			event.preventDefault(); go(event.key === 'ArrowRight' ? 1 : -1)
+		if (slides.length < 2) continue
+
+		let current = Math.max(0, slides.findIndex((s) => s.classList.contains('is-active')))
+		let timer = null
+		let paused = false
+		let visible = true
+
+		const show = (i) => {
+			current = (i + slides.length) % slides.length
+			slides.forEach((slide, n) => slide.classList.toggle('is-active', n === current))
+			if (status) status.textContent = `${current + 1} / ${slides.length}`
+		}
+		const stop = () => { if (timer) { clearInterval(timer); timer = null } }
+		const start = () => {
+			stop()
+			if (reducedMotion.matches || paused || !visible) return
+			timer = setInterval(() => show(current + 1), HOLD)
+		}
+		const nudge = (direction) => { show(current + direction); start() }
+
+		previous?.addEventListener('click', () => nudge(-1))
+		next?.addEventListener('click', () => nudge(1))
+		track.addEventListener('keydown', (event) => {
+			if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return
+			event.preventDefault()
+			nudge(event.key === 'ArrowRight' ? 1 : -1)
 		})
-		const update = () => { const i=index(); status.textContent=`${i+1} / ${slides.length}`; previous.disabled=i===0; next.disabled=i===slides.length-1 }
-		track.addEventListener('scroll', update, {passive:true})
-		window.addEventListener('resize', update)
-		update()
+
+		// let people actually look at a photo: pause while hovered or focused
+		carousel.addEventListener('mouseenter', () => { paused = true; stop() })
+		carousel.addEventListener('mouseleave', () => { paused = false; start() })
+		carousel.addEventListener('focusin', () => { paused = true; stop() })
+		carousel.addEventListener('focusout', () => { paused = false; start() })
+
+		// no work while the gallery is off screen or the tab is hidden
+		if ('IntersectionObserver' in window) {
+			new IntersectionObserver((entries) => {
+				visible = entries.some((e) => e.isIntersecting)
+				visible ? start() : stop()
+			}, { threshold: 0.2 }).observe(carousel)
+		}
+		document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()))
+		reducedMotion.addEventListener('change', start)
+
+		show(current)
+		start()
 	}
 }

@@ -287,6 +287,7 @@ body.mobile-menu-open {
 }
 .site-nav__products {
 	position: relative;
+	transition: background .15s;
 }
 /* Hover fill runs to the left edge of the viewport: a strip painted off the button's left side. Off-screen to the left never causes horizontal scroll. */
 .site-nav__products::before {
@@ -527,23 +528,32 @@ li.product:focus-within .product-hover,
 	align-self: end;
 	margin-top: -46px;
 }
+/* Photos are stacked in a fixed-height box and crossfade, so the layout around them never moves. */
 .rural-cta__track {
-	display: flex;
-	overflow-x: auto;
-	scroll-snap-type: x mandatory;
-	scrollbar-width: none;
+	position: relative;
+	display: block;
+	height: 660px;
+	overflow: hidden;
 	border-radius: 12px 12px 0 0;
-}
-.rural-cta__track::-webkit-scrollbar {
-	display: none;
+	background: #2a231a;
 }
 .rural-cta__track > img {
+	position: absolute;
+	inset: 0;
 	width: 100%;
-	flex: 0 0 100%;
-	min-width: 0;
-	height: 660px;
+	height: 100%;
 	object-fit: cover;
-	scroll-snap-align: start;
+	opacity: 0;
+	transition: opacity 1.2s ease;
+	will-change: opacity;
+}
+.rural-cta__track > img.is-active {
+	opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+	.rural-cta__track > img {
+		transition: none;
+	}
 }
 .rural-cta__controls {
 	display: flex;
@@ -819,7 +829,7 @@ li.product:focus-within .product-hover,
 		gap: 40px;
 		grid-template-columns: 1fr 1fr;
 	}
-	.rural-cta__track > img {
+	.rural-cta__track {
 		height: 560px;
 	}
 	.rural-cta__heading {
@@ -886,7 +896,7 @@ li.product:focus-within .product-hover,
 	.rural-cta__gallery {
 		margin-top: 0;
 	}
-	.rural-cta__track > img {
+	.rural-cta__track {
 		height: 360px;
 	}
 	.rural-category-spotlight__images {
@@ -1162,7 +1172,7 @@ li.product:focus-within .product-hover,
 		font-size: 19px;
 		line-height: 28px;
 	}
-	.rural-cta__track > img {
+	.rural-cta__track {
 		height: 320px;
 	}
 	.rural-stripes i {
