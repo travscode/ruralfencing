@@ -12,7 +12,7 @@
 }
 
 .weerts-cart-header {
-	@apply border-b border-birch/10 bg-white py-8;
+	@apply -mt-6 pb-2 lg:-mt-8;
 }
 
 .weerts-cart-header .container {
@@ -24,7 +24,7 @@
 }
 
 .weerts-cart-count {
-	@apply mt-2 block text-t2 text-birch/70;
+	@apply block text-t7 text-birch/70;
 }
 
 .weerts-cart-content {
@@ -152,13 +152,29 @@
 	@apply text-center;
 }
 
+.weerts-qty {
+	@apply mx-auto inline-flex h-12 items-stretch overflow-hidden rounded-md border border-birch bg-white;
+}
+
+.weerts-qty__btn {
+	@apply inline-flex w-12 flex-none items-center justify-center text-[22px] leading-none text-birch transition-colors hover:bg-goldenrod;
+}
+
+.weerts-qty .weerts-qty-input,
 .weerts-qty-input {
-	@apply mx-auto block h-10 w-20 rounded-lg border border-birch/20 bg-white px-2 text-center text-t4 font-medium text-birch transition-all focus:border-deep-green focus:outline-none focus:ring-1 focus:ring-deep-green/20;
+	@apply block h-12 w-16 border-0 bg-white px-1 text-center text-t4 font-semibold text-birch focus:outline-none;
+	-moz-appearance: textfield;
+}
+
+.weerts-qty-input::-webkit-outer-spin-button,
+.weerts-qty-input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }
 
 /* Remove Button */
 .weerts-cart-remove {
-	@apply inline-flex h-10 w-10 items-center justify-center rounded-lg text-birch/40 transition-all hover:bg-red-50 hover:text-red-600;
+	@apply inline-flex min-h-[44px] items-center gap-2 rounded-md px-3 text-t7 font-medium text-birch/70 no-underline transition-colors hover:bg-terracotta-clay/10 hover:text-terracotta-clay;
 }
 
 .weerts-cart-remove-icon {
@@ -166,7 +182,7 @@
 }
 
 .weerts-cart-remove-text {
-	@apply sr-only;
+	@apply lg:sr-only;
 }
 
 /* ==========================================================================
@@ -197,8 +213,9 @@
 	@apply h-12 flex-1 rounded-lg border border-birch/20 bg-white px-4 text-t4 text-birch placeholder:text-birch/40 focus:border-deep-green focus:outline-none focus:ring-1 focus:ring-deep-green/20;
 }
 
+.woocommerce-cart .weerts-coupon-btn,
 .weerts-coupon-btn {
-	@apply inline-flex h-12 items-center justify-center rounded-lg bg-birch px-6 text-t7 font-medium text-white transition-colors hover:bg-birch/90;
+	@apply inline-flex h-12 items-center justify-center rounded-md border border-birch bg-white px-6 font-heading text-b2 uppercase text-birch transition-colors hover:bg-birch hover:text-white;
 }
 
 .weerts-cart-update {
@@ -262,8 +279,40 @@
 	@apply w-full;
 }
 
+.woocommerce-cart .weerts-btn--outline,
 .weerts-btn--outline {
-	@apply border border-birch/20 bg-white text-birch hover:bg-eggshell;
+	@apply min-h-[50px] rounded-md border border-birch bg-transparent font-heading text-b2 uppercase text-birch hover:bg-birch hover:text-white;
+}
+
+/* Proceed to checkout: the brand arrow button, stretched to the card width */
+.weerts-cart-collaterals .rural-button--block,
+.woocommerce-cart .weerts-cart-collaterals a.checkout-button {
+	display: flex;
+	width: 100%;
+	align-self: stretch;
+	padding: 0;
+	background: transparent;
+	border-radius: 0 6px 6px 0;
+	text-align: left;
+	font-size: inherit;
+}
+
+.weerts-cart-collaterals .rural-button--block > span:last-child {
+	flex: 1;
+	justify-content: center;
+	background: var(--rural-gold);
+	color: var(--rural-ink);
+	font-size: 23px;
+}
+
+.weerts-cart-collaterals .rural-button--block:hover > span:last-child {
+	background: var(--rural-ink);
+	color: white;
+}
+
+.weerts-cart-collaterals .rural-button--block > span:first-child {
+	background: var(--rural-ink);
+	color: white;
 }
 
 .weerts-btn--text {
@@ -328,16 +377,16 @@
 	}
 
 	.weerts-cart-row {
-		@apply grid gap-4 px-4 py-4;
+		@apply grid gap-4 px-4 py-5;
 		grid-template-columns: 1fr;
 	}
 
 	.weerts-cart-product {
-		@apply gap-3;
+		@apply gap-4;
 	}
 
 	.weerts-cart-product-image {
-		@apply h-16 w-16;
+		@apply h-20 w-20 flex-none;
 	}
 
 	.weerts-cart-col-price,
@@ -346,8 +395,12 @@
 		@apply flex items-center justify-between text-left;
 	}
 
+	.weerts-cart-col-quantity .weerts-qty {
+		@apply mx-0;
+	}
+
 	.weerts-cart-col-remove {
-		@apply flex justify-end;
+		@apply -mt-1 flex justify-end;
 	}
 
 	.weerts-cart-actions {
@@ -432,4 +485,87 @@
 
 .weerts-cart-notice--error {
 	@apply bg-terracotta-clay/10 text-terracotta-clay;
+}
+
+/* ==========================================================================
+   Overrides: beat WooCommerce's button styles, and give the product name room on desktop
+   ========================================================================== */
+
+.woocommerce-cart .woocommerce button.button.weerts-coupon-btn,
+.woocommerce-cart .woocommerce button.button.weerts-coupon-btn:hover,
+.woocommerce-cart .woocommerce button.button.weerts-btn--outline,
+.woocommerce-cart .woocommerce button.button.weerts-btn--outline:hover {
+	@apply rounded-md border border-birch font-heading text-b2 uppercase;
+	border-style: solid;
+	background: transparent;
+	color: var(--rural-ink);
+	font-weight: 700;
+	line-height: 1;
+	padding: 14px 24px;
+}
+
+.woocommerce-cart .woocommerce button.button.weerts-coupon-btn:hover,
+.woocommerce-cart .woocommerce button.button.weerts-btn--outline:hover {
+	background: var(--rural-ink);
+	color: white;
+}
+
+.woocommerce-cart .woocommerce button.button.weerts-coupon-btn {
+	background: white;
+}
+
+.weerts-cart-header .container,
+.weerts-cart-content .container {
+	max-width: 1400px;
+}
+
+@media (min-width: 1024px) {
+	.weerts-cart-table-header,
+	.weerts-cart-row {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 110px 176px 120px 64px;
+		align-items: center;
+		column-gap: 12px;
+	}
+
+	.weerts-cart-product-details {
+		min-width: 0;
+	}
+
+	.weerts-cart-product-image {
+		width: 96px;
+		height: 96px;
+		flex: none;
+	}
+
+	.weerts-cart-layout {
+		grid-template-columns: minmax(0, 1fr) 400px;
+	}
+}
+
+/* Update cart is disabled by WooCommerce until a quantity changes; keep it recognisable */
+.woocommerce-cart .woocommerce button.button.weerts-btn--outline:disabled,
+.woocommerce-cart .woocommerce button.button.weerts-btn--outline:disabled:hover {
+	@apply border border-birch/40;
+	border-style: solid;
+	background: transparent;
+	color: #2a231a80;
+	opacity: 1;
+	cursor: not-allowed;
+}
+
+/* Sidebar only sits beside the items from 1280px; between 1024 and 1279 it stacks so the product column keeps its width */
+@media (min-width: 1024px) and (max-width: 1279px) {
+	.weerts-cart-layout {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.weerts-cart-wrap .weerts-cart-page {
+	min-height: 0;
+	padding-bottom: 0;
+}
+
+.weerts-cart-wrap .weerts-cart-header {
+	margin-top: 0;
 }

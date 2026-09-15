@@ -1,0 +1,31 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+	{% set theme_uri = function('get_stylesheet_directory_uri') %}
+	{% set logged_in = function('is_user_logged_in') %}
+
+	{% include 'partials/sections/product-cat-banner.twig' with {
+		breadcrumb_items: [
+			{ title: 'Home', url: site.url ~ '/' },
+			{ title: logged_in ? 'My account' : 'Log in', url: '' }
+		],
+		banner_icon_url: '',
+		title: logged_in ? 'My account' : 'Log in'
+	} only %}
+
+	<section class="rural-account-page bg-eggshell px-6 py-10 lg:px-[100px] lg:py-16">
+		<div class="mx-auto w-full max-w-[1720px]">
+			{{ post.content }}
+		</div>
+	</section>
+
+	{% if not logged_in %}
+		{% include 'partials/sections/cta-primary.twig' with {
+			title: 'Not sure what you need?',
+			body: 'Tell us what you are working on, what you are trying to keep in or out, and we will help you figure out what you need. Our team is always happy to point you in the right direction.',
+			button_label: 'Get in touch',
+			button_url: site.url ~ '/contact/',
+			image_url: theme_uri ~ '/images/cta-primary.png'
+		} only %}
+	{% endif %}
+{% endblock %}

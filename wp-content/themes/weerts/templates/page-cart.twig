@@ -1,0 +1,11 @@
+{% extends 'base.twig' %}
+
+{# The cart lays itself out in its own containers, so it gets the full width rather than the narrow article column. #}
+{% block content %}
+	<article class="rural-page weerts-cart-wrap py-10 lg:py-16">
+		<header class="mx-auto w-full max-w-[1400px] px-6 lg:px-8">
+			<h1 class="font-heading text-d1-sm uppercase text-birch md:text-d2 lg:text-d1-md">{{ post.title }}</h1>
+		</header>
+		{{ post.content }}
+	</article>
+{% endblock %}

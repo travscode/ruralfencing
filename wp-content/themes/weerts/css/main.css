@@ -4,6 +4,7 @@
 @import 'tailwindcss/utilities';
 @import './cart.css';
 @import './responsive.css';
+@import './account.css';
 
 @layer base {
 	html {

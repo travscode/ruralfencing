@@ -55,3 +55,5 @@ wp-content/plugins/plugins.zip
 !scripts/
 !scripts/catalogue/
 !scripts/catalogue/**
+!scripts/dev/
+!scripts/dev/**

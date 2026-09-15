@@ -163,7 +163,15 @@ do_action( 'woocommerce_before_cart' );
                                                             false
                                                         );
                                                     }
-                                                    echo apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item );
+                                                    if ( $_product->is_sold_individually() ) {
+                                                        echo apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item );
+                                                    } else {
+                                                        echo '<div class="weerts-qty" data-qty-stepper>';
+                                                        echo '<button type="button" class="weerts-qty__btn" data-qty-minus aria-label="' . esc_attr__( 'Decrease quantity', 'weerts' ) . '">&minus;</button>';
+                                                        echo apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item );
+                                                        echo '<button type="button" class="weerts-qty__btn" data-qty-plus aria-label="' . esc_attr__( 'Increase quantity', 'weerts' ) . '">+</button>';
+                                                        echo '</div>';
+                                                    }
                                                     ?>
                                                 </div>
 

@@ -39,6 +39,7 @@ Timber::$dirname = ['templates'];
 
 require_once __DIR__ . '/includes/block-patterns.php';
 require_once __DIR__ . '/includes/product-listing.php';
+require_once __DIR__ . '/includes/account.php';
 
 /**
  * Sets up the shared Timber site configuration.

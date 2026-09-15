@@ -1,0 +1,211 @@
+/* My Account. Mobile first; the two-column layout arrives at 1024px. */
+
+.rural-account { display: grid; gap: 24px; color: var(--rural-ink); }
+.rural-account__content { min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+
+/* ---- navigation: pill strip on phones, card on desktop ---- */
+.rural-account__nav-user { display: none; }
+.rural-account__nav-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.rural-account__nav-item a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 1.2px solid var(--rural-ink); border-radius: 999px; background: white; font-size: 16px; font-weight: 500; line-height: 22px; white-space: nowrap; text-decoration: none; color: var(--rural-ink); transition: background .2s, color .2s, border-color .2s; }
+.rural-account__nav-item a[aria-current='page'] { background: var(--rural-green); border-color: var(--rural-green); color: white; }
+.rural-account__nav-item a:hover { border-color: var(--rural-green); color: var(--rural-green); }
+.rural-account__nav-item a[aria-current='page']:hover { color: white; }
+.rural-account__nav-icon { display: inline-flex; width: 18px; height: 18px; flex: none; }
+.rural-account__nav-icon svg { width: 100%; height: 100%; }
+.rural-account__nav-item--customer-logout a { border-style: dashed; }
+
+/* ---- type ---- */
+.rural-account__title { margin: 0; font-family: 'Dharma Gothic E', Impact, sans-serif; font-size: 40px; line-height: 1; font-weight: 700; text-transform: uppercase; }
+.rural-account__card h3, .rural-account__card .woocommerce-order-details__title, .rural-account__card .woocommerce-column__title { margin: 0; font-family: 'Dharma Gothic E', Impact, sans-serif; font-size: 26px; line-height: 1; font-weight: 700; text-transform: uppercase; }
+.rural-account__hello p, .rural-account__page-head p { margin: 8px 0 0; font-size: 17px; line-height: 25px; }
+.rural-account__hello-logout { display: block; margin-top: 4px; font-size: 15px; color: #2a231a99; }
+.rural-account__hello-logout a, .rural-account__link { color: var(--rural-green); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
+.rural-account__muted { color: #2a231a99; font-size: 15px; line-height: 22px; margin: 0; }
+.rural-account__page-head { display: flex; flex-direction: column; gap: 4px; }
+.rural-account__page-head--order { flex-direction: row; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.rural-account__back { align-self: flex-start; font-size: 15px; font-weight: 500; text-decoration: none; color: var(--rural-green); }
+.rural-account__back:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* ---- cards ---- */
+.rural-account__grid { display: grid; gap: 16px; }
+.rural-account__card { display: flex; flex-direction: column; gap: 16px; min-width: 0; padding: 20px; border-radius: 12px; background: white; }
+.rural-account__card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.rural-account__card--help { background: var(--rural-gold); }
+.rural-account__card--help p { margin: 6px 0 0; font-size: 16px; line-height: 24px; }
+.rural-account__help-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.rural-account__empty { gap: 16px; }
+.rural-account__empty p { margin: 0; font-size: 17px; line-height: 25px; }
+.rural-account__dl { display: grid; gap: 12px; margin: 0; }
+.rural-account__dl dt { font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: #2a231a99; }
+.rural-account__dl dd { margin: 2px 0 0; font-size: 17px; line-height: 24px; overflow-wrap: anywhere; }
+.rural-account__address { font-style: normal; font-size: 17px; line-height: 26px; }
+
+/* ---- status chips ---- */
+.rural-chip { display: inline-flex; align-items: center; flex: none; padding: 5px 10px; border-radius: 999px; font-size: 13px; line-height: 16px; font-weight: 600; white-space: nowrap; }
+.rural-chip--green { background: #00660018; color: var(--rural-green); }
+.rural-chip--cyan { background: #3b8ea51f; color: #2b6f82; }
+.rural-chip--gold { background: #db9d1633; color: #7a5300; }
+.rural-chip--clay { background: #b3645520; color: #8d4a3c; }
+.rural-chip--muted { background: #2a231a12; color: #2a231a; }
+
+/* ---- buttons ---- */
+.rural-account__btn { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 12px 22px; border-radius: 6px; font-family: 'Dharma Gothic E', Impact, sans-serif; font-size: 21px; line-height: 22px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+.rural-account__btn--ghost { border: 1.2px solid var(--rural-ink); background: transparent; color: var(--rural-ink); }
+.rural-account__btn--ghost:hover { background: var(--rural-ink); color: white; }
+.rural-account__btn--cancel { border-color: #b3645599; color: #8d4a3c; }
+.rural-account__btn--cancel:hover { background: var(--rural-clay, #B36455); border-color: #B36455; color: white; }
+.rural-button--submit { border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; }
+.rural-button--submit > span:first-child svg { width: 12px; height: 12px; }
+
+/* ---- overview: recent order rows ---- */
+.rural-order-rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.rural-order-rows > li + li { border-top: 1px solid #2a231a1a; }
+.rural-order-row { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto 16px; align-items: center; gap: 12px; padding: 14px 0; text-decoration: none; color: inherit; }
+.rural-order-row__thumb { width: 56px; height: 56px; border-radius: 8px; overflow: hidden; background: var(--rural-paper); }
+.rural-order-row__thumb img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); }
+.rural-order-row__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.rural-order-row__title { font-size: 17px; font-weight: 600; line-height: 22px; }
+.rural-order-row__meta { font-size: 14px; line-height: 20px; color: #2a231a99; }
+.rural-order-row__chevron { font-size: 22px; line-height: 1; color: #2a231a66; }
+.rural-order-row:hover .rural-order-row__title { color: var(--rural-green); }
+@media (max-width: 479px) {
+	.rural-order-row { grid-template-columns: 48px minmax(0, 1fr) 16px; }
+	.rural-order-row__thumb { width: 48px; height: 48px; }
+	.rural-order-row .rural-chip { grid-column: 2; justify-self: start; }
+}
+
+/* ---- orders list: cards ---- */
+.rural-order-cards { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.rural-order-card { display: flex; flex-direction: column; gap: 16px; padding: 20px; border-radius: 12px; background: white; }
+.rural-order-card__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.rural-order-card__title { margin: 0; font-family: 'Dharma Gothic E', Impact, sans-serif; font-size: 28px; line-height: 1; font-weight: 700; text-transform: uppercase; }
+.rural-order-card__date { margin: 4px 0 0; font-size: 15px; line-height: 20px; color: #2a231a99; }
+.rural-order-card__items { display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 8px; background: var(--rural-paper); text-decoration: none; color: inherit; }
+.rural-order-card__thumbs { display: flex; flex: none; }
+.rural-order-card__thumb { width: 52px; height: 52px; border-radius: 8px; overflow: hidden; background: white; border: 2px solid var(--rural-paper); }
+.rural-order-card__thumb + .rural-order-card__thumb { margin-left: -14px; }
+.rural-order-card__thumb img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); }
+.rural-order-card__thumb--more { display: inline-flex; align-items: center; justify-content: center; background: var(--rural-ink); color: white; font-size: 14px; font-weight: 600; }
+.rural-order-card__summary { display: flex; flex-direction: column; gap: 2px; min-width: 0; font-size: 15px; line-height: 20px; }
+.rural-order-card__summary strong { font-size: 17px; line-height: 22px; }
+.rural-order-card__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.rural-order-card__actions .rural-button, .rural-order-card__actions .rural-account__btn { flex: 1 1 auto; justify-content: center; }
+.rural-order-card__actions .rural-button > span:last-child { flex: 1; justify-content: center; }
+.rural-account__pager { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; }
+.rural-account__pager > :last-child { justify-self: end; }
+
+/* ---- single order ---- */
+.rural-account__status-card { border-left: 6px solid var(--rural-ink); }
+.rural-account__status-card p { margin: 0; font-size: 17px; line-height: 25px; }
+.rural-account__status-card--green { border-color: var(--rural-green); }
+.rural-account__status-card--cyan { border-color: #3B8EA5; }
+.rural-account__status-card--gold { border-color: var(--rural-gold); }
+.rural-account__status-card--clay { border-color: #B36455; }
+.rural-account__status-card--muted { border-color: #2a231a66; }
+.rural-order-updates { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.rural-order-updates time { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: #2a231a99; }
+.rural-order-updates p { margin: 4px 0 0; font-size: 16px; line-height: 24px; }
+.rural-order-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.rural-order-item { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; align-items: start; padding: 14px 0; border-top: 1px solid #2a231a1a; }
+.rural-order-item__thumb { width: 64px; height: 64px; border-radius: 8px; overflow: hidden; background: var(--rural-paper); }
+.rural-order-item__thumb img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); }
+.rural-order-item__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; font-size: 15px; line-height: 20px; }
+.rural-order-item__name { font-size: 17px; font-weight: 600; line-height: 22px; }
+.rural-order-item__name a { color: inherit; text-decoration: none; }
+.rural-order-item__name a:hover { color: var(--rural-green); }
+.rural-order-item__qty { color: #2a231a99; }
+.rural-order-item__body .wc-item-meta { list-style: none; margin: 0; padding: 0; font-size: 14px; color: #2a231a99; }
+.rural-order-item__body .wc-item-meta li { display: flex; gap: 4px; }
+.rural-order-item__body .wc-item-meta p { margin: 0; display: inline; }
+.rural-order-item__total { font-size: 17px; font-weight: 600; white-space: nowrap; }
+.rural-order-totals { display: flex; flex-direction: column; gap: 8px; margin: 4px 0 0; padding-top: 14px; border-top: 1px solid #2a231a1a; }
+.rural-order-totals__row { display: flex; justify-content: space-between; gap: 16px; font-size: 16px; line-height: 22px; }
+.rural-order-totals__row dt { color: #2a231a99; }
+.rural-order-totals__row dd { margin: 0; text-align: right; }
+.rural-order-totals__row--order_total { padding-top: 10px; margin-top: 4px; border-top: 1px solid #2a231a1a; font-size: 19px; font-weight: 700; }
+.rural-order-totals__row--order_total dt { color: var(--rural-ink); }
+.rural-order-totals__row--order_total dd { color: var(--rural-green); }
+.rural-order-note { margin: 0; font-size: 15px; line-height: 22px; }
+.rural-account__order-help { margin-top: 8px; }
+.rural-account__order-help a { color: var(--rural-green); font-weight: 600; text-decoration: none; }
+/* Woo's own customer-details block, restyled */
+.rural-account .woocommerce-customer-details { display: grid; gap: 16px; }
+.rural-account .woocommerce-customer-details .woocommerce-columns { display: grid; gap: 16px; }
+.rural-account .woocommerce-customer-details .woocommerce-column { display: flex; flex-direction: column; gap: 12px; padding: 20px; border-radius: 12px; background: white; }
+.rural-account .woocommerce-customer-details .woocommerce-column__title { margin: 0; font-family: 'Dharma Gothic E', Impact, sans-serif; font-size: 26px; line-height: 1; font-weight: 700; text-transform: uppercase; }
+.rural-account .woocommerce-customer-details address { border: 0; padding: 0; margin: 0; font-style: normal; font-size: 17px; line-height: 26px; }
+.rural-account .woocommerce-customer-details .woocommerce-customer-details--phone, .rural-account .woocommerce-customer-details .woocommerce-customer-details--email { padding-left: 0; }
+.rural-account .woocommerce-customer-details address p { margin: 6px 0 0; }
+.rural-account .woocommerce-customer-details .woocommerce-customer-details--phone::before,
+.rural-account .woocommerce-customer-details .woocommerce-customer-details--email::before { display: none; }
+
+/* ---- forms ---- */
+.rural-account__form { display: flex; flex-direction: column; gap: 16px; }
+.rural-account__form .rural-account__card { gap: 12px; }
+.rural-account__form .rural-account__card h3 { margin-bottom: 4px; }
+.rural-account__fields--2 { display: grid; gap: 0 16px; }
+.rural-account .form-row { margin: 0 0 14px; padding: 0; width: 100%; float: none; }
+.rural-account .form-row label { display: block; margin-bottom: 6px; font-size: 15px; font-weight: 500; line-height: 20px; }
+.rural-account .form-row .required { color: #B36455; text-decoration: none; }
+.rural-account .form-row .input-text, .rural-account .form-row select, .rural-account .form-row textarea, .rural-account .select2-container .select2-selection--single { display: block; width: 100%; min-height: 52px; padding: 12px 14px; border: 1px solid var(--rural-ink); border-radius: 6px; background: white; font-size: 17px; line-height: 24px; color: var(--rural-ink); }
+.rural-account .form-row .input-text:focus, .rural-account .form-row select:focus { outline: 2px solid var(--rural-green); outline-offset: 1px; border-color: var(--rural-green); }
+.rural-account .select2-container .select2-selection--single { display: flex; align-items: center; }
+.rural-account .select2-container .select2-selection--single .select2-selection__rendered { padding: 0; line-height: 24px; color: var(--rural-ink); }
+.rural-account .select2-container .select2-selection--single .select2-selection__arrow { top: 50%; right: 10px; transform: translateY(-50%); }
+.rural-account .form-row .optional { font-weight: 400; color: #2a231a99; }
+.rural-account__hint { display: block; margin-top: 6px; font-size: 14px; line-height: 20px; color: #2a231a99; }
+.rural-account__form-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.rural-login__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; font-size: 15px; }
+.rural-login__remember { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.rural-login__remember input { width: 18px; height: 18px; accent-color: var(--rural-green); }
+
+/* ---- login layout ---- */
+.rural-login { display: grid; gap: 16px; max-width: 1100px; }
+.rural-login__card { gap: 12px; padding: 24px; }
+.rural-login__card--new { background: var(--rural-gold); }
+.rural-login__card--new p { margin: 0; font-size: 17px; line-height: 25px; }
+.rural-login__benefits { margin: 4px 0 8px; padding-left: 20px; font-size: 16px; line-height: 26px; }
+.rural-login__help { margin-top: 4px; color: #2a231ab3; }
+.rural-login__help a { color: inherit; }
+
+/* ---- notices inside the account area ---- */
+.rural-account-page .woocommerce-message, .rural-account-page .woocommerce-info, .rural-account-page .woocommerce-error { margin: 0 0 16px; padding: 14px 18px; border-radius: 8px; border-left: 6px solid var(--rural-green); background: white; font-size: 16px; line-height: 24px; list-style: none; }
+.rural-account-page .woocommerce-error { border-left-color: #B36455; }
+.rural-account-page .woocommerce-info { border-left-color: var(--rural-gold); }
+.rural-account-page .woocommerce-error li { margin: 0; }
+.rural-account-page .woocommerce-message a.button, .rural-account-page .woocommerce-info a.button { margin-left: 12px; color: var(--rural-green); text-decoration: underline; }
+
+/* WooCommerce floats and percentage widths do not belong in the grid */
+.woocommerce-account .rural-account .woocommerce-MyAccount-navigation,
+.woocommerce-account .rural-account .woocommerce-MyAccount-content { float: none; width: auto; }
+
+/* ---- larger screens ---- */
+@media (min-width: 640px) {
+	.rural-account__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.rural-account__card--wide { grid-column: 1 / -1; }
+	.rural-account__card--help { flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; }
+	.rural-account__fields--2 { grid-template-columns: 1fr 1fr; }
+	.rural-order-card__actions .rural-button, .rural-order-card__actions .rural-account__btn { flex: 0 0 auto; }
+	.rural-account .woocommerce-customer-details .woocommerce-columns { grid-template-columns: 1fr 1fr; }
+	.rural-login { grid-template-columns: 1fr 1fr; align-items: start; }
+	.rural-account__card, .rural-order-card { padding: 24px; }
+	.rural-account__title { font-size: 48px; }
+}
+@media (min-width: 1024px) {
+	.rural-account { grid-template-columns: 280px minmax(0, 1fr); gap: 40px; align-items: start; }
+	.rural-account__nav { position: sticky; top: calc(var(--site-header-height, 80px) + 24px); display: flex; flex-direction: column; border-radius: 12px; background: white; overflow: hidden; }
+	.rural-account__nav-user { display: flex; align-items: center; gap: 12px; padding: 20px 20px 16px; border-bottom: 1px solid #2a231a1a; }
+	.rural-account__nav-avatar { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; border-radius: 50%; background: var(--rural-gold); font-family: 'Dharma Gothic E', Impact, sans-serif; font-size: 24px; color: var(--rural-ink); }
+	.rural-account__nav-name { display: flex; flex-direction: column; min-width: 0; font-size: 14px; line-height: 20px; color: #2a231a99; }
+	.rural-account__nav-name strong { font-size: 16px; color: var(--rural-ink); }
+	.rural-account__nav-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+	.rural-account__nav-list { flex-direction: column; gap: 0; margin: 0; padding: 8px 0; overflow: visible; }
+	.rural-account__nav-item a { display: flex; width: 100%; min-height: 48px; padding: 12px 20px; border: 0; border-radius: 0; background: transparent; font-size: 17px; }
+	.rural-account__nav-item a:hover { background: var(--rural-paper); color: var(--rural-ink); }
+	.rural-account__nav-item a[aria-current='page'] { background: var(--rural-paper); color: var(--rural-green); box-shadow: inset 4px 0 0 var(--rural-green); }
+	.rural-account__nav-item a[aria-current='page']:hover { color: var(--rural-green); }
+	.rural-account__nav-item--customer-logout { margin-top: 8px; border-top: 1px solid #2a231a1a; }
+	.rural-account__nav-item--customer-logout a { color: #2a231a99; }
+	.rural-account__content { gap: 32px; }
+	.rural-account__grid { gap: 24px; }
+}

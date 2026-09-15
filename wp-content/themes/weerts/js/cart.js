@@ -27,6 +27,22 @@
 	function initQuantityUpdates() {
 		const quantityInputs = document.querySelectorAll('.weerts-qty-input')
 
+		// +/- steppers: bump the value and let the change handler below do the update
+		document.querySelectorAll('[data-qty-stepper]').forEach((wrap) => {
+			const input = wrap.querySelector('.weerts-qty-input')
+			if (!input) return
+			const step = (delta) => {
+				const min = parseInt(input.min, 10) || 0
+				const max = parseInt(input.max, 10) || 9999
+				const next = Math.min(max, Math.max(min, (parseInt(input.value, 10) || 0) + delta))
+				if (next === parseInt(input.value, 10)) return
+				input.value = next
+				input.dispatchEvent(new Event('change', { bubbles: true }))
+			}
+			wrap.querySelector('[data-qty-minus]')?.addEventListener('click', () => step(-1))
+			wrap.querySelector('[data-qty-plus]')?.addEventListener('click', () => step(1))
+		})
+
 		quantityInputs.forEach((input) => {
 			// Store initial value to detect changes
 			input.dataset.initialValue = input.value
@@ -159,12 +175,22 @@
 					return
 				}
 
-				// Show loading state
+				// Disabling a submit button inside its own click handler cancels the submission,
+				// so post the form ourselves with the update_cart field WooCommerce looks for.
+				e.preventDefault()
 				this.disabled = true
 				this.dataset.originalText = this.textContent
 				this.textContent = 'Updating...'
-
 				showNotification('Updating cart...', 'info')
+
+				if (!cartForm.querySelector('input[name="update_cart"]')) {
+					const flag = document.createElement('input')
+					flag.type = 'hidden'
+					flag.name = 'update_cart'
+					flag.value = 'Update Cart'
+					cartForm.appendChild(flag)
+				}
+				cartForm.submit()
 			})
 		}
 	}
@@ -269,6 +295,9 @@
 		updateTimeout = setTimeout(() => {
 			const updateButton = document.querySelector('button[name="update_cart"]')
 			if (updateButton) {
+				// WooCommerce disables this button until it sees a change on `div.woocommerce > form input`,
+				// which never matches the theme's nested markup, so a click would be swallowed.
+				updateButton.disabled = false
 				updateButton.click()
 			}
 		}, 500)
