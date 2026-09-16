@@ -43,7 +43,8 @@
 
 	{% include 'partials/sections/product-carousel.twig' with {
 		title: 'New & Featured Products',
-		products_shortcode: '[products limit="12" columns="4" category="' ~ term.slug ~ '" visibility="featured" orderby="date" order="DESC"]'
+		products_shortcode: '[weerts_products limit="12" columns="4" category="' ~ term.slug ~ '" featured="true" show_badges="true" orderby="date" order="DESC"]',
+		fallback_shortcode: '[weerts_products limit="12" columns="4" featured="true" show_badges="true" orderby="date" order="DESC"]'
 	} only %}
 
 	{% if optional_seo_content %}

@@ -1,8 +1,13 @@
 {% set section_title = title|default('') %}
 {% set products_shortcode = products_shortcode|default('') %}
+{% set fallback_shortcode = fallback_shortcode|default('') %}
 {% set products_html = products_shortcode ? function('do_shortcode', products_shortcode) : '' %}
+{# e.g. a category with no featured products of its own falls back to the site-wide featured set #}
+{% if not (products_html|trim) and fallback_shortcode %}
+	{% set products_html = function('do_shortcode', fallback_shortcode) %}
+{% endif %}
 
-{# Nothing to show (e.g. no featured items on sale yet): skip the whole section rather than an empty header #}
+{# Nothing to show at all (e.g. no featured items on sale yet): skip the whole section rather than an empty header #}
 {% if products_html|trim %}
 <section class="rural-product-carousel px-6 pb-20 lg:px-[100px] lg:pb-[180px]">
 	<div class="mx-auto flex w-full max-w-[1720px] flex-col items-center gap-8 lg:gap-[60px]">

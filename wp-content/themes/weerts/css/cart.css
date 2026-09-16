@@ -160,6 +160,10 @@
 	@apply inline-flex w-12 flex-none items-center justify-center text-[22px] leading-none text-birch transition-colors hover:bg-goldenrod;
 }
 
+.weerts-qty__btn:disabled {
+	@apply cursor-not-allowed text-birch/30 hover:bg-white;
+}
+
 .weerts-qty .weerts-qty-input,
 .weerts-qty-input {
 	@apply block h-12 w-16 border-0 bg-white px-1 text-center text-t4 font-semibold text-birch focus:outline-none;

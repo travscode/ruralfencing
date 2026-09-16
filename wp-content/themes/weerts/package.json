@@ -2,12 +2,13 @@
 	"name": "rural-timber-boilerplate",
 	"private": true,
 	"scripts": {
-		"build": "cross-env NODE_ENV=production concurrently \"pnpm run build:css-app\" \"pnpm run build:css-editor\" \"pnpm run build:js\"",
+		"build": "cross-env NODE_ENV=production concurrently \"pnpm run build:css-app\" \"pnpm run build:css-editor\" \"pnpm run build:css-checkout\" \"pnpm run build:js\"",
 		"dev": "cross-env NODE_ENV=development concurrently \"pnpm run watch:css-app\" \"pnpm run watch:css-editor\" \"pnpm run watch:js\"",
 		"watch:js": "esbuild js/index.js --bundle --watch --outfile=static/site.js",
 		"build:js": "esbuild js/index.js --bundle --minify --outfile=static/site.js",
 		"build:css-app": "postcss css/main.css -o static/style.css",
 		"build:css-editor": "postcss css/editor.css -o static/editor.css",
+		"build:css-checkout": "postcss css/checkout.css -o static/checkout.css",
 		"watch:css-app": "tailwindcss -i css/main.css -o static/style.css --watch --postcss",
 		"watch:css-editor": "tailwindcss -i css/editor.css -o static/editor.css --watch --postcss"
 	},

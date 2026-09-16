@@ -88,6 +88,10 @@ class RuralBoilerplateSite extends Site
         add_action('woocommerce_before_shop_loop_item_title', [$this, 'open_product_image'], 8);
         add_action('woocommerce_before_shop_loop_item_title', [$this, 'close_product_image'], 12);
         add_filter('cfw_custom_css_properties', [$this, 'checkout_css_properties']);
+        add_action('cfw_wp_head', [$this, 'print_checkout_stylesheet'], 999);
+        add_filter('cfw_cart_thumb_width', static fn() => 270);
+        add_filter('cfw_cart_thumb_height', static fn() => 180);
+        add_filter('cfw_crop_cart_thumbs', '__return_true');
         add_filter('woocommerce_is_purchasable', [$this, 'filter_enquire_only_purchasable'], 10, 2);
 
         parent::__construct();
@@ -143,18 +147,39 @@ class RuralBoilerplateSite extends Site
     }
 
     /** Apply the brand through CheckoutWC's supported styling API, preserving its layout. */
+    /**
+     * CheckoutWC replaces the theme's templates and drops its stylesheet, so the checkout gets its
+     * own small stylesheet (fonts included). It is printed on cfw_wp_head, which fires after wp_head,
+     * so it lands after every CheckoutWC stylesheet and wins the cascade.
+     */
+    public function print_checkout_stylesheet(): void
+    {
+        $path = get_stylesheet_directory() . '/static/checkout.css';
+        if (!file_exists($path)) {
+            return;
+        }
+        printf(
+            '<link rel="stylesheet" id="weerts-checkout-css" href="%s?ver=%s" media="all">' . "\n",
+            esc_url(get_stylesheet_directory_uri() . '/static/checkout.css'),
+            esc_attr((string) filemtime($path))
+        );
+    }
+
     public function checkout_css_properties(array $properties): array
     {
         return array_merge($properties, [
-            '--cfw-body-background-color' => '#F1EDE2',
+            '--cfw-body-background-color' => '#FFFFFF',
             '--cfw-body-text-color' => '#2A231A',
             '--cfw-body-font-family' => 'Tenon, sans-serif',
             '--cfw-heading-font-family' => '"Dharma Gothic E", Impact, sans-serif',
-            '--cfw-header-background-color' => '#F1EDE2',
+            '--cfw-header-background-color' => '#FFFFFF',
             '--cfw-footer-background-color' => '#2A231A',
             '--cfw-footer-text-color' => '#FFFFFF',
-            '--cfw-cart-summary-background-color' => '#FFFFFF',
-            '--cfw-cart-summary-mobile-background-color' => '#FFFFFF',
+            '--cfw-cart-summary-background-color' => '#F1EDE2',
+            '--cfw-cart-summary-mobile-background-color' => '#F1EDE2',
+            '--cfw-horizontal-divider-color' => '#2A231A',
+            '--cfw-breadcrumb-current-accent-color' => '#DB9D16',
+            '--cfw-breadcrumb-completed-accent-color' => '#DB9D16',
             '--cfw-cart-summary-text-color' => '#2A231A',
             '--cfw-cart-summary-link-color' => '#006600',
             '--cfw-body-link-color' => '#006600',
@@ -1691,6 +1716,7 @@ class RuralBoilerplateSite extends Site
                 'limit' => 12,
                 'columns' => 4,
                 'ids' => '',
+                'category' => '',
                 'featured' => '',
                 'on_sale' => '',
                 'show_sale_flash' => 'true',
@@ -1735,6 +1761,15 @@ class RuralBoilerplateSite extends Site
         }
 
         $tax_query = [];
+        $category_slug = is_string($atts['category']) ? sanitize_title(trim($atts['category'])) : '';
+        if ($category_slug !== '') {
+            $tax_query[] = [
+                'taxonomy' => 'product_cat',
+                'field' => 'slug',
+                'terms' => [$category_slug],
+                'include_children' => true,
+            ];
+        }
         if ($featured === true && function_exists('wc_get_product_visibility_term_ids')) {
             $visibility_term_ids = wc_get_product_visibility_term_ids();
             if (!empty($visibility_term_ids['featured'])) {

@@ -239,6 +239,23 @@ if ($product instanceof WC_Product_Variable) {
 }
 $context['variation_ui'] = $variation_ui;
 
+if (!function_exists('weerts_product_qty_stepper')) {
+    /** Quantity stepper (− / input / +) used by both cart forms on the product page. */
+    function weerts_product_qty_stepper(WC_Product $product): string
+    {
+        $max = $product->get_max_purchase_quantity();
+        $max_attr = $max > 0 ? sprintf(' max="%d"', (int) $max) : '';
+        return '<div class="rural-product__qty-row">'
+            . '<span class="rural-product__qty-label" id="rural-qty-label">Quantity</span>'
+            . '<div class="weerts-qty rural-product__qty quantity" data-qty-stepper>'
+            . '<button type="button" class="weerts-qty__btn" data-qty-minus aria-label="Decrease quantity">&minus;</button>'
+            . '<input type="number" class="weerts-qty-input input-text qty text" name="quantity" value="1" min="1"' . $max_attr . ' step="1" inputmode="numeric" aria-labelledby="rural-qty-label" />'
+            . '<button type="button" class="weerts-qty__btn" data-qty-plus aria-label="Increase quantity">+</button>'
+            . '</div>'
+            . '</div>';
+    }
+}
+
 ob_start();
 if (!$enquire_only && $is_purchasable && $is_in_stock && $product instanceof WC_Product_Variable) {
     $available_variations = $product->get_available_variations();
@@ -268,19 +285,12 @@ if (!$enquire_only && $is_purchasable && $is_in_stock && $product instanceof WC_
     echo '</div>';
 
     echo '<div class="single_variation_wrap">';
-    // Woo renders its own price/availability block here; we keep it out of sight and update the
-    // theme's own price/SKU elements from the found_variation event instead.
-    echo '<div class="single_variation hidden" aria-hidden="true"></div>';
+    // Woo renders its own price/availability block into .single_variation; it is hidden by CSS and the
+    // theme's own price/SKU/availability elements are updated from the found_variation event instead.
     wc_get_template('single-product/add-to-cart/variation.php');
 
-    echo '<div class="woocommerce-variation-add-to-cart variations_button">';
-    woocommerce_quantity_input(
-        [
-            'min_value' => 1,
-            'max_value' => $product->get_max_purchase_quantity(),
-            'input_value' => 1,
-        ]
-    );
+    echo '<div class="woocommerce-variation-add-to-cart variations_button rural-product__actions">';
+    echo weerts_product_qty_stepper($product);
 
     echo '<button type="submit" class="single_add_to_cart_button !inline-flex overflow-hidden rounded-md no-underline !border-0 !bg-transparent !p-0 focus:!outline-none focus:!shadow-none" disabled="disabled">';
     echo '<span class="!flex items-center bg-goldenrod px-[26px] py-7 text-birch" aria-hidden="true">';
@@ -300,15 +310,8 @@ if (!$enquire_only && $is_purchasable && $is_in_stock && $product instanceof WC_
         '<form class="cart rural-product__cart" action="%s" method="post" enctype="multipart/form-data">',
         esc_url($product->get_permalink())
     );
-    woocommerce_quantity_input(
-        [
-            'min_value' => 1,
-            'max_value' => $product->get_max_purchase_quantity(),
-            'input_value' => 1,
-        ],
-        $product,
-        false
-    );
+    echo '<div class="rural-product__actions">';
+    echo weerts_product_qty_stepper($product);
     printf('<input type="hidden" name="add-to-cart" value="%d" />', (int) $product->get_id());
     echo '<button type="submit" class="single_add_to_cart_button !inline-flex overflow-hidden rounded-md no-underline !border-0 !bg-transparent !p-0 focus:!outline-none focus:!shadow-none">';
     echo '<span class="!flex items-center bg-goldenrod px-[26px] py-7 text-birch" aria-hidden="true">';
@@ -316,6 +319,7 @@ if (!$enquire_only && $is_purchasable && $is_in_stock && $product instanceof WC_
     echo '</span>';
     echo '<span class="!flex items-center bg-white py-8 pl-[30px] pr-[60px] font-heading text-b3 uppercase tracking-button text-birch hover:bg-goldenrod">Add to Cart</span>';
     echo '</button>';
+    echo '</div>';
     echo '</form>';
 } elseif (!$enquire_only) {
     echo '<div class="flex flex-col gap-4">';

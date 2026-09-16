@@ -542,8 +542,76 @@
 	.rural-testimonials-carousel__dot.is-active {
 		background: rgba(255, 255, 255, 1);
 	}
+}
 
-	.rural-product__cart .quantity {
-		display: none;
-	}
+/* Product page: quantity + add to cart row */
+.rural-product__cart {
+	@apply w-full lg:w-auto;
+}
+
+.rural-product__actions {
+	@apply flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-6;
+}
+
+.rural-product__qty-row {
+	@apply flex items-center justify-between gap-4 lg:justify-start;
+}
+
+.rural-product__qty-label {
+	@apply text-t7 font-bold uppercase tracking-[0.08em] text-birch lg:sr-only;
+}
+
+.rural-product__cart .weerts-qty,
+.rural-product__cart .quantity {
+	@apply mx-0 h-14 flex-none border-birch;
+	float: none;
+	margin: 0;
+}
+
+.rural-product__cart .weerts-qty__btn {
+	@apply w-14 text-[24px];
+}
+
+.rural-product__cart .weerts-qty-input,
+.rural-product__cart .quantity .qty {
+	@apply h-14 w-[72px] text-[20px];
+}
+
+.rural-product__cart .single_add_to_cart_button {
+	@apply w-full lg:w-auto;
+}
+
+.rural-product__cart .single_add_to_cart_button > span:last-child {
+	@apply flex-1 justify-center lg:flex-none lg:justify-start;
+}
+
+.rural-product__cart .single_add_to_cart_button:disabled {
+	@apply cursor-not-allowed opacity-50;
+}
+
+.rural-product__cart .single_add_to_cart_button:disabled > span:last-child {
+	@apply hover:bg-white;
+}
+
+/* Woo writes its own price/availability block here (inline display:block); the theme shows its own. */
+.rural-product__cart .single_variation {
+	display: none !important;
+}
+
+.rural-product__buy .rural-category-spotlight__pill {
+	@apply w-full justify-center py-3 lg:w-auto lg:py-[5px];
+}
+
+/* Variation price written by JS as Woo markup: keep it terracotta, sale price with muted strike-through. */
+[data-product-price] .price,
+[data-product-price] .amount {
+	@apply text-terracotta-clay;
+}
+
+[data-product-price] del {
+	@apply mr-2 font-normal opacity-60;
+}
+
+[data-product-price] ins {
+	text-decoration: none;
 }

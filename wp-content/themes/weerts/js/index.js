@@ -16,6 +16,7 @@ function initSite() {
 	initProductCarousels()
 	initTestimonialsCarousels()
 	initFadeTestimonialsCarousels()
+	initQtySteppers()
 	initProductVariationButtons()
 	initProductEnquiryModal()
 	initResponsivePlaceholders()
@@ -1386,6 +1387,40 @@ function initResponsivePlaceholders() {
 	media.addEventListener('change', apply)
 }
 
+/** +/- quantity steppers (product page, cart). Bumps the input and fires change so listeners react. */
+function initQtySteppers() {
+	document.querySelectorAll('[data-qty-stepper]').forEach((wrap) => {
+		const input = wrap.querySelector('.weerts-qty-input')
+		if (!(input instanceof HTMLInputElement)) return
+		const minus = wrap.querySelector('[data-qty-minus]')
+		const plus = wrap.querySelector('[data-qty-plus]')
+		const bounds = () => ({
+			min: parseInt(input.min, 10) || 0,
+			max: input.max !== '' && parseInt(input.max, 10) > 0 ? parseInt(input.max, 10) : Infinity,
+		})
+		const sync = () => {
+			const { min, max } = bounds()
+			const value = parseInt(input.value, 10) || min
+			if (minus instanceof HTMLButtonElement) minus.disabled = value <= min
+			if (plus instanceof HTMLButtonElement) plus.disabled = value >= max
+		}
+		const step = (delta) => {
+			const { min, max } = bounds()
+			const next = Math.min(max, Math.max(min, (parseInt(input.value, 10) || 0) + delta))
+			if (next === parseInt(input.value, 10)) return
+			input.value = String(next)
+			input.dispatchEvent(new Event('change', { bubbles: true }))
+		}
+		minus?.addEventListener('click', () => step(-1))
+		plus?.addEventListener('click', () => step(1))
+		input.addEventListener('change', sync)
+		input.addEventListener('input', sync)
+		// min/max attributes change when a variation is picked (Woo) – re-evaluate the buttons.
+		new MutationObserver(sync).observe(input, { attributes: true, attributeFilter: ['min', 'max'] })
+		sync()
+	})
+}
+
 function initProductVariationButtons() {
 	const containers = document.querySelectorAll('[data-variation-attribute]')
 	if (!containers.length) return
@@ -1400,6 +1435,19 @@ function initProductVariationButtons() {
 	const stockEl = document.querySelector('[data-variation-stock]')
 	const defaultPriceHtml = priceEl ? priceEl.innerHTML : ''
 	const defaultSku = skuEl ? skuEl.textContent : ''
+	const priceClass = 'text-[28px] font-bold leading-[30px] text-terracotta-clay'
+	const textOf = (html) => {
+		const tmp = document.createElement('div')
+		tmp.innerHTML = html || ''
+		return (tmp.textContent || '').trim()
+	}
+	const setStock = (message, tone) => {
+		if (!stockEl) return
+		stockEl.textContent = message
+		stockEl.classList.toggle('hidden', !message)
+		stockEl.classList.toggle('text-terracotta-clay', tone === 'warn')
+		stockEl.classList.toggle('text-deep-green', tone === 'ok')
+	}
 
 	const activeClasses = ['bg-deep-green', 'text-white', 'border-deep-green']
 	const idleClasses = ['border-birch', 'text-birch', 'hover:text-deep-green']
@@ -1446,21 +1494,23 @@ function initProductVariationButtons() {
 		const $form = $(form)
 		$form.on('found_variation', (event, variation) => {
 			if (!variation) return
-			if (priceEl && variation.price_html) priceEl.innerHTML = variation.price_html
-			if (skuEl) skuEl.textContent = variation.sku || defaultSku
-			if (stockEl) {
-				const unavailable = !variation.is_in_stock || !variation.is_purchasable
-				stockEl.textContent = unavailable
-					? 'This option is currently out of stock. Choose another option or contact us.'
-					: ''
-				stockEl.classList.toggle('hidden', !unavailable)
+			if (priceEl && variation.price_html) {
+				priceEl.innerHTML = `<p class="${priceClass}">${variation.price_html}</p>`
 			}
-			if (submitButton) submitButton.disabled = !variation.is_in_stock || !variation.is_purchasable
+			if (skuEl) skuEl.textContent = variation.sku || defaultSku
+			const unavailable = !variation.is_in_stock || !variation.is_purchasable
+			if (unavailable) {
+				setStock('This option is currently out of stock. Choose another option or contact us.', 'warn')
+			} else {
+				const availability = textOf(variation.availability_html)
+				setStock(availability || 'In stock', 'ok')
+			}
+			if (submitButton) submitButton.disabled = unavailable
 		})
 		$form.on('reset_data', () => {
 			if (priceEl) priceEl.innerHTML = defaultPriceHtml
 			if (skuEl) skuEl.textContent = defaultSku
-			if (stockEl) stockEl.classList.add('hidden')
+			setStock('', 'ok')
 			if (submitButton) submitButton.disabled = true
 		})
 		// Woo initialises on DOM ready; if it already ran before we attached, re-evaluate now.

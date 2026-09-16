@@ -6,7 +6,7 @@
 			<div class="rural-cta__track" data-cta-track tabindex="0" aria-label="Photo carousel; use arrow keys to browse">
 				{% for image in slides %}<img src="{{ image }}" width="575" height="736" alt="{{ loop.first ? 'Rural Fencing and Irrigation Supplies' : 'Our store and workshop, photo ' ~ loop.index }}"{% if loop.first %} class="is-active"{% endif %} decoding="async" />{% endfor %}
 			</div>
-			<div class="rural-cta__controls hidden"><button type="button" data-cta-prev aria-label="Previous photo">Previous</button><span aria-live="polite" data-cta-status>1 / {{ slides|length }}</span><button type="button" data-cta-next aria-label="Next photo">Next</button></div>
+			<div class="rural-cta__controls hidden!"><button type="button" data-cta-prev aria-label="Previous photo">Previous</button><span aria-live="polite" data-cta-status>1 / {{ slides|length }}</span><button type="button" data-cta-next aria-label="Next photo">Next</button></div>
 		</div>
 		<div class="rural-cta__content">
 			<div class="rural-cta__heading"><span class="rural-stripes" aria-hidden="true"><i></i><i></i><i></i></span><h2 class="font-heading text-d2-sm uppercase lg:text-d2">{{ title }}</h2></div>

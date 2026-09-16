@@ -27,21 +27,7 @@
 	function initQuantityUpdates() {
 		const quantityInputs = document.querySelectorAll('.weerts-qty-input')
 
-		// +/- steppers: bump the value and let the change handler below do the update
-		document.querySelectorAll('[data-qty-stepper]').forEach((wrap) => {
-			const input = wrap.querySelector('.weerts-qty-input')
-			if (!input) return
-			const step = (delta) => {
-				const min = parseInt(input.min, 10) || 0
-				const max = parseInt(input.max, 10) || 9999
-				const next = Math.min(max, Math.max(min, (parseInt(input.value, 10) || 0) + delta))
-				if (next === parseInt(input.value, 10)) return
-				input.value = next
-				input.dispatchEvent(new Event('change', { bubbles: true }))
-			}
-			wrap.querySelector('[data-qty-minus]')?.addEventListener('click', () => step(-1))
-			wrap.querySelector('[data-qty-plus]')?.addEventListener('click', () => step(1))
-		})
+		// +/- stepper buttons are wired in js/index.js (initQtySteppers); the change handler below does the update.
 
 		quantityInputs.forEach((input) => {
 			// Store initial value to detect changes

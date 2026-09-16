@@ -36,7 +36,8 @@
 
 					{% if variation_ui %}
 						<div class="flex flex-col gap-6">
-							<p class="text-t4 font-bold leading-[30px] text-birch">Select a {{ variation_ui.label|lower }}:</p>
+							{% set vlabel = variation_ui.label|lower %}
+							<p class="text-t4 font-bold leading-[30px] text-birch">Select {{ vlabel|first in ['a', 'e', 'i', 'o', 'u'] ? 'an' : 'a' }} {{ vlabel }}:</p>
 
 							<div class="flex flex-wrap gap-3" data-variation-attribute="{{ variation_ui.name }}" role="group" aria-label="{{ variation_ui.label }}">
 								{% for opt in variation_ui.buttons %}
@@ -51,11 +52,11 @@
 									</button>
 								{% endfor %}
 							</div>
-							<p class="hidden text-t7 leading-[23px] text-terracotta-clay" data-variation-stock></p>
+							<p class="hidden text-t7 font-medium leading-[23px]" data-variation-stock aria-live="polite"></p>
 						</div>
 					{% endif %}
 
-					<div class="flex flex-col gap-5 pt-5 lg:flex-row lg:items-center lg:gap-9">
+					<div class="rural-product__buy flex flex-col gap-4 pt-5 lg:flex-row lg:flex-wrap lg:items-center lg:gap-x-6 lg:gap-y-4">
 						{% if enquire_only %}
 							<button
 								class="rural-button"

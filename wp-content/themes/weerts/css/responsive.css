@@ -287,7 +287,7 @@ body.mobile-menu-open {
 }
 .site-nav__products {
 	position: relative;
-	transition: background .15s;
+	transition: background 0.15s;
 }
 /* Hover fill runs to the left edge of the viewport: a strip painted off the button's left side. Off-screen to the left never causes horizontal scroll. */
 .site-nav__products::before {
@@ -556,7 +556,7 @@ li.product:focus-within .product-hover,
 	}
 }
 .rural-cta__controls {
-	display: flex;
+	display: none !important;
 	justify-content: space-between;
 	align-items: center;
 	color: white;

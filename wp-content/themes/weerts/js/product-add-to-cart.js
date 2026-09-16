@@ -58,10 +58,12 @@
 		setButtonState(button, textSpan, 'adding', originalText)
 		button.disabled = true
 
-		// Prepare AJAX data for WooCommerce's add_to_cart endpoint
+		// Prepare AJAX data for WooCommerce's add_to_cart endpoint.
+		// Woo's wc-ajax=add_to_cart resolves the variation from product_id, so send the variation's own id.
+		const variationId = Number(formData.get('variation_id') || 0)
 		const ajaxData = new URLSearchParams()
-		ajaxData.append('product_id', productId)
-		ajaxData.append('variation_id', formData.get('variation_id') || 0)
+		ajaxData.append('product_id', variationId > 0 ? variationId : productId)
+		ajaxData.append('variation_id', variationId)
 		ajaxData.append('quantity', formData.get('quantity') || 1)
 		ajaxData.append('security', cartData.addToCartNonce || '')
 
