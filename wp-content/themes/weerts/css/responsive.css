@@ -300,10 +300,27 @@ body.mobile-menu-open {
 	pointer-events: none;
 	transition: background 0.15s;
 }
+/* Fill the gap on the button's right so the hover panel ends flush against the
+   divider line before the desktop nav links. Width matches .site-nav__desktop's
+   margin-left; the divider is hidden below 1280px, so the strip is too. */
+@media (min-width: 1280px) {
+	.site-nav__products::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 100%;
+		width: 30px;
+		pointer-events: none;
+		transition: background 0.15s;
+	}
+}
 .site-nav__products:hover,
 .site-nav__products[aria-expanded='true'],
 .site-nav__products:hover::before,
-.site-nav__products[aria-expanded='true']::before {
+.site-nav__products[aria-expanded='true']::before,
+.site-nav__products:hover::after,
+.site-nav__products[aria-expanded='true']::after {
 	background: #2a231a66;
 }
 .site-nav .header-search {
