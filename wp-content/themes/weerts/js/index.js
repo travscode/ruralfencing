@@ -9,6 +9,7 @@ function initSite() {
 	initCtaCarousels()
 	initArticleSharing()
 	initHeaderHeightVar()
+	initScrollUpHeader()
 	initGoogleMapsSections()
 	initProductsMegaMenu()
 	initAdvancedSearchDrawer()
@@ -90,6 +91,39 @@ function initHeaderHeightVar() {
 
 	set()
 	window.addEventListener('resize', set)
+}
+
+/** Keeps the mobile logo and menu within reach when scrolling back up. */
+function initScrollUpHeader() {
+	const header = document.querySelector('.site-header')
+	if (!header) return
+	const mobile = window.matchMedia('(max-width: 1279px)')
+	let previousY = Math.max(0, window.scrollY)
+	let queued = false
+	const reveal = (visible) => {
+		header.classList.toggle('is-revealed', visible)
+		document.documentElement.style.setProperty(
+			'--mobile-header-offset', visible ? `${header.offsetHeight}px` : '0px'
+		)
+	}
+	const update = () => {
+		const y = Math.max(0, window.scrollY)
+		if (!mobile.matches) reveal(false)
+		else if (document.body.classList.contains('mobile-menu-open')) reveal(true)
+		else if (y !== previousY) reveal(y < previousY)
+		previousY = y
+		queued = false
+	}
+	window.addEventListener('scroll', () => {
+		if (!queued) {
+			queued = true
+			window.requestAnimationFrame(update)
+		}
+	}, { passive: true })
+	window.addEventListener('resize', () => {
+		reveal(mobile.matches && header.classList.contains('is-revealed'))
+		previousY = Math.max(0, window.scrollY)
+	})
 }
 
 /**

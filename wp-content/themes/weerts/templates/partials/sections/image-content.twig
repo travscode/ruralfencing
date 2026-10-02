@@ -13,10 +13,10 @@
 {% set cta2_icon = cta2_icon|default('arrow-right') %}
 {% set layout_class = reverse ? 'lg:flex-row-reverse' : 'lg:flex-row' %}
 
-<section class="rural-text-image bg-eggshell px-6 pb-[60px] lg:px-[100px]">
+<section class="rural-text-image {{ is_service_intro|default(false) ? 'rural-services-intro' : '' }} bg-eggshell px-6 pb-[60px] lg:px-[100px]">
 	<div class="mx-auto flex w-full max-w-[1720px] flex-col gap-10 py-8 lg:gap-[80px] lg:py-10 {{ layout_class }}">
 		<div class="flex w-full gap-10 lg:w-auto">
-			<div class="w-10 pt-[19px]">
+			<div class="rural-text-image__marker w-10 pt-[19px]">
 				{% include 'icons/horiz-line.twig' with { class: 'h-1 w-10 text-deep-green' } %}
 			</div>
 

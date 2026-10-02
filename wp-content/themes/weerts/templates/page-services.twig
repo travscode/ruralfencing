@@ -56,7 +56,7 @@
 	} only %}
 
 	{% for section in service_sections %}
-		{% include 'partials/sections/image-content.twig' with section only %}
+		{% include 'partials/sections/image-content.twig' with section|merge({ is_service_intro: loop.first }) only %}
 	{% endfor %}
 
 	

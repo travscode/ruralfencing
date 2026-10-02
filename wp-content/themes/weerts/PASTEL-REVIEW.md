@@ -1,3 +1,29 @@
+# Final nine comments — 23 September 2026
+
+Branch: `codex/pastel-final-nine`, based on latest main `5b54979`.
+
+Implemented the nine remaining active comments from Dale and marked them resolved in Pastel. Changes are local, uncommitted and not deployed; staging verification remains after deployment. No replies were posted.
+
+| Comment | Change |
+| --- | --- |
+| 19 | Figma sidebar spacing, 375px width on large screens, reusable chevrons, hover/focus and current-category/ancestor states. |
+| 35 | Services introduction has 120px desktop top spacing; green marker aligns with the first heading line. |
+| 36 | Removed shared “Where to next?” eyebrow from all instances. |
+| 37 | Mobile FAQ uses 18px/24px text and 20px vertical row padding. |
+| 38 | Mobile CTA has 48px top padding and no gap below the carousel. |
+| 39 | Removed accumulated mobile category spacing; first card begins at y=590 in the 375×974 preview. |
+| 40 | Mobile breadcrumbs use 20px above/24px below, with no additional product-section top padding. |
+| 41 | Logo/hamburger return on upward scroll; sticky product navigation moves below the revealed header. |
+| 42 | Mobile article title sits beside a smaller, top-aligned stripe icon. |
+
+Validation: full production build passed; final CSS rebuild passed; `git diff --check` passed; Twig templates compiled with Twig.js and changed PHP parsed with php-parser. Browser preview used public staging HTML with local CSS/JS, template-equivalent markup changes and the actual rendered sidebar Twig. This is layout verification, not a local WordPress/database runtime test. Checked relevant layouts at 375px and 1440px, all five affected page types for horizontal overflow at 320px and 768px, scroll-down/up header positions and the hamburger menu after reveal. Measured the services marker at the heading's first-line centre, sidebar active colours and spacing, FAQ styles and zero CTA image bottom gap.
+
+Compiled static assets are ignored by Git and rebuilt by the existing deployment workflow.
+
+---
+
+## Historical review — 11 September 2026
+
 # Dale feedback and responsive review
 
 Branch: `codex/article-pastel-feedback` · 11 September 2026

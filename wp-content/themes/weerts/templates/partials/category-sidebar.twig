@@ -1,6 +1,6 @@
 <aside class="category-sidebar pt-6 lg:pt-[45px]">
 	<details data-responsive-details open>
 		<summary>Product Categories</summary>
-		{% include 'partials/category-tree.twig' with { items: product_cat_tree } only %}
+		{% include 'partials/category-tree.twig' with { items: product_cat_tree, current_id: term.term_id|default(0), ancestor_ids: category_ancestor_ids|default([]) } only %}
 	</details>
 </aside>

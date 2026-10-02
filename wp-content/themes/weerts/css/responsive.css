@@ -487,6 +487,7 @@ li.product:focus-within .product-hover,
 	background: #3b8ea5;
 	color: white;
 }
+/* Category navigation follows the Figma row spacing and selected state. */
 .category-sidebar {
 	width: 280px;
 	flex-shrink: 0;
@@ -496,29 +497,51 @@ li.product:focus-within .product-hover,
 	border-radius: 12px;
 	overflow: hidden;
 }
+.category-sidebar > details[open] {
+	padding: 12px 0 30px;
+}
 .category-sidebar > details > summary {
 	padding: 20px 24px;
+	font-size: 19px;
+	line-height: 26px;
 	font-weight: 700;
 	cursor: pointer;
 }
 .category-tree a,
 .category-tree summary {
-	display: block;
-	padding: 12px 24px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 15px 24px;
 	font-size: 17px;
+	font-weight: 500;
 	line-height: 24px;
 	cursor: pointer;
+	list-style: none;
 }
-.category-tree summary {
-	display: list-item;
-	list-style-position: inside;
+.category-tree summary::-webkit-details-marker { display: none; }
+.category-tree__arrow {
+	width: 10px;
+	height: 5px;
+	flex-shrink: 0;
+	transform: rotate(-90deg);
 }
-.category-tree .category-tree {
-	padding-left: 16px;
-}
+.category-tree details[open] > summary .category-tree__arrow { transform: none; }
+.category-tree .category-tree { padding-left: 16px; }
 .category-tree a:hover,
-.category-tree summary:hover {
+.category-tree summary:hover,
+.category-tree a:focus-visible,
+.category-tree summary:focus-visible {
 	background: var(--rural-gold);
+}
+.category-tree [aria-current="page"],
+.category-tree .is-active {
+	background: white;
+	color: #006600;
+}
+@media (min-width: 1440px) {
+	.category-sidebar { width: 375px; }
 }
 .enquiry-dialog {
 	max-height: calc(100dvh - 48px);
@@ -1079,7 +1102,7 @@ li.product:focus-within .product-hover,
 		font-size: 17px;
 		line-height: 25px;
 	}
-	main > section:not(.home-hero):not(.location-block):not(.rural-cta) {
+	main > section:not(.home-hero):not(.location-block):not(.rural-cta):not(.catalogue-section):not(.product-breadcrumbs):not(.product-details) {
 		padding-top: 48px;
 		padding-bottom: 48px;
 	}
@@ -1176,11 +1199,16 @@ li.product:focus-within .product-hover,
 	.rural-faq > div > div:first-child {
 		gap: 16px;
 	}
-	.rural-faq summary {
+	.rural-faq .wp-block-details {
 		padding-block: 20px;
 	}
+	.rural-faq .wp-block-details summary {
+		padding-block: 0;
+		font-size: 18px;
+		line-height: 24px;
+	}
 	.rural-cta__inner {
-		padding: 28px 24px 16px;
+		padding: 48px 24px 0;
 	}
 	.rural-cta__content {
 		gap: 24px;
@@ -1307,4 +1335,43 @@ li.product:focus-within .product-hover,
 		transition-duration: 0.01ms !important;
 		animation-duration: 0.01ms !important;
 	}
+}
+
+/* Final designer review: section rhythm and mobile navigation. */
+.rural-text-image .rural-text-image__marker {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	height: 42px;
+	margin-top: 8px;
+	padding-top: 0;
+}
+@media (min-width: 1024px) {
+	.rural-services-intro > div { padding-top: 120px; }
+	.rural-text-image .rural-text-image__marker { height: 58px; }
+}
+@media (max-width: 1279px) {
+	.site-header {
+		position: sticky;
+		top: calc(-1 * var(--mobile-header-height, 84px));
+	}
+	.site-header.is-revealed,
+	body.mobile-menu-open .site-header { top: 0; }
+	[data-sticky-nav] { top: var(--mobile-header-offset, 0px); }
+	.products-mega-menu {
+		top: calc(var(--site-header-height, 0px) + var(--mobile-header-offset, 0px));
+	}
+}
+@media (max-width: 767px) {
+	.catalogue-section { padding-top: 24px; padding-bottom: 48px; }
+	.catalogue-layout { gap: 20px; }
+	.catalogue-section .category-sidebar,
+	.catalogue-results { padding-top: 0; }
+	.category-sidebar > details > summary { padding: 16px 20px; }
+	.product-breadcrumbs { padding-top: 20px; padding-bottom: 24px; }
+	.product-details { padding-top: 0; padding-bottom: 48px; }
+	.blog-article-hero__heading { flex-direction: row; align-items: flex-start; gap: 20px; }
+	.blog-article-hero__heading > div { flex-shrink: 0; gap: 5px; }
+	.blog-article-hero__heading > div > span { height: 42px; width: 3px; }
+	.blog-article-hero__heading h1 { min-width: 0; }
 }

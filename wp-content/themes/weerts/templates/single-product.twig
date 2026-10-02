@@ -3,7 +3,7 @@
 {% block content %}
 	{% set theme_uri = function('get_stylesheet_directory_uri') %}
 
-	<section class="bg-eggshell px-6 pb-10 pt-5 lg:px-[100px]">
+	<section class="product-breadcrumbs bg-eggshell px-6 pb-10 pt-5 lg:px-[100px]">
 		<nav class="mx-auto w-full max-w-[1720px] text-t7 leading-[23px] text-birch">
 			{% for item in breadcrumb_items %}
 				{% if loop.first %}

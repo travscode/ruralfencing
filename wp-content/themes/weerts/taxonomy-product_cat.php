@@ -28,6 +28,7 @@ $breadcrumb_items = [
 
 $ancestor_ids = get_ancestors((int) $term->term_id, 'product_cat');
 $ancestor_ids = array_reverse(array_map('intval', is_array($ancestor_ids) ? $ancestor_ids : []));
+$context['category_ancestor_ids'] = $ancestor_ids;
 foreach ($ancestor_ids as $ancestor_id) {
     $ancestor = get_term($ancestor_id, 'product_cat');
     if (!$ancestor instanceof WP_Term) {

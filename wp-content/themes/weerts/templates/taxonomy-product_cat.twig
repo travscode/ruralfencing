@@ -11,10 +11,10 @@
 
 	<section class="catalogue-section bg-eggshell px-6 pb-[90px] lg:px-[100px]">
 		<div class="mx-auto w-full max-w-[1720px]">
-			<div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-10">
+			<div class="catalogue-layout flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-10">
 				{% include 'partials/category-sidebar.twig' %}
 
-				<div class="min-w-0 flex-1 pt-[45px]">
+				<div class="catalogue-results min-w-0 flex-1 pt-[45px]">
 					{% if category_cards and category_cards|length %}
 						<p class="text-t7 leading-[23px] text-birch">Showing {{ category_cards|length }} of {{ category_cards|length }} categories</p>
 						<div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">

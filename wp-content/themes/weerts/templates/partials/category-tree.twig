@@ -1,5 +1,21 @@
 <ul class="category-tree">
 {% for item in items %}
-	<li>{% if item.children %}<details><summary>{{ item.name }}</summary><a href="{{ item.link }}">View all {{ item.name }}</a>{% include 'partials/category-tree.twig' with { items: item.children } only %}</details>{% else %}<a href="{{ item.link }}">{{ item.name }}</a>{% endif %}</li>
+	{% set is_current = item.id == current_id %}
+	{% set is_ancestor = item.id in ancestor_ids %}
+	<li>
+		{% if item.children %}
+			<details{% if is_current or is_ancestor %} open{% endif %}>
+				<summary{% if is_current or is_ancestor %} class="is-active"{% endif %}>
+					<span>{{ item.name }}</span>{% include 'icons/chevron-down.twig' with { class: 'category-tree__arrow' } only %}
+				</summary>
+				<a href="{{ item.link }}"{% if is_current %} aria-current="page"{% endif %}>View all {{ item.name }}</a>
+				{% include 'partials/category-tree.twig' with { items: item.children, current_id: current_id, ancestor_ids: ancestor_ids } only %}
+			</details>
+		{% else %}
+			<a href="{{ item.link }}"{% if is_current %} aria-current="page"{% endif %}>
+				<span>{{ item.name }}</span>{% include 'icons/chevron-down.twig' with { class: 'category-tree__arrow' } only %}
+			</a>
+		{% endif %}
+	</li>
 {% endfor %}
 </ul>
