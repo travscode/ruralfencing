@@ -5,6 +5,8 @@
 @import './cart.css';
 @import './responsive.css';
 @import './account.css';
+@import 'lenis/dist/lenis.css';
+@import './homepage-motion.css';
 
 @layer base {
 	html {

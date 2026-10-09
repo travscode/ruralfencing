@@ -3,5 +3,6 @@ wp-content
 node_modules
 uploads
 static/site.js
+static/homepage-motion.js
 static/editor.css
 static/style.css

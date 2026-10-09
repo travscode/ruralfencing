@@ -997,6 +997,18 @@ class RuralBoilerplateSite extends Site
             ]);
         }
 
+        // Keep the motion libraries exclusive to the homepage.
+        $motion_path = $theme_path . '/static/homepage-motion.js';
+        if (is_front_page() && file_exists($motion_path)) {
+            wp_enqueue_script(
+                'rural-homepage-motion',
+                $theme_uri . '/static/homepage-motion.js',
+                ['rural-boilerplate-theme'],
+                (string) filemtime($motion_path),
+                true
+            );
+        }
+
         // Enqueue product add to cart script on product pages
         if (function_exists('is_product') && is_product()) {
             // Woo only loads its variation resolver when its own template renders the form; ours does not.
