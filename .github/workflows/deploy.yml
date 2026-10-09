@@ -44,6 +44,12 @@ jobs:
         working-directory: wp-content/themes/weerts
         run: pnpm build
 
+      - name: Check SEO PHP syntax
+        run: |
+          php -l wp-content/mu-plugins/rural-seo.php
+          php -l wp-content/mu-plugins/rural-seo/cli.php
+          php -l wp-content/themes/weerts/single-product.php
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -90,6 +96,26 @@ jobs:
             --exclude .github \
             wp-content/plugins/ \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$PLUGINS_PATH/"
+
+      - name: Deploy site SEO integration
+        run: |
+          THEME_PATH="${{ secrets.SSH_PATH }}"
+          THEMES_DIR="$(dirname "${THEME_PATH%/}")"
+          WP_CONTENT_DIR="$(dirname "$THEMES_DIR")"
+          WP_ROOT="$(dirname "$WP_CONTENT_DIR")"
+          ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_ed25519 \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "mkdir -p '$WP_CONTENT_DIR/mu-plugins' '$WP_ROOT/scripts/seo'"
+          rsync -az \
+            -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
+            wp-content/mu-plugins/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$WP_CONTENT_DIR/mu-plugins/"
+          rsync -az \
+            -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
+            scripts/seo/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$WP_ROOT/scripts/seo/"
+          # Yoast installation and metadata migration are one-time setup steps.
+          # See scripts/seo/README.md; do not repeat or overwrite SEO-team edits on deployment.
 
       - name: Deploy uploads (if exists and configured)
         run: |

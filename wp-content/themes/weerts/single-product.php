@@ -25,6 +25,12 @@ if (!$product instanceof WC_Product) {
 $context['product'] = $product;
 $context['title'] = (string) $product->get_name();
 
+// The Timber template does not run woocommerce_single_product_summary, where
+// WooCommerce normally collects product schema for its wp_footer output.
+if (WC()->structured_data) {
+    WC()->structured_data->generate_product_data($product);
+}
+
 $breadcrumb_items = [
     [
         'title' => (string) __('Home', 'rural-boilerplate'),

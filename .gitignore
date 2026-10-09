@@ -57,3 +57,9 @@ wp-content/plugins/plugins.zip
 !scripts/catalogue/**
 !scripts/dev/
 !scripts/dev/**
+
+# SEO integration and reviewed migration data.
+!wp-content/mu-plugins/
+!wp-content/mu-plugins/**
+!scripts/seo/
+!scripts/seo/**

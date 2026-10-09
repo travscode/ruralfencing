@@ -1,0 +1,6 @@
+{
+  "steps": [
+    { "step": "activatePlugin", "pluginPath": "woocommerce/woocommerce.php" },
+    { "step": "activatePlugin", "pluginPath": "wordpress-seo/wp-seo.php" }
+  ]
+}

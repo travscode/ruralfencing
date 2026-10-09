@@ -1,0 +1,147 @@
+[
+  {
+    "type": "product_cat",
+    "slug": "aluminium-boundary-fencing",
+    "source": "https://www.ruralfencingsupplies.com.au/fencing--panels-gates/aluminium-boundary-fencing"
+  },
+  {
+    "type": "product_cat",
+    "slug": "aluminium-picket-fencing",
+    "source": "https://www.ruralfencingsupplies.com.au/fencing--panels-gates/aluminium-picket-fencing"
+  },
+  {
+    "type": "product_cat",
+    "slug": "aluminium-pool-fencing",
+    "source": "https://www.ruralfencingsupplies.com.au/fencing--panels-gates/aluminium-pool-fencing"
+  },
+  {
+    "type": "product_cat",
+    "slug": "automatic-gates",
+    "source": "https://www.ruralfencingsupplies.com.au/automatic-gates"
+  },
+  {
+    "type": "product_cat",
+    "slug": "boundary-gates",
+    "source": "https://www.ruralfencingsupplies.com.au/fencing--panels-gates/aluminium-boundary-fencing/boundary-fencing-gates"
+  },
+  {
+    "type": "product_cat",
+    "slug": "boundary-panels",
+    "source": "https://www.ruralfencingsupplies.com.au/fencing--panels-gates/aluminium-boundary-fencing/boundary-fencing-panels"
+  },
+  {
+    "type": "product_cat",
+    "slug": "cattle-rail",
+    "source": "https://www.ruralfencingsupplies.com.au/cattle-rail"
+  },
+  {
+    "type": "product_cat",
+    "slug": "clearance",
+    "source": "https://www.ruralfencingsupplies.com.au/clearance"
+  },
+  {
+    "type": "product_cat",
+    "slug": "electric-fencing",
+    "source": "https://www.ruralfencingsupplies.com.au/electric-fencing"
+  },
+  {
+    "type": "product_cat",
+    "slug": "fencing-panels-gates",
+    "source": "https://www.ruralfencingsupplies.com.au/fencing--panels-gates"
+  },
+  {
+    "type": "product_cat",
+    "slug": "fencing-rural",
+    "source": "https://www.ruralfencingsupplies.com.au/fencing--rural"
+  },
+  {
+    "type": "product_cat",
+    "slug": "fencing-security",
+    "source": "https://www.ruralfencingsupplies.com.au/fencing--security"
+  },
+  {
+    "type": "product_cat",
+    "slug": "gabion-cages",
+    "source": "https://www.ruralfencingsupplies.com.au/gabion-cages"
+  },
+  {
+    "type": "product_cat",
+    "slug": "garrison-fencing",
+    "source": "https://www.ruralfencingsupplies.com.au/fencing--panels-gates/garrison-fencing"
+  },
+  {
+    "type": "product_cat",
+    "slug": "gates",
+    "source": "https://www.ruralfencingsupplies.com.au/gates"
+  },
+  {
+    "type": "product_cat",
+    "slug": "hardware-garden",
+    "source": "https://www.ruralfencingsupplies.com.au/hardware-garden"
+  },
+  {
+    "type": "product_cat",
+    "slug": "irrigation",
+    "source": "https://www.ruralfencingsupplies.com.au/irrigation"
+  },
+  {
+    "type": "product_cat",
+    "slug": "pet-enclosures",
+    "source": "https://www.ruralfencingsupplies.com.au/pet-enclosures"
+  },
+  {
+    "type": "product_cat",
+    "slug": "pumps",
+    "source": "https://www.ruralfencingsupplies.com.au/pumps"
+  },
+  {
+    "type": "product_cat",
+    "slug": "shade-cloth-fruit-tree-netting",
+    "source": "https://www.ruralfencingsupplies.com.au/shade-cloth-fruit-tree-netting"
+  },
+  {
+    "type": "product_cat",
+    "slug": "steel-y-posts",
+    "source": "https://www.ruralfencingsupplies.com.au/steel-y-posts"
+  },
+  {
+    "type": "product_cat",
+    "slug": "treated-pine-poles",
+    "source": "https://www.ruralfencingsupplies.com.au/treated-pine-poles"
+  },
+  {
+    "type": "product_cat",
+    "slug": "water-tanks",
+    "source": "https://www.ruralfencingsupplies.com.au/water-tanks"
+  },
+  {
+    "type": "product_cat",
+    "slug": "welded-mesh",
+    "source": "https://www.ruralfencingsupplies.com.au/welded-mesh"
+  },
+  {
+    "type": "product_cat",
+    "slug": "wire-netting",
+    "source": "https://www.ruralfencingsupplies.com.au/wire-netting"
+  },
+  {
+    "type": "front_page",
+    "slug": "home",
+    "source": "https://www.ruralfencingsupplies.com.au/"
+  },
+  {
+    "type": "page",
+    "slug": "about",
+    "source": "https://www.ruralfencingsupplies.com.au/about-us"
+  },
+  {
+    "type": "page",
+    "slug": "contact",
+    "source": "https://www.ruralfencingsupplies.com.au/index.php?main_page=contact_us"
+  },
+  {
+    "type": "page",
+    "slug": "privacy",
+    "source": "https://www.ruralfencingsupplies.com.au/index.php?main_page=privacy"
+  }
+]
