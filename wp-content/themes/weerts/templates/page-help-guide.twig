@@ -1,0 +1,21 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+    {% include 'partials/sections/internal-banner.twig' with {
+        title: post.title, background_url: guide_image_url
+    } only %}
+
+    <article class="px-6 py-16 lg:px-[100px] lg:py-20">
+        <div class="mx-auto w-full max-w-[1000px]">
+            <nav aria-label="Breadcrumb" class="mb-10">
+                <a class="underline underline-offset-4" href="{{ function('home_url', '/help/') }}">Helpful Info</a>
+                <span aria-hidden="true"> / </span><span aria-current="page">{{ post.title }}</span>
+            </nav>
+            <div class="article-content rich-text [&>p:first-of-type]:text-[30px] [&>p:first-of-type]:leading-[36px] [&_h2]:font-heading [&_h2]:text-d2 [&_h2]:uppercase [&_h2]:leading-[58px] [&_ul]:list-disc [&_ul]:space-y-3 [&_ul]:pl-6">{{ post.content }}</div>
+            <div class="mt-12 flex flex-wrap gap-6">
+                <a class="rural-category-spotlight__pill" href="{{ function('home_url', '/contact/') }}">Ask our team</a>
+                <a class="rural-category-spotlight__pill" href="{{ function('home_url', '/help/') }}">Explore all guides</a>
+            </div>
+        </div>
+    </article>
+{% endblock %}

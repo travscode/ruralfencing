@@ -75,6 +75,11 @@
 	box-shadow: 0 12px 30px #2a231a26;
 	border-radius: 6px;
 }
+.site-nav__desktop .nav-dropdown__items {
+	max-height: min(560px, calc(100dvh - 220px));
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
 .nav-dropdown__items a {
 	display: block;
 	padding: 12px 0;

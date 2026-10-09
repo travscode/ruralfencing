@@ -63,3 +63,7 @@ wp-content/plugins/plugins.zip
 !wp-content/mu-plugins/**
 !scripts/seo/
 !scripts/seo/**
+
+# Legacy information-page migration and its source inventory.
+!scripts/content/
+!scripts/content/**

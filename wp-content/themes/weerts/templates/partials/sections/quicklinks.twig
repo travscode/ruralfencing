@@ -17,9 +17,11 @@
 		<div class="grid w-full gap-5 lg:grid-cols-3">
 			{% for card in cards %}
 				<a class="group flex h-full flex-col no-underline" href="{{ card.href|default('#') }}">
+					{% if card.image_url %}
 					<div class="shrink-0 overflow-hidden rounded-xl">
-						<img class="h-[260px] w-full object-cover transition-transform duration-200 group-hover:scale-[1.02] lg:h-[315px]" src="{{ card.image_url }}" alt="" />
+						<img class="h-[260px] w-full object-cover transition-transform duration-200 group-hover:scale-[1.02] lg:h-[315px]" src="{{ card.image_url }}" alt="" loading="lazy" decoding="async" />
 					</div>
+					{% endif %}
 					<div class="mt-[10px] flex flex-1 items-start gap-6 rounded-xl bg-eggshell pb-10 pr-6 pt-8 xl:pb-[60px] xl:pr-[60px] xl:pt-10">
 						<div class="flex h-[50px] w-[50px] shrink-0 items-center justify-center bg-goldenrod text-birch">
 							{% include 'icons/arrow-right.twig' with { class: 'h-3 w-3' } %}

@@ -113,10 +113,19 @@ class RuralBoilerplateSite extends Site
         $context['product_categories_menu'] = Timber::get_menu('product_categories');
         $context['product_cat_tree'] = $this->get_product_cat_tree();
         $context['help_pages'] = [];
+        $context['help_cards'] = [];
         $help_page = get_page_by_path('help');
         if ($help_page instanceof WP_Post) {
             foreach (get_pages(['child_of' => $help_page->ID, 'post_status' => 'publish', 'sort_column' => 'menu_order,post_title']) as $help_child) {
+                if ($help_child->post_password !== '') { continue; }
                 $context['help_pages'][] = ['title' => get_the_title($help_child), 'link' => get_permalink($help_child)];
+                $image = basename((string) get_post_meta($help_child->ID, '_rural_guide_image', true));
+                $context['help_cards'][] = [
+                    'title' => get_the_title($help_child),
+                    'href' => get_permalink($help_child),
+                    'text' => get_the_excerpt($help_child),
+                    'image_url' => $image ? get_stylesheet_directory_uri() . '/images/' . $image : '',
+                ];
             }
         }
         $context['account_url'] = function_exists('wc_get_page_permalink')

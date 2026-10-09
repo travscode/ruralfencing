@@ -117,6 +117,23 @@ jobs:
           # Yoast installation and metadata migration are one-time setup steps.
           # See scripts/seo/README.md; do not repeat or overwrite SEO-team edits on deployment.
 
+      - name: Populate staging Helpful Info guides
+        run: |
+          THEME_PATH="${{ secrets.SSH_PATH }}"
+          THEMES_DIR="$(dirname "${THEME_PATH%/}")"
+          WP_CONTENT_DIR="$(dirname "$THEMES_DIR")"
+          WP_ROOT="$(dirname "$WP_CONTENT_DIR")"
+          ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_ed25519 \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "mkdir -p '$WP_ROOT/scripts/content'"
+          rsync -az \
+            -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
+            scripts/content/deploy.php \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$WP_ROOT/scripts/content/deploy.php"
+          ssh -p "${{ secrets.SSH_PORT }}" -i ~/.ssh/id_ed25519 \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "php '$WP_ROOT/scripts/content/deploy.php'"
+
       - name: Deploy uploads (if exists and configured)
         run: |
           if [ -d wp-content/uploads ] && [ -n "${{ secrets.SSH_UPLOADS_PATH }}" ]; then
