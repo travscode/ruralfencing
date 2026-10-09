@@ -10,4 +10,8 @@ if (!class_exists('Rural_Helpful_Content')) { throw new RuntimeException('Helpfu
 foreach (Rural_Helpful_Content::import(true) as $row) {
     echo $row['action'] . ': ' . $row['path'] . "\n";
 }
+if (!class_exists('Rural_Tip_Images')) { throw new RuntimeException('Tips image plugin is missing.'); }
+foreach (Rural_Tip_Images::import(true) as $row) {
+    echo $row['action'] . ': ' . $row['slug'] . "\n";
+}
 wp_cache_flush();

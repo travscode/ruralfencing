@@ -33,3 +33,19 @@ npx @wp-playground/cli@3.1.56 php --php=8.2 --wp=6.8 --define RURAL_CONTENT_TEST
 ```
 
 Covers preview-only operation, collision preflight, all 12 pages and redirects, repeated imports, edited content/permalinks, and unpublished destinations.
+
+## Tips featured images
+
+`rural-helpful/tip-images.json` maps all 15 staging tip articles to 10 reviewed, topic-matched photographs from the original blog. `rural-tip-images.php` imports them into local WordPress media, generates normal image sizes, and adds descriptive alt text. The cards and article headers use these local attachments rather than hotlinks.
+
+Staging deployment runs the import automatically. Elsewhere, preview with `wp rural tips images`, then apply with `wp rural tips images --apply`. The importer replaces only the recorded seed images or missing selections, preserves later editor choices, and reuses already imported media. Original thumbnail IDs remain in `_rural_tip_previous_thumbnail` for rollback. Migrate uploads and attachment records with the database at launch.
+
+Run the image migration tests in disposable WordPress:
+
+```sh
+npx @wp-playground/cli@3.1.56 php --php=8.2 --wp=6.8 --define RURAL_CONTENT_TEST 1 \
+  --mount "$PWD/wp-content/mu-plugins/rural-tip-images.php:/wordpress/wp-content/mu-plugins/rural-tip-images.php" \
+  --mount "$PWD/scripts/content:/content" -- /content/test-tip-images.php
+```
+
+Covers dry runs, local attachment creation, shared-image reuse, alt text, repeat imports, previous thumbnail retention, editorial preservation, and source validation.
